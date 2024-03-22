@@ -2,9 +2,9 @@
   <div class="container">
     <Tabs @selectTab="getTabsValue" />
     <Advertising :advertiseList="data.advertiseList" />
-    <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" />
+    <Playlist :MovieList="data.Homepage" @getMVdata="getMVdata" />
     <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" />
-    <div class="HotMovie">Popular video</div> 
+    <div class="HotMovie">Popular video</div>
     <!-- 热门视频 -->
     <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.Hvideolist" @getMoviedata="getMoviedata" />
 
@@ -48,20 +48,12 @@ const data = reactive({
   })),
   Hvideolist: computed(() => store.state.MovieList),
   isMobile: isMobile(),
-
+  Homepage: computed(() => getHomepage({ limit: 10, page: 1, type: 3 }))
 })
 
 const router = useRouter();
 const getTabsValue = async (value) => {
-
-
-  // let res = await ApiPost('/movie/pagebyareahits', { area_id: value.id })
-  store.dispatch('gelMoveiList', { area_id: value.id, limit: data.limit, page: data.page, type: value.name == '全部' ? 0 : 1 });
-  // let data ={
-  //   query: JSON.stringify(res.data.list),
-  //   value:JSON.stringify(value)
-  // }
-  // router.push({ path: '/filmClassify', query: data });
+  store.dispatch('gelMoveiList', { area_id: value.id, limit: data.limit, page: data.page, type: value.name == 'ALL' ? 0 : 1 });
 }
 const changePage = (page: number) => {
   console.log(page);
@@ -91,8 +83,16 @@ const getMVdata = async (e) => {
 
   router.push({ path: '/play', query: data });
 }
-onMounted(()=>{
-  store.dispatch('gelMoveiList', { limit: 10, page: 1,type:0 });
+const getHomepage = async (data: any) => {
+  let res = await ApiPost("/movie/pagebytype", data)
+  console.log(res.data.list, '查看数据');
+
+  return res.data.list
+}
+onMounted(() => {
+
+   
+
 })
 </script>
 <!--移动端修改-->
@@ -102,8 +102,8 @@ onMounted(()=>{
   margin: .625rem .625rem 0rem .625rem;
   font-weight: bold;
   width: 95%;
-  border-bottom: .0625rem solid #000;
-  color: #000;
+  border-bottom: .0625rem solid #ba7405;
+  color: #ba7405;
 }
 </style>
 <style scoped>

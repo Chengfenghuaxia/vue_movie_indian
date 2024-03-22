@@ -1,13 +1,14 @@
 <template>
     <div class="play_list">
-        <div class="play_list_item" v-for="(item, index) in MovieList" :key="index" @click="getdata(item)">
+        <div class="play_list_item" v-for="(item, index) in HomeList" :key="index" @click="getdata(item)">
             <div class="video" :style="{ backgroundImage: 'url(' + item.picture + ')' }">
 
             </div>
             <div class="video_detail">
                 <h4 class="video_name">{{ item.name }}</h4>
                 <span :style="{ paddingLeft: '10px' }">play Count:{{ item.hits }} </span>
-                <span :style="{ float: 'right', paddingRight: '20px' }">release date:{{ fmtDate(item.release_time) }} </span>
+                <span :style="{ float: 'right', paddingRight: '20px' }">release date:{{ fmtDate(item.release_time) }}
+                </span>
             </div>
         </div>
 
@@ -19,11 +20,14 @@ export default {
     props: ["MovieList"],
     data() {
         return {
-
+            HomeList: []
         }
 
     },
-    mounted() { },
+    mounted() {
+        this.getList()
+
+    },
     computed: {
 
     },
@@ -33,6 +37,9 @@ export default {
             return date.getFullYear() + '-' +
                 ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
                 ('0' + date.getDate()).slice(-2);
+        },
+       async getList() {
+        this.HomeList = await  this.MovieList
         },
         getdata(data) {
             this.$emit('getMVdata', data)
@@ -103,8 +110,9 @@ h4 {
         color: rgb(61, 126, 216);
         display: flex;
         justify-content: flex-start;
-        
-        flex-wrap:wrap;
+
+        flex-wrap: wrap;
+
         .play_list_item {
             width: 30%;
             min-height: 250px;
