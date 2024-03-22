@@ -35,6 +35,7 @@ export default createStore({
         },
         SetMovieList(state, value) {
             state.MovieList = value
+     
         },
         SetadvertiseList(state, value){
             state.advertiseList = value
@@ -45,9 +46,7 @@ export default createStore({
     },
     actions: {
         gelMoveiList({ commit }, data) {
-            // ApiPost("/movie/pagebyhits", data).then(res => {
             ApiPost("/movie/pagebytype", data).then(res => {
-                console.log(res.data.list,'拿到电影了吧');
                 commit("SetMovieList",res.data.list)
             })
         },

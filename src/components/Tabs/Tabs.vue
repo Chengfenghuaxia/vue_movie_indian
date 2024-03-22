@@ -49,11 +49,14 @@ export default {
     width: 100%;
     height: 2.5rem;
     line-height: 2.5rem;
-    background-color: blue;
+    background-color: #ba7405;
+    font-weight: bold;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .active {
-    color: red;
+    color: rgb(37, 11, 156);
     /* Highlight color */
 }
 </style>

@@ -7,14 +7,15 @@
     </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions, useStore } from 'vuex'
 import { useRouter } from 'vue-router';
+import { ApiPost } from "../../utils/request";
 export default {
     data() {
         return {
             NavList: [
                 // { nav: '导航', color: 'green' },
-                { nav: 'nav', color: 'green' },
+                { nav: 'Home', color: 'green' },
                 // { nav: '搜索', color: 'red' },
                 { nav: 'search', color: 'red' },
                 // { nav: '视频', color: 'blue' },
@@ -26,7 +27,12 @@ export default {
                 // // { nav: '高清', color: 'FFF' }
                 { nav: 'high definition', color: 'FFF' }
             ],
-            router: {}
+            router: {},
+            params: {
+                limit: 10,
+                page: 1,
+                type: 0
+            }
         }
     },
     mounted() {
@@ -41,13 +47,16 @@ export default {
             'setNovel',
             'setHD'
         ]),
+        ...mapActions(['gelMoveiList']),
         async handTopSearch(e) {
-            console.log(111111)
             switch (e.nav) {
-                case 'nav':
-                    await this.router.push({ path: '/index', });
-                    this.setNavigation(true)
-                    window.scrollTo(0, 400);
+                case 'Home':
+                    if (this.$route.fullPath != '/index') {
+                        this.gelMoveiList({ page: 1, limit: 10, type: 0 }) //回主页获取所有数据
+                        await this.router.push({ path: '/index' });
+                        this.setNavigation(true)
+                        window.scrollTo(0, 400);
+                    }
                     break;
                 case 'search':
                     this.router.push({ path: '/search', });

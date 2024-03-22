@@ -229,6 +229,7 @@ onBeforeMount(async () => {
 
   .Movie_detail {
     color: black;
+    background: #ba7405;
     width: 100;
     height: 9.375rem;
     display: flex;
@@ -319,8 +320,11 @@ onBeforeMount(async () => {
 
   .Movie_detail {
     color: black;
-    width: 100;
-    height: 9.375rem;
+    width: 96%;
+    margin-left: 2%;
+    border-radius: .3125rem;
+    height: 10.375rem;
+    background: #ba7405;
     display: flex;
   }
 

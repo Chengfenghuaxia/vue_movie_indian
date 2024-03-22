@@ -41,10 +41,6 @@ export default {
             }
         });
         this.observer.observe(this.$refs.observerElement);
-        setTimeout(() => {
-            console.log(this.HotVideoList, '影视信息');
-        }, 5000);
-
     },
     computed: {
         hotmovieList() {
