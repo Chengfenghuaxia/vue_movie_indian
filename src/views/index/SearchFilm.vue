@@ -14,7 +14,7 @@
                 <div class="film_item" v-for="m in data.list">
                     <span :style="{ backgroundImage: `url('${m.picture}')` }"></span>
                     <div class="film_intro">
-                        <h3>{{ m.name }}</h3>
+                        <h3>{{ truncatedText(m.name)}}</h3>
                         <p class="tags">
                             <span class="tag_c">{{ m.language }}</span>
                             <span>{{ fmtrelease(m.release_time) }}</span>
@@ -65,13 +65,13 @@ const data = reactive({
 
 
 // 点击播放
-const play =async (e: string | number) => {
+const play = async (e: string | number) => {
     let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
     let data = {
         query: JSON.stringify(e),
         movieinfo: JSON.stringify(res.data)
     }
-    await  router.push({ path: '/play', query: data });
+    await router.push({ path: '/play', query: data });
     window.scrollTo(0, 500);
 }
 const getList = (current) => {
@@ -107,7 +107,13 @@ const fmtrelease = (time) => {
         ('0' + date.getDate()).slice(-2);
 
 }
-
+const truncatedText = (text) => {
+    if (text.length > 15) {
+        return text.substring(0, 20) + '...';
+    } else {
+        return text;
+    }
+}
 onMounted(() => {
 
 })

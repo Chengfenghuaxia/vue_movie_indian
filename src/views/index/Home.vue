@@ -80,8 +80,6 @@ const getMVdetail = async (info) => {
 }
 const getMoviedata = (data) => {
   console.log(data);
-
-  // store.dispatch('gelMoveiList', data);
 }
 const getMVdata = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
@@ -92,6 +90,9 @@ const getMVdata = async (e) => {
 
   router.push({ path: '/play', query: data });
 }
+onMounted(()=>{
+  store.dispatch('gelMoveiList', { limit: 10, page: 1,type:0 });
+})
 </script>
 <!--移动端修改-->
 <style scoped>

@@ -45,7 +45,9 @@ export default createStore({
     },
     actions: {
         gelMoveiList({ commit }, data) {
-            ApiPost("/movie/pagebyhits", data).then(res => {
+            // ApiPost("/movie/pagebyhits", data).then(res => {
+            ApiPost("/movie/pagebytype", data).then(res => {
+                console.log(res.data.list,'拿到电影了吧');
                 commit("SetMovieList",res.data.list)
             })
         },

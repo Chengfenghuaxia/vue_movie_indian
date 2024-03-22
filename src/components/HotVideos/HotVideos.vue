@@ -59,7 +59,6 @@ export default {
             } else {
                 return text;
             }
-
         },
         fmtDate(time) {
             const date = new Date(time);

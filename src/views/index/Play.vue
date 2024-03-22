@@ -183,6 +183,7 @@ onBeforeMount(async () => {
   let query = router.currentRoute.value.query
   let movieinfo = JSON.parse(query.movieinfo)
   data.MovieDetail = JSON.parse(query.query)
+  store.dispatch('gelMoveiList', { category_id: movieinfo.info.cid, limit: data.limit, page: data.page, type:  2 });
   await initHLS(movieinfo)
 })
 </script>
