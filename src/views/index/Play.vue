@@ -117,25 +117,30 @@ const initHLS = (MVinfo) => {
     //获取m3u8文件
     let lastSlashIndex = MVinfo.play_link.lastIndexOf("/");
     let link = MVinfo.play_link.substring(0, lastSlashIndex + 1); // 包含最后的斜杠
-    const response = await axios.get(MVinfo.play_link);
-    let m3u8Content = response.data;
-    m3u8Content = m3u8Content.replace(/%s/g, `${import.meta.env.VITE_API_BASE_URL}verify/getenckey?token=${MVinfo.token}&enc_key=${MVinfo.info.enc_key}`); // 当前请求地址
-    m3u8Content = m3u8Content.replace(/(.*\.ts)/g, `${link}$1`);
-    const blob = new Blob([m3u8Content], { type: 'application/x-mpegURL' });
-    const url = URL.createObjectURL(blob);
-    if (Hls.isSupported()) {
-      // const video = videoPlayer.value;
-      const video = videoa.value;
-      const hls = new Hls();
-      hls.loadSource(url); // 替换为你的HLS流地址
-      hls.attachMedia(video);
-      // hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      //   video.play();
-      // });
+    if (MVinfo.info.play_type==1) {  // 如果非外链
+      const response = await axios.get(MVinfo.play_link);
+      let m3u8Content = response.data;
+      m3u8Content = m3u8Content.replace(/%s/g, `${import.meta.env.VITE_API_BASE_URL}verify/getenckey?token=${MVinfo.token}&enc_key=${MVinfo.info.enc_key}`); // 当前请求地址
+      m3u8Content = m3u8Content.replace(/(.*\.ts)/g, `${link}$1`);
+      const blob = new Blob([m3u8Content], { type: 'application/x-mpegURL' });
+      const url = URL.createObjectURL(blob);
+      if (Hls.isSupported()) {
+        const video = videoa.value;
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+      }
+    }else{ //走外链
+      if (Hls.isSupported()) {
+        const video = videoa.value;
+        const hls = new Hls();
+        hls.loadSource(MVinfo.info.ext_link);
+        hls.attachMedia(video);
+      }
     }
   });
 }
-const handTohotMovie = async(e) => {
+const handTohotMovie = async (e) => {
   console.log(e, '看看有什么');
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   data.MovieDetail = e
@@ -183,7 +188,7 @@ onBeforeMount(async () => {
   let query = router.currentRoute.value.query
   let movieinfo = JSON.parse(query.movieinfo)
   data.MovieDetail = JSON.parse(query.query)
-  store.dispatch('gelMoveiList', { category_id: movieinfo.info.cid, limit: data.limit, page: data.page, type:  2 });
+  store.dispatch('gelMoveiList', { category_id: movieinfo.info.cid, limit: data.limit, page: data.page, type: 2 });
   await initHLS(movieinfo)
 })
 </script>
