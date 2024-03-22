@@ -4,12 +4,13 @@
     <Advertising :advertiseList="data.advertiseList" />
     <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" />
     <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" />
-    <div class="HotMovie">热门视频</div>
+    <div class="HotMovie">Popular video</div> 
+    <!-- 热门视频 -->
     <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.Hvideolist" @getMoviedata="getMoviedata" />
 
     <!-- <van-pagination v-model="data.currentPage" :total-items="data.total" :show-page-size="data.pageSize" force-ellipses
       @change="changePage" /> -->
-    <el-pagination :style="{ float: 'right', right: '50px' }" layout="prev, pager, next" :total="data.total" />
+    <el-pagination :style="{ float: 'right', right: '3.125rem' }" layout="prev, pager, next" :total="data.total" />
 
   </div>
 </template>
@@ -98,26 +99,26 @@ onMounted(()=>{
 <style scoped>
 .HotMovie {
   text-align: left;
-  margin: 10px 10px 0px 10px;
+  margin: .625rem .625rem 0rem .625rem;
   font-weight: bold;
   width: 95%;
-  border-bottom: 1px solid #000;
+  border-bottom: .0625rem solid #000;
   color: #000;
 }
 </style>
 <style scoped>
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .cus_content_item {
-    padding: 10px;
+    padding: .625rem;
     overflow: hidden;
-    /*margin-bottom: 10px;*/
+    /*margin-bottom: .625rem;*/
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .cus_content_item {
-    padding: 0 6px 0 0;
-    margin-bottom: 10px;
+    padding: 0 .375rem 0 0;
+    margin-bottom: .625rem;
     overflow: hidden;
   }
 
@@ -129,9 +130,9 @@ onMounted(()=>{
 
 <!--轮播图双端样式-->
 <style scoped>
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   :deep(.el-carousel) {
-    --el-carousel-arrow-size: 30px;
+    --el-carousel-arrow-size: 1.875rem;
     --el-carousel-arrow-background: rgba(115, 133, 159, 0.5);
   }
 
@@ -143,7 +144,7 @@ onMounted(()=>{
   .el-carousel__item h3 {
     color: #475669;
     opacity: 0.75;
-    line-height: 200px;
+    line-height: 12.5rem;
     margin: 0;
     text-align: center;
   }
@@ -159,46 +160,46 @@ onMounted(()=>{
   :deep(.el-carousel__indicators) {
     width: 100% !important;
     text-align: right;
-    height: 20px;
-    line-height: 20px;
-    padding-right: 10px;
+    height: 1.25rem;
+    line-height: 1.25rem;
+    padding-right: .625rem;
     --el-carousel-indicator-padding-vertical: 0;
   }
 
   :deep(.el-carousel__button) {
-    width: 8px;
-    height: 8px;
+    width: .5rem;
+    height: .5rem;
     border-radius: 50%;
     padding: 0 0 !important;
-    margin: 0 2px;
+    margin: 0 .125rem;
   }
 
   .banner_wrap {
-    margin: -15px 0 20px 0;
+    margin: -0.9375rem 0 1.25rem 0;
     position: relative;
-    box-shadow: 0 5px 30px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: 0 .3125rem 1.875rem 0 rgba(255, 255, 255, 0.15);
   }
 
   .carousel-tags {
     position: absolute;
-    top: 170px;
+    top: 10.625rem;
     left: 25%;
   }
 
   .carousel-tags span {
-    font-size: 12px;
+    font-size: .75rem;
     background: rgba(0, 0, 0, 0.55);
     color: #ffffff;
-    padding: 2px 5px;
-    margin: 2px 5px;
+    padding: .125rem .3125rem;
+    margin: .125rem .3125rem;
   }
 
   .carousel-title {
-    font-size: 12px;
+    font-size: .75rem;
     position: absolute;
     bottom: 0;
-    height: 20px;
-    line-height: 20px;
+    height: 1.25rem;
+    line-height: 1.25rem;
     background: rgba(0, 0, 0, 0.5);
     text-align: left;
     width: 100%;
@@ -211,9 +212,9 @@ onMounted(()=>{
 }
 
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   :deep(.el-carousel) {
-    --el-carousel-arrow-size: 30px;
+    --el-carousel-arrow-size: 1.875rem;
     --el-carousel-arrow-background: rgba(115, 133, 159, 0.5);
   }
 
@@ -223,53 +224,53 @@ onMounted(()=>{
   }
 
   .container {
-    /*    padding-top: 660px;*/
+    /*    padding-top: 41.25rem;*/
   }
 
   .banner2 {
-    height: 600px;
+    height: 37.5rem;
     position: absolute;
-    margin-top: 60px;
+    margin-top: 3.75rem;
     left: 0;
     top: 0;
-    box-shadow: inset 0 -40px 30px 20px rgba(0, 0, 0, 0.6), 0 5px 30px 0 rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 -2.5rem 1.875rem 1.25rem rgba(0, 0, 0, 0.6), 0 .3125rem 1.875rem 0 rgba(255, 255, 255, 0.15);
     padding: 2%;
-    margin-bottom: 10px;
-    border-radius: 0 0 6px 6px;
+    margin-bottom: .625rem;
+    border-radius: 0 0 .375rem .375rem;
     width: 100%;
   }
 
   .preview2 {
-    width: 260px;
-    height: 200px;
+    width: 16.25rem;
+    height: 12.5rem;
     position: absolute;
-    right: 50px;
-    bottom: 60px;
+    right: 3.125rem;
+    bottom: 3.75rem;
   }
 
   .banner {
-    height: 600px;
-    box-shadow: inset 0 -40px 30px 20px rgba(0, 0, 0, 0.6), 0 5px 30px 0 rgba(255, 255, 255, 0.15);
+    height: 37.5rem;
+    box-shadow: inset 0 -2.5rem 1.875rem 1.25rem rgba(0, 0, 0, 0.6), 0 .3125rem 1.875rem 0 rgba(255, 255, 255, 0.15);
     position: relative;
     padding: 2%;
-    margin-bottom: 10px;
-    border-radius: 6px;
+    margin-bottom: .625rem;
+    border-radius: .375rem;
     width: 100%;
   }
 
   .preview {
-    width: 260px;
-    height: 200px;
+    width: 16.25rem;
+    height: 12.5rem;
     position: absolute;
-    right: 50px;
-    bottom: 60px;
-    /*  border: 1px solid skyblue;*/
+    right: 3.125rem;
+    bottom: 3.75rem;
+    /*  border: .0625rem solid skyblue;*/
   }
 
   .el-carousel__item h3 {
     color: #475669;
     opacity: 0.75;
-    line-height: 200px;
+    line-height: 12.5rem;
     margin: 0;
     text-align: center;
   }
@@ -287,28 +288,28 @@ onMounted(()=>{
   }
 
   :deep(.el-carousel__button) {
-    width: 8px;
-    height: 8px;
+    width: .5rem;
+    height: .5rem;
     border-radius: 50%;
-    margin: 0 2px;
+    margin: 0 .125rem;
   }
 
   .carousel-tags {
     position: absolute;
-    top: 170px;
+    top: 10.625rem;
     left: 25%;
   }
 
   .carousel-tags span {
-    font-size: 12px;
+    font-size: .75rem;
     background: rgba(0, 0, 0, 0.55);
     color: #ffffff;
-    padding: 2px 5px;
-    margin: 2px 5px;
+    padding: .125rem .3125rem;
+    margin: .125rem .3125rem;
   }
 
   .carousel-title {
-    font-size: 12px;
+    font-size: .75rem;
     max-width: 50%;
 
     margin: 0 auto;
