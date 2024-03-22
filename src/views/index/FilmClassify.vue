@@ -1,36 +1,36 @@
 <template>
   <div class="container">
-    <div class="title">
+    <!-- <div class="title">
       <span @click="selectTab" :style="{ paddingRight: '20px', fontSize: '16px', fontWeight: 'bold' }">{{ d.title.name
         }}Film</span>
-    </div>
+    </div> -->
 
     <!--影片列表展示-->
     <div class="content">
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text silver">Latest release</span>
-          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=release_stamp`" class="c_nav_more ">more<b
+          <span class="c_nav_text">Ranking display</span>
+          <a :href="`/filmClassifySearch?type=4`" class="c_nav_more ">more<b
               class="iconfont icon-more" /></a>
         </div>
-        <FilmList :col="7" :list="d.content.news" />
+        <FilmList :col="7" :list="d.content.news" :type="4" />
       </div>
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text silver">Ranking list</span>
-          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=hits`" class="c_nav_more ">more<b
+          <span class="c_nav_text">Ranking list</span>
+          <a :href="`/filmClassifySearch?type=5`" class="c_nav_more ">more<b
               class="iconfont icon-more" /></a>
         </div>
-        <FilmList :col="7" :list="d.content.top" />
+        <FilmList :col="7" :list="d.content.top" :type="5" />
       </div>
-      <div class="news">
-        <div class="c_nav">
-          <span class="c_nav_text silver">recent updates</span>
+      <!-- <div class="news">
+        <div class="c_nav" style="background:red">
+          <span class="c_nav_text">recent updates</span>
           <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=update_stamp`" class="c_nav_more ">more<b
               class="iconfont icon-more" /></a>
         </div>
         <FilmList :col="7" :list="d.content.recent" />
-      </div>
+      </div> -->
     </div>
 
     <!--分页展示区域-->
@@ -42,7 +42,7 @@
 import { onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
 import FilmList from "../../components/index/FilmList.vue";
-
+import { ApiPost } from "../../utils/request";
 
 const d = reactive({
   data: {},
@@ -63,6 +63,18 @@ const getFilmData = () => {
 const selectTab = (index: number) => {
   d.currentIndex = index
 }
+
+const handlePlayVideo = async(e) =>{
+  console.log(11111111)
+  let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
+  let data = {
+    query: JSON.stringify(e),
+    movieinfo: JSON.stringify(res.data)
+  }
+  router.push({ path: '/play', query: data });
+} 
+
+
 onMounted(() => {
   getFilmData()
   let query = router.currentRoute.value.query
@@ -80,7 +92,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
 
-  padding: 6px;
+  /* padding: 6px; */
 }
 
 .c_nav_text {
@@ -94,13 +106,13 @@ onMounted(() => {
 }
 
 .content>div {
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 
 /**/
 @media (min-width: 768px) {
   .c_nav {
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
   }
 
   .c_nav_text {

@@ -185,7 +185,7 @@ const fmtDate = (time) => {
 
 // 初始化页面数据
 onBeforeMount(async () => {
-  let query = router.currentRoute.value.query
+  let query:object = router.currentRoute.value.query
   let movieinfo = JSON.parse(query.movieinfo)
   data.MovieDetail = JSON.parse(query.query)
   store.dispatch('gelMoveiList', { category_id: movieinfo.info.cid, limit: data.limit, page: data.page, type: 2 });
