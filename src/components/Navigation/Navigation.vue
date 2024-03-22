@@ -20,10 +20,10 @@ export default {
                 // { nav: '视频', color: 'blue' },
                 { nav: 'video', color: 'blue' },
                 // { nav: '漫画', color: 'yellow' },
-                { nav: 'cartoon', color: 'yellow' },
-                // { nav: '小说', color: 'pink' },
-                { nav: 'fiction', color: 'pink' },
-                // { nav: '高清', color: 'FFF' }
+                // { nav: 'cartoon', color: 'yellow' },
+                // // { nav: '小说', color: 'pink' },
+                // { nav: 'fiction', color: 'pink' },
+                // // { nav: '高清', color: 'FFF' }
                 { nav: 'high definition', color: 'FFF' }
             ],
             router: {}
@@ -42,29 +42,30 @@ export default {
             'setHD'
         ]),
         async handTopSearch(e) {
+            console.log(111111)
             switch (e.nav) {
-                case '导航':
+                case 'nav':
                     await this.router.push({ path: '/index', });
                     this.setNavigation(true)
                     window.scrollTo(0, 400);
                     break;
-                case '搜索':
+                case 'search':
                     this.router.push({ path: '/search', });
 
                     break;
-                case '视频':
+                case 'video':
                     this.setVideo(true)
                     this.router.push({ path: '/filmClassify' })
                     break;
-                case '漫画':
-                    this.setComics(true)
-                    this.router.push({ path: '/Ceshi' })
-                    break;
-                case '小说':
-                    this.setNovel(true)
-                    this.router.push({ path: '/Ceshi' })
-                    break;
-                case '高清':
+                // case 'cartoon':
+                //     this.setComics(true)
+                //     this.router.push({ path: '/Ceshi' })
+                //     break;
+                // case 'fiction':
+                //     this.setNovel(true)
+                //     this.router.push({ path: '/Ceshi' })
+                //     break;
+                case 'high definition':
                     this.setHD(true)
                     this.router.push({ path: '/Ceshi' })
             }

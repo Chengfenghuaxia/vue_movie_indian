@@ -6,8 +6,8 @@
             </div>
             <div class="video_detail">
                 <h4 class="video_name">{{ item.name }}</h4>
-                <span :style="{ paddingLeft: '10px' }">播放次数:{{ item.hits }} </span>
-                <span :style="{ float: 'right', paddingRight: '20px' }">上映时间:{{ fmtDate(item.release_time) }} </span>
+                <span :style="{ paddingLeft: '10px' }">play Count:{{ item.hits }} </span>
+                <span :style="{ float: 'right', paddingRight: '20px' }">release date:{{ fmtDate(item.release_time) }} </span>
             </div>
         </div>
 

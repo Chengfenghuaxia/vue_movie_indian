@@ -7,7 +7,7 @@
 export default {
   data() {
     return {
-      title:"暂未开放"
+      title:"Not yet open"
     }
   }
 }
