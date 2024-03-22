@@ -13,12 +13,18 @@ export default {
     data() {
         return {
             NavList: [
-                { nav: '导航', color: 'green' },
-                { nav: '搜索', color: 'red' },
-                { nav: '视频', color: 'blue' },
-                { nav: '漫画', color: 'yellow' },
-                { nav: '小说', color: 'pink' },
-                { nav: '高清', color: 'FFF' }
+                // { nav: '导航', color: 'green' },
+                { nav: 'nav', color: 'green' },
+                // { nav: '搜索', color: 'red' },
+                { nav: 'search', color: 'red' },
+                // { nav: '视频', color: 'blue' },
+                { nav: 'video', color: 'blue' },
+                // { nav: '漫画', color: 'yellow' },
+                { nav: 'cartoon', color: 'yellow' },
+                // { nav: '小说', color: 'pink' },
+                { nav: 'fiction', color: 'pink' },
+                // { nav: '高清', color: 'FFF' }
+                { nav: 'high definition', color: 'FFF' }
             ],
             router: {}
         }

@@ -4,7 +4,7 @@
         <div class="box">
             <div class="Tabs" :class="{ 'active': currentIndex === index }" v-for="(item, index) in areaList"
                 :key="index" @click="selectTab(item,index)">
-                {{ item.name }}
+                <span> {{ item.name }}</span>
             </div>
         </div>
     </div>
@@ -47,8 +47,8 @@ export default {
 
 .Tabs {
     width: 100%;
-    height: 40px;
-    line-height: 40px;
+    height: 2.5rem;
+    line-height: 2.5rem;
     background-color: blue;
 }
 

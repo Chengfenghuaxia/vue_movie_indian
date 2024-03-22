@@ -1,9 +1,10 @@
 <template>
     <div class="custom-footer">
-        <span :style="{borderRight:'1px solid #ccc',padding:'0 10px 0 10px'}">版权声明</span>
-        <span :style="{borderRight:'1px solid #ccc',padding:'0 10px 0 10px'}">免责声明</span>
-        <span :style="{borderRight:'1px solid #ccc',padding:'0 10px 0 10px'}">联系我们</span>
-        <span :style="{paddingLeft:'10px'}">隐私政策</span>
+        <span :style="{borderRight:'.0625rem solid #ccc',padding:'0 .625rem .5rem'}">copyright notice</span>
+        <span :style="{borderRight:'.0625rem solid #ccc',padding:'0 .625rem 0 .625rem'}">disclaimer</span>
+        <span :style="{borderRight:'.0625rem solid #ccc',padding:'0 .625rem 0 .625rem'}">contact us
+</span>
+        <span :style="{paddingLeft:'.625rem'}">privacy policy</span>
     </div>
 </template>
 
@@ -16,11 +17,11 @@
 .custom-footer {
     text-align: center;
     width: 100%;
-    height: 30px;
+    height: 1.875rem;
     text-align: center;
-    line-height: 15px;
-    font-size: 15px;
+    line-height: .9375rem;
+    font-size: 11px;
     color: #888888;
-    margin-top: 25px;
+    margin-top: 1.5625rem;
 }
 </style>
