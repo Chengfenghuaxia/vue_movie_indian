@@ -2,31 +2,31 @@
   <div class="container">
     <div class="title">
       <span @click="selectTab" :style="{ paddingRight: '20px', fontSize: '16px', fontWeight: 'bold' }">{{ d.title.name
-        }}电影</span>
+        }}Film</span>
     </div>
 
     <!--影片列表展示-->
     <div class="content">
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text silver">最新上映</span>
-          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=release_stamp`" class="c_nav_more ">更多<b
+          <span class="c_nav_text silver">Latest release</span>
+          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=release_stamp`" class="c_nav_more ">more<b
               class="iconfont icon-more" /></a>
         </div>
         <FilmList :col="7" :list="d.content.news" />
       </div>
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text silver">排行榜</span>
-          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=hits`" class="c_nav_more ">更多<b
+          <span class="c_nav_text silver">Ranking list</span>
+          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=hits`" class="c_nav_more ">more<b
               class="iconfont icon-more" /></a>
         </div>
         <FilmList :col="7" :list="d.content.top" />
       </div>
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text silver">最近更新</span>
-          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=update_stamp`" class="c_nav_more ">更多<b
+          <span class="c_nav_text silver">recent updates</span>
+          <a :href="`/filmClassifySearch?Pid=${d.title.id}&Sort=update_stamp`" class="c_nav_more ">more<b
               class="iconfont icon-more" /></a>
         </div>
         <FilmList :col="7" :list="d.content.recent" />

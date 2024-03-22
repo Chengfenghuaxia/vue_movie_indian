@@ -2,13 +2,13 @@
     <div class="container">
         <div class="search_group">
             <input v-model="data.search" @keydown="e => { e.keyCode == 13 && searchMovie() }"
-                placeholder="输入关键字搜索 动漫,剧集,电影 " class="search" />
+                placeholder="Enter keywords to search anime, series, movies " class="search" />
             <el-button @click="searchMovie" :icon="Search" style="" />
         </div>
         <div v-if="data.list && data.list.length > 0" class="search_res">
             <div class="title">
                 <h2>{{ data.oldSearch }}</h2>
-                <p :style="{ color: '#000' }">共找到{{ data.page.total }}部与"{{ data.oldSearch }}"相关的影视作品</p>
+                <p :style="{ color: '#000' }">All found{{ data.page.total }}fikms and"{{ data.oldSearch }}"Related film and television works</p>
             </div>
             <div class="content">
                 <div class="film_item" v-for="m in data.list">
@@ -20,10 +20,10 @@
                             <span>{{ fmtrelease(m.release_time) }}</span>
                             <span>{{ m.area }}</span>
                         </p>
-                        <p><em>类型:</em>{{ m.tags }}</p>
-                        <p><em>主演:</em>{{ m.actor }}</p>
-                        <p class="blurb"><em>剧情:</em>{{ m.blurb.replaceAll('　　', '') }}</p>
-                        <el-button :icon="CaretRight" @click="play(m)">立即播放</el-button>
+                        <p><em>Type:</em>{{ m.tags }}</p>
+                        <p><em>Protagonist:</em>{{ m.actor }}</p>
+                        <p class="blurb"><em>plot:</em>{{ m.blurb.replaceAll('　　', '') }}</p>
+                        <el-button :icon="CaretRight" @click="play(m)">Play now</el-button>
                     </div>
                 </div>
             </div>

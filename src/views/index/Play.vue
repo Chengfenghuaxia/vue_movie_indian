@@ -7,42 +7,42 @@
     </div>
     <!-- 视频详情 -->
     <div class="Movie_detail_name">
-      <el-form-item label="电影名称:">
-        <span style="font-size:16px;">{{ data.MovieDetail.name }}</span>
+      <el-form-item label="Film title:">
+        <span style="font-size:1rem;">{{ data.MovieDetail.name }}</span>
       </el-form-item>
     </div>
     <div class="Movie_detail">
       <div class="Movie_detail_left">
-        <el-form label-width="auto" style="max-width: 600px">
+        <el-form label-width="auto" style="max-width: 37.5rem">
 
-          <el-form-item label="主演:">
-            <span style="font-size:16px;">{{ data.MovieDetail.actor }}</span>
+          <el-form-item label="Starring:">
+            <span style="font-size:1rem;">{{ data.MovieDetail.actor }}</span>
           </el-form-item>
-          <el-form-item label="地区:">
-            <span style="font-size:16px;">{{ data.MovieDetail.area }}</span>
+          <el-form-item label="Area:">
+            <span style="font-size:1rem;">{{ data.MovieDetail.area }}</span>
           </el-form-item>
-          <el-form-item label="上映时间:">
-            <span style="font-size:16px;">{{ fmtDate(Number(data.MovieDetail.release_time)) }}</span>
+          <el-form-item label="Release date:">
+            <span style="font-size:.875rem;">{{ fmtDate(Number(data.MovieDetail.release_time)) }}</span>
           </el-form-item>
         </el-form>
       </div>
       <div class="Movie_detail_right">
-        <el-form label-width="auto" style="max-width: 600px">
+        <el-form label-width="auto" style="max-width: 37.5rem;margin-left:1.875rem">
 
-          <el-form-item label="语言:">
-            <span style="font-size:16px;">{{ data.MovieDetail.language }}</span>
+          <el-form-item label="Language:">
+            <span style="font-size:1rem;">{{ data.MovieDetail.language }}</span>
           </el-form-item>
-          <el-form-item label="类型:">
-            <span style="font-size:14px;">{{ fmtTags(data.MovieDetail.tags) }}</span>
+          <el-form-item label="Type:">
+            <span style="font-size:.875rem;">{{ fmtTags(data.MovieDetail.tags) }}</span>
           </el-form-item>
-          <el-form-item label="播放次数:">
-            <span style="font-size:16px;">{{ data.MovieDetail.hits }}</span>
+          <el-form-item label="Time of play:">
+            <span style="font-size:1rem;">{{ data.MovieDetail.hits }}</span>
           </el-form-item>
         </el-form>
       </div>
 
     </div>
-    <p class="blurb">简介：</p>
+    <p class="blurb">Brief introduction：</p>
     <div class="Movie_details">
       <span>
         {{ data.MovieDetail.blurb }}
@@ -51,7 +51,7 @@
     </div>
     <!--相关推荐-->
     <div class="correlation">
-      <div class="HotMovie">相关推荐</div>
+      <div class="HotMovie">Related Recommendation</div>
       <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.relate" />
     </div>
     <!-- 广告弹窗 -->
@@ -197,75 +197,74 @@ onBeforeMount(async () => {
 @import "/src/assets/css/film.css";
 
 /* PC端 */
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   :deep(.plyr--video) {
     width: 100%;
-    height: 800px;
+    height: 50rem;
     /* height: auto; */
   }
 
   .player_area {
-    padding: 10px 6%;
+    padding: .625rem 6%;
   }
 
   .Movie_details {
     width: 96%;
-    min-height: 50px;
+    min-height: 3.125rem;
     padding: 0 0 0 1%;
     margin-left: 2%;
-    border-radius: 5px;
+    border-radius: .3125rem;
     background-color: rgb(45, 204, 204);
     text-align: left;
-    font-size: 14px;
-    margin-top: 10px;
+    font-size: .875rem;
+    margin-top: .625rem;
 
   }
 
   .video_window {
     width: 100%;
-    height: 600px;
+    height: 37.5rem;
     object-fit: cover;
   }
 
   .Movie_detail {
     color: black;
     width: 100;
-    height: 150px;
+    height: 9.375rem;
     display: flex;
   }
 
   .Movie_detail_left {
     width: 50%;
-    height: 200px;
-    padding-left: 10px;
-    font-size: 18px
+    height: 12.5rem;
+    padding-left: .625rem;
+    font-size: 1.125rem
   }
 
   .Movie_detail_right {
-    height: 200px;
+    height: 12.5rem;
     width: 50%;
-
   }
 
   video {
     width: 100%;
-    height: 260px;
+    height: 16.25rem;
   }
 
   .video_title {
     width: 100%;
-    height: 20px;
-    padding: 0 0 0 20px;
+    height: 1.25rem;
+    padding: 0 0 0 1.25rem;
     text-align: left;
-    /* margin-top: 30px; */
+    /* margin-top: 1.875rem; */
   }
 
   .Movie_detail_name {
-    margin-left: 20px;
+    margin-left: 1.25rem;
     color: black;
     width: 94%;
-    font-size: 14px;
-    min-height: 30px;
+    font-size: .875rem;
+    min-height: 1.875rem;
     text-align: left;
   }
 
@@ -273,17 +272,17 @@ onBeforeMount(async () => {
     padding: 0;
     margin: 0;
     text-align: left;
-    padding-left: 10px;
+    padding-left: .625rem;
     color: black;
   }
 
   .HotMovie {
     text-align: left;
-    margin: 10px 10px 0px 10px;
+    margin: .625rem .625rem 0rem .625rem;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 1.25rem;
     width: 95%;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: .0625rem solid #e6e6e6;
     color: rgb(194, 190, 190);
   }
 }
@@ -292,80 +291,80 @@ onBeforeMount(async () => {
 <!--移动端-->
 <style scoped>
 /*适应小尺寸*/
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   :deep(.plyr--video) {
     width: 100%;
-    height: 200px;
+    height: 12.5rem;
     /* height: auto; */
   }
 
   .Movie_details {
     width: 96%;
-    min-height: 20px;
+    min-height: 1.25rem;
     padding: 0 0 0 1%;
     margin-left: 2%;
-    border-radius: 5px;
+    border-radius: .3125rem;
     background-color: rgb(45, 204, 204);
     text-align: left;
-    font-size: 14px;
-    margin-top: 10px;
+    font-size: .875rem;
+    margin-top: .625rem;
 
   }
 
   .video_window {
     width: 100%;
-    max-width: 640px;
+    max-width: 40rem;
     object-fit: cover;
   }
 
   .Movie_detail {
     color: black;
     width: 100;
-    height: 150px;
+    height: 9.375rem;
     display: flex;
   }
 
   .Movie_detail_left {
     width: 50%;
-    height: 200px;
-    padding-left: 10px;
-    font-size: 18px
+    height: 12.5rem;
+    padding-left: .625rem;
+    font-size: 1.125rem
   }
 
   .Movie_detail_right {
-    height: 200px;
+    height: 12.5rem;
     width: 50%;
 
   }
 
   video {
     width: 100%;
-    height: 260px;
+    height: 16.25rem;
   }
 
   .video_title {
     width: 100%;
-    height: 20px;
-    padding: 0 0 0 20px;
+    height: 1.25rem;
+    padding: 0 0 0 1.25rem;
     text-align: left;
-    /* margin-top: 30px; */
+    /* margin-top: 1.875rem; */
   }
 
   .HotMovie {
     text-align: left;
-    margin: 10px 10px 0px 10px;
+    margin: .625rem .625rem 0rem .625rem;
     font-weight: bold;
     width: 95%;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: .0625rem solid #e6e6e6;
     color: black;
   }
 
   .Movie_detail_name {
-    margin-left: 20px;
+    margin-left: 1.25rem;
     color: black;
     width: 94%;
-    font-size: 14px;
-    min-height: 30px;
+    font-size: .875rem;
+    min-height: 1.875rem;
     text-align: left;
   }
 
@@ -373,7 +372,7 @@ onBeforeMount(async () => {
     padding: 0;
     margin: 0;
     text-align: left;
-    padding-left: 10px;
+    padding-left: .625rem;
     color: black;
   }
 }

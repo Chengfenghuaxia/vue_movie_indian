@@ -17,7 +17,7 @@
         </div>
       </div>
     </template>
-    <el-empty v-if="d.list.length <= 0" style="padding: 10px 0;margin: 0 auto" description="暂无相关数据"/>
+    <el-empty v-if="d.list.length <= 0" style="padding: 10px 0;margin: 0 auto" description="No relevant data is available"/>
   </div>
 </template>
 

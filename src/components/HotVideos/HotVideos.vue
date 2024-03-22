@@ -5,14 +5,14 @@
                 <div v-if="item.picture" class="left_movie" :style="{ backgroundImage: 'url(' + item.picture + ')' }">
                 </div>
                 <div v-else class="left_movie" :style="{ backgroundImage: 'url(' + imageUrl + ')' }"></div>
-                <div :style="{ textAlign: 'left', fontSize: '14px', color: '#000' }">{{ truncatedText(item.name) }}
+                <div :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">{{ truncatedText(item.name) }}
                 </div>
-                <span :style="{ textAlign: 'left', fontSize: '14px', color: '#000' }">上映时间：{{ fmtDate(item.release_time)
+                <span :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">Release date：{{ fmtDate(item.release_time)
                     }}</span>
             </div>
 
         </div>
-        <div ref="observerElement">加载更多...</div>
+        <div ref="observerElement">Loading more...</div>
     </div>
 
 </template>
