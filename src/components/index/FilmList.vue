@@ -22,7 +22,7 @@
     <div class="video_movies">
     <div class="video_movies_item" v-for="(item, index) in d.vediosList.slice(0, 4)">
       <div @click="handlePlayVideo(item)">
-        <div v-if="item.picture" class="left_movie" :style="{ backgroundImage: 'url(' + item.picture + ')' }">
+        <div v-if="item.picture" class="left_movie" :style="{ backgroundImage: 'url(' +d.res_url_prefix+item.picture + ')' }">
         </div>
         <div v-else class="left_movie" :style="{ backgroundImage: 'url(' + d.imageUrl + ')' }"></div>
         <div :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">{{ truncatedText(item.name) }}
@@ -41,7 +41,8 @@
 import { defineProps, onMounted, reactive, watch, watchEffect } from 'vue'
 import { ApiPost } from "../../utils/request";
 import { useRouter } from "vue-router";
-
+import { useStore } from 'vuex';
+const store = useStore();
 const router = useRouter()
 const props = defineProps({
   list: Array,
@@ -55,6 +56,7 @@ const d = reactive({
   maxLength: 10,
   imageUrl: 'require(../../assets/image/images.jpg)',
   vediosList: [],
+  res_url_prefix:""
 })
 
 // 图片加载失败事件
@@ -65,10 +67,11 @@ const handleImg = (e: Event) => {
 const handlePlayVideo = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   let data = {
-    query: JSON.stringify(e),
-    movieinfo: JSON.stringify(res.data)
+    query: e,
+    movieinfo: res.data
   }
-  router.push({ path: '/play', query: data });
+  router.push({ path: '/play'});
+  store.commit('setMovieInfo', data)
 }
 
 
@@ -98,9 +101,8 @@ const getVidiosList = async (type) => {
   console.log('type: ', type);
   let res = await ApiPost('/movie/pagebytype', { type, page: 1, limit: 4 })
   if (res.code === 0) {
-    console.log('res:____++ ', res);
     d.vediosList = res.data.list
-    console.log('d.vediosList: ', d.vediosList);
+    d.res_url_prefix = res.data.res_url_prefix
   } else {
     ElMessage.error({ message: `${type == 4 ? '最新上映' : type == 5 ? '最新更新' : ''}视频获取类败`, duration: 1000 })
   }
@@ -120,7 +122,8 @@ const truncatedText = (text) => {
 
 
 const fmtDate = (time) => {
-  const date = new Date(time);
+  let T = (time+'').length>11?time:time*1000
+  const date = new Date(T);
   return date.getFullYear() + '-' +
     ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
     ('0' + date.getDate()).slice(-2);

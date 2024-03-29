@@ -35,20 +35,20 @@
                      class="pagination"/>
     </div> -->
     <!-- <div v-if="d.vediosList.length > 0"> -->
-      <div class="video_movies">
-        <div class="video_movies_item" v-for="(item, index) in d.vediosList">
-          <div @click="handlePlayVideo(item)">
-            <div v-if="item.picture" class="left_movie" :style="{ backgroundImage: 'url(' + item.picture + ')' }">
-            </div>
-            <div v-else class="left_movie" :style="{ backgroundImage: 'url(' + d.imageUrl + ')' }"></div>
-            <div :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">{{ truncatedText(item.name) }}
-            </div>
-            <span :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">Release date：{{
-      fmtDate(item.release_time)
-    }}</span>
+    <div class="video_movies">
+      <div class="video_movies_item" v-for="(item, index) in d.vediosList">
+        <div @click="handlePlayVideo(item)">
+          <div v-if="item.picture" class="left_movie" :style="{ backgroundImage: 'url(' + item.picture + ')' }">
           </div>
+          <div v-else class="left_movie" :style="{ backgroundImage: 'url(' + d.imageUrl + ')' }"></div>
+          <div :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">{{ truncatedText(item.name) }}
+          </div>
+          <span :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">Release date：{{
+        fmtDate(item.release_time)
+      }}</span>
         </div>
       </div>
+    </div>
     <!-- </div>
     <el-empty v-if="d.list.length <= 0" style="padding: 10px 0;margin: 0 auto"
       description="No relevant data is available" /> -->
@@ -70,9 +70,9 @@ const d = reactive({
   imageUrl: 'require(../../assets/image/images.jpg)',
   maxLength: 10,
   videosList: [],
-  limit:10,
-  page:1,
-  observer:{},
+  limit: 10,
+  page: 1,
+  observer: {},
   title: {
     name: "大陆电影",
     id: 20
@@ -88,7 +88,7 @@ const d = reactive({
   //   pageSize: 10,
   //   total: 20
   // },
- 
+
   searchParams: {
     Pid: '',
     Category: '',
@@ -114,9 +114,9 @@ const handlePlayVideo = async (e) => {
   router.push({ path: '/play', query: data });
 }
 
-const getVidiosList = async (page,limit,type) => {
+const getVidiosList = async (page, limit, type) => {
   console.log('type: ', type);
-  let res = await ApiPost('/movie/pagebytype', { type, page,limit})
+  let res = await ApiPost('/movie/pagebytype', { type, page, limit })
   if (res.code === 0) {
     console.log('res:____++ ', res);
     d.vediosList = res.data.list
@@ -155,7 +155,8 @@ const truncatedText = (text) => {
 
 
 const fmtDate = (time) => {
-  const date = new Date(time);
+  let T = (time + '').length > 11 ? time : time * 1000
+  const date = new Date(T);
   return date.getFullYear() + '-' +
     ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
     ('0' + date.getDate()).slice(-2);
@@ -165,16 +166,16 @@ const fmtDate = (time) => {
 onMounted(() => {
   let type = Number(router.currentRoute.value.query.type)
   console.log('type: ', type);
-  getVidiosList(d.page,d.limit,type)
-        // this.loadMore(); // 初始加载数据
-        d.observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {
-                d.limit += 2;
-                d.page += 1;
-                getVidiosList(d.limit, d.page, type);
-            }
-        });
+  getVidiosList(d.page, d.limit, type)
+  // this.loadMore(); // 初始加载数据
+  d.observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      d.limit += 2;
+      d.page += 1;
+      getVidiosList(d.limit, d.page, type);
     }
+  });
+}
 
 
 

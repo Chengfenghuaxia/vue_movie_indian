@@ -2,10 +2,8 @@
   <el-container>
     <el-header>
       <Nanigation ref="Nanigations" />
-      <van-search ref="Searcha" v-if="isSearch" @search="handSearch" v-model="data.value" shape="round"
-        background="#4fc08d" placeholder="请输入搜索关键词" />
     </el-header>
-    <el-main>
+    <el-main :style="isMobile() ? { marginTop: '-15px' } : { marginTop: '-10px' }">
       <router-view></router-view>
     </el-main>
     <el-footer>
@@ -15,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+import { isMobile } from "../utils/isMobil";
 import Header from "../components/index/Header.vue";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
@@ -23,6 +22,7 @@ import { useStore, mapMutations } from 'vuex';
 const data = reactive({
   value: '',
 })
+const store = useStore();
 const Searcha = ref(null);
 const Nanigations = ref(null);
 const handSearch = () => {
@@ -30,6 +30,7 @@ const handSearch = () => {
 }
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+console.log(isMobile());
 
 })
 
@@ -40,7 +41,7 @@ const handleClickOutside = () => {
     
   }
 }
-const store = useStore();
+
 // 映射state
 const isSearch = computed(() => store.state.Search);
 

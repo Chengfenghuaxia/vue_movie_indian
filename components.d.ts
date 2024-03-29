@@ -64,6 +64,7 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./src/components/Manage/Sidebar.vue')['default']
     Tabs: typeof import('./src/components/Tabs/Tabs.vue')['default']
+    TopNav: typeof import('./src/components/TopNav/index.vue')['default']
     Util: typeof import('./src/components/index/Util.vue')['default']
   }
 }

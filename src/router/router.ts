@@ -1,6 +1,7 @@
 import {
     createRouter,
     createWebHistory,
+    createWebHashHistory
 } from "vue-router";
 
 // 1.定义路由组件
@@ -67,7 +68,8 @@ const routes = [
 
 // 创建路由实例并传递 routes配置
 const router = createRouter({
-    history: createWebHistory(),
+    // history: createWebHistory(),
+    history: createWebHashHistory(),
     routes
 })
 

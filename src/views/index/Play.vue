@@ -3,12 +3,13 @@
     <Advertising :advertiseList="data.advertiseList" :movietypeList="data.movietypeList" />
     <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" />
     <div class="player_p">
-      <video class="video_window" ref="videoa" controls :poster="data.MovieDetail.picture"></video>
+      <video playsinline class="video_window" ref="videoa" controls
+        :poster="data.res_url_prefix + data.data_MovieInfo.query.picture"></video>
     </div>
     <!-- 视频详情 -->
     <div class="Movie_detail_name">
       <el-form-item label="Film title:">
-        <span style="font-size:1rem;">{{ data.MovieDetail.name }}</span>
+        <span style="font-size:1rem;">{{ data.data_MovieInfo.query.name }}</span>
       </el-form-item>
     </div>
     <div class="Movie_detail">
@@ -16,28 +17,32 @@
         <el-form label-width="auto" style="max-width: 37.5rem">
 
           <el-form-item label="Starring:">
-            <span style="font-size:1rem;">{{ data.MovieDetail.actor }}</span>
+            <span style="font-size:1rem;">{{ data.data_MovieInfo.query.actor }}</span>
           </el-form-item>
           <el-form-item label="Area:">
-            <span style="font-size:1rem;">{{ data.MovieDetail.area }}</span>
+            <span style="font-size:1rem;">{{ data.data_MovieInfo.query.area }}</span>
           </el-form-item>
-          <el-form-item label="Release date:">
-            <span style="font-size:.875rem;">{{ fmtDate(Number(data.MovieDetail.release_time)) }}</span>
+          <el-form-item label="RE:">
+            <span style="font-size:.875rem;">{{ fmtDate(Number(data.data_MovieInfo.query.release_time)) }}</span>
           </el-form-item>
         </el-form>
       </div>
       <div class="Movie_detail_right">
-        <el-form label-width="auto" style="max-width: 37.5rem;margin-left:1.875rem">
+        <el-form label-width="auto" style="max-width: 37.5rem;">
 
           <el-form-item label="Language:">
-            <span style="font-size:1rem;">{{ data.MovieDetail.language }}</span>
-          </el-form-item>
-          <el-form-item label="Type:">
-            <span style="font-size:.875rem;">{{ fmtTags(data.MovieDetail.tags) }}</span>
+            <span style="font-size:1rem;">{{ data.data_MovieInfo.query.language }}</span>
           </el-form-item>
           <el-form-item label="Time of play:">
-            <span style="font-size:1rem;">{{ data.MovieDetail.hits }}</span>
+            <span style="font-size:1rem;">{{ data.data_MovieInfo.query.hits }}</span>
           </el-form-item>
+          <!-- <el-form-item label="Type:">
+            <span style="font-size:.875rem;">{{ fmtTags(data.data_MovieInfo.query.tags) }}</span>
+          </el-form-item> -->
+          <div class="video_tags">
+            <div class="video_tags_item" v-for="(item, index) in data.data_MovieInfo.query.tags" :key="index">{{ item }}
+            </div>
+          </div>
         </el-form>
       </div>
 
@@ -45,25 +50,27 @@
     <p class="blurb">Brief introduction：</p>
     <div class="Movie_details">
       <span>
-        {{ data.MovieDetail.blurb }}
+        {{ data.data_MovieInfo.query.blurb }}
       </span>
 
     </div>
     <!--相关推荐-->
     <div class="correlation">
-      <div class="HotMovie">Related Recommendation</div>
+      <div class="HotMovie" :style="{ color: '#ba7405' }">Related Recommendation</div>
       <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.relate" />
     </div>
     <!-- 广告弹窗 -->
     <Dialog :dvData="data.dvData" />
 
-
+    <el-pagination @change="handeChange" :style="{ float: 'right', right: '3.125rem' }" layout="prev, pager, next"
+      :total="data.total" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import {
   onBeforeMount,
+  onMounted,
   computed,
   reactive,
   ref,
@@ -90,6 +97,7 @@ const videoa = ref(null);
 const data = reactive({
   limit: 10,
   page: 1,
+  total:computed(() => store.state.MovieTotal),
   token: "",
   tags: "",
   dvData: [],
@@ -98,15 +106,16 @@ const data = reactive({
     title: "",
     src: "",
   },
+  data_MovieInfo: computed(() => store.state.MovieInfo),
   relate: computed(() => store.state.MovieList),
+  res_url_prefix: computed(() => store.state.res_url_prefix),
   MovieDetail: {},
   advertiseList: computed(() => store.state.advertiseList.filter(item => item.type == 1 && item.jump_type == 2)),
   movietypeList: computed(() => store.state.movietypeList.map(item => {
     return {
       title: item.name,
       show: item.show,
-      list1: item.children ? item.children.filter((k, index) => index < 4).map(j => { return { name: j.name, id: j.id, show: j.show } }) : [],
-      list2: item.children ? item.children.filter((item, index) => index >= 4 && index < 8).map(item => { return { name: item.name, id: item.id, show: item.show } }) : []
+      list: item.children.length < 8 ? item.children : item.children.slice(0, 8),
     }
   })),
 })
@@ -114,10 +123,11 @@ const data = reactive({
 // 初始化HLS
 const initHLS = (MVinfo) => {
   nextTick().then(async () => {
+    const video = videoa.value;
     //获取m3u8文件
     let lastSlashIndex = MVinfo.play_link.lastIndexOf("/");
     let link = MVinfo.play_link.substring(0, lastSlashIndex + 1); // 包含最后的斜杠
-    if (MVinfo.info.play_type==1) {  // 如果非外链
+    if (MVinfo.info.play_type == 1) {  // 如果非外链
       const response = await axios.get(MVinfo.play_link);
       let m3u8Content = response.data;
       m3u8Content = m3u8Content.replace(/%s/g, `${import.meta.env.VITE_API_BASE_URL}verify/getenckey?token=${MVinfo.token}&enc_key=${MVinfo.info.enc_key}`); // 当前请求地址
@@ -125,14 +135,18 @@ const initHLS = (MVinfo) => {
       const blob = new Blob([m3u8Content], { type: 'application/x-mpegURL' });
       const url = URL.createObjectURL(blob);
       if (Hls.isSupported()) {
-        const video = videoa.value;
         const hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
       }
-    }else{ //走外链
+    } else if (MVinfo.info.play_type == 2) {  //无加密
       if (Hls.isSupported()) {
-        const video = videoa.value;
+        const hls = new Hls();
+        hls.loadSource(MVinfo.play_link);
+        hls.attachMedia(video);
+      }
+    } else { //走外链
+      if (Hls.isSupported()) {
         const hls = new Hls();
         hls.loadSource(MVinfo.info.ext_link);
         hls.attachMedia(video);
@@ -141,9 +155,8 @@ const initHLS = (MVinfo) => {
   });
 }
 const handTohotMovie = async (e) => {
-  console.log(e, '看看有什么');
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
-  data.MovieDetail = e
+  data.data_MovieInfo.query = e
   await initHLS(res.data)
   window.scrollTo(0, 500);
 }
@@ -152,6 +165,7 @@ const changePage = (page: number) => {
   console.log(page);
 }
 const getMVdetail = (info) => {
+
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.name == '全部' ? 0 : 2 });
 }
 const truncatedText = (text) => {
@@ -174,26 +188,67 @@ const fmtTags = (tags: any) => {
   return str
 }
 const fmtDate = (time) => {
-  const date = new Date(time);
+  let T = (time + '').length > 11 ? time : time * 1000
+  const date = new Date(T);
   return date.getFullYear() + '-' +
     ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
     ('0' + date.getDate()).slice(-2);
 }
-//取广告然后传给子组件
+const handeChange = (page: number) => {
+  store.dispatch('gelMoveiList', { limit: data.limit, page: page, type: 0 });
+}
+const onEnterFullscreen = () => {
 
+
+
+
+  if (videoa.value.requestFullscreen) {
+    videoa.value.requestFullscreen();
+  } else if (videoa.value.webkitRequestFullscreen) { // Safari
+    videoa.value.webkitRequestFullscreen();
+  } else if (videoa.value.mozRequestFullScreen) { // Firefox
+    videoa.value.mozRequestFullScreen();
+  } else if (videoa.value.msRequestFullscreen) { // IE/Edge
+    videoa.value.msRequestFullscreen();
+  }
+
+
+
+}
+const onExitFullscreen = () => {
+  console.log("退出全屏");
+}
+const fullscreenChange = () => {
+  // 检查是否处于全屏状态，方法因浏览器而异
+  if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+    // 目前处于全屏状态
+    onEnterFullscreen();
+  } else {
+    // 目前未处于全屏状态
+    onExitFullscreen();
+  }
+}
+
+//取广告然后传给子组件
+onMounted(() => {
+
+  // 监听全屏变化事件
+  document.addEventListener("fullscreenchange", fullscreenChange);
+  document.addEventListener("webkitfullscreenchange", fullscreenChange);
+  document.addEventListener("mozfullscreenchange", fullscreenChange);
+  document.addEventListener("MSFullscreenChange", fullscreenChange);
+})
 
 
 // 初始化页面数据
 onBeforeMount(async () => {
-  let query:object = router.currentRoute.value.query
-  let movieinfo = JSON.parse(query.movieinfo)
-  data.MovieDetail = JSON.parse(query.query)
-  store.dispatch('gelMoveiList', { category_id: movieinfo.info.cid, limit: data.limit, page: data.page, type: 2 });
+  let movieinfo = data.data_MovieInfo.movieinfo
+  store.dispatch('gelMoveiList', { category_id: movieinfo ? movieinfo.info.cid : "", limit: data.limit, page: data.page, type: 2 });
   await initHLS(movieinfo)
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 @import "/src/assets/css/film.css";
 
 /* PC端 */
@@ -214,7 +269,7 @@ onBeforeMount(async () => {
     padding: 0 0 0 1%;
     margin-left: 2%;
     border-radius: .3125rem;
-    background-color: rgb(45, 204, 204);
+    background-color: rgb(77, 78, 78);
     text-align: left;
     font-size: .875rem;
     margin-top: .625rem;
@@ -229,7 +284,7 @@ onBeforeMount(async () => {
 
   .Movie_detail {
     color: black;
-    background: #ba7405;
+    background: #ece5d9;
     width: 100;
     height: 9.375rem;
     display: flex;
@@ -283,13 +338,28 @@ onBeforeMount(async () => {
     font-weight: bold;
     font-size: 1.25rem;
     width: 95%;
-    border-bottom: .0625rem solid #e6e6e6;
+    border-bottom: .0625rem solid #ba7405;
     color: rgb(194, 190, 190);
+  }
+
+  .video_tags {
+    width: 100%;
+    height: 2rem;
+    font-size: 14px;
+    line-height: 2rem;
+    display: flex;
+    justify-content: space-around;
+
+    .video_tags_item {
+      background-color: #ba7405;
+      padding: 0 .3125rem;
+      border-radius: .3125rem;
+    }
   }
 }
 </style>
 
-<!--移动端-->
+// <!--移动端-->
 <style scoped>
 /*适应小尺寸*/
 @media (max-width: 48rem) {
@@ -305,7 +375,7 @@ onBeforeMount(async () => {
     padding: 0 0 0 1%;
     margin-left: 2%;
     border-radius: .3125rem;
-    background-color: rgb(45, 204, 204);
+    background-color: rgb(77, 78, 78);
     text-align: left;
     font-size: .875rem;
     margin-top: .625rem;
@@ -324,7 +394,7 @@ onBeforeMount(async () => {
     margin-left: 2%;
     border-radius: .3125rem;
     height: 10.375rem;
-    background: #ba7405;
+    background: #ece5d9;
     display: flex;
   }
 
@@ -378,6 +448,21 @@ onBeforeMount(async () => {
     text-align: left;
     padding-left: .625rem;
     color: black;
+  }
+
+  .video_tags {
+    width: 100%;
+    height: 2rem;
+    font-size: 14px;
+    line-height: 2rem;
+    display: flex;
+    justify-content: space-around;
+
+    .video_tags_item {
+      background-color: #ba7405;
+      padding: 0 .3125rem;
+      border-radius: .3125rem;
+    }
   }
 }
 </style>

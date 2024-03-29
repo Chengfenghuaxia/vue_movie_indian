@@ -8,19 +8,27 @@
         <div v-if="data.list && data.list.length > 0" class="search_res">
             <div class="title">
                 <h2>{{ data.oldSearch }}</h2>
-                <p :style="{ color: '#000' }">All found{{ data.page.total }}fikms and"{{ data.oldSearch }}"Related film and television works</p>
+                <p :style="{ color: '#000' }">All found{{ data.page.total }}fikms and"{{ data.oldSearch }}"Related film
+                    and television works</p>
             </div>
             <div class="content">
                 <div class="film_item" v-for="m in data.list">
-                    <span :style="{ backgroundImage: `url('${m.picture}')` }"></span>
+                    <span :style="{ backgroundImage: `url('${data.res_url_prefix+m.picture}')` }"></span>
                     <div class="film_intro">
-                        <h3>{{ truncatedText(m.name)}}</h3>
+                        <h3>{{ truncatedText(m.name) }}</h3>
                         <p class="tags">
                             <span class="tag_c">{{ m.language }}</span>
                             <span>{{ fmtrelease(m.release_time) }}</span>
                             <span>{{ m.area }}</span>
                         </p>
-                        <p><em>Type:</em>{{ m.tags }}</p>
+                        <!-- <p><em>Type:</em>{{ m.tags }}</p> -->
+
+                        <div class="video_tags">
+                            <div class="video_tags_item" v-for="(item, index) in m.tags" :key="index">
+                                {{ item }}</div>
+                        </div>
+
+
                         <p><em>Protagonist:</em>{{ m.actor }}</p>
                         <p class="blurb"><em>plot:</em>{{ m.blurb.replaceAll('　　', '') }}</p>
                         <el-button :icon="CaretRight" @click="play(m)">Play now</el-button>
@@ -41,25 +49,26 @@
 
 <script lang="ts" setup>
 
-import { onMounted, reactive, watch } from "vue";
+import { onMounted, reactive,computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiPost } from "../../utils/request";
 import { ArrowLeftBold, ArrowRightBold, CaretRight, Search } from '@element-plus/icons-vue'
 import { ElMessage } from "element-plus";
-
-
+import { useStore } from 'vuex';
+const store = useStore();
 const router = useRouter()
 const route = useRoute()
 const data = reactive({
     list: [],
     page: {
-        current: 0,
+        current: 1,
         total: 0,
         pageSize: 10
     },
     oldSearch: '',
     search: '',
-    Hvideolist: []
+    Hvideolist: [],
+    res_url_prefix: computed(() => store.state.res_url_prefix),
 })
 // 监听路由参数的变化
 
@@ -75,9 +84,7 @@ const play = async (e: string | number) => {
     window.scrollTo(0, 500);
 }
 const getList = (current) => {
-    console.log(current);
-
-    ApiPost('/movie/pagebyname', { name: data.search, page: 1, limit: 10 }).then((resp: any) => {
+    ApiPost('/movie/pagebyname', { name: data.search, page: current, limit: 10 }).then((resp: any) => {
         if (resp.code == 0) {
             data.list = resp.data.list
             data.page.total = resp.data.total
@@ -119,6 +126,8 @@ onMounted(() => {
 })
 // 分页器
 const changeCurrent = (currentVal: number) => {
+    console.log(currentVal);
+    
     getList(currentVal)
 
 }
@@ -126,7 +135,7 @@ const changeCurrent = (currentVal: number) => {
 </script>
 
 <!--移动端-->
-<style scoped>
+<style scoped lang="less">
 @import "/src/assets/css/pagination.css";
 @media (max-width: 768px) {
     .title h2 {
@@ -224,6 +233,7 @@ const changeCurrent = (currentVal: number) => {
         width: 80%;
         margin: 0 auto;
         display: flex;
+        margin-top: 30px;
     }
 
     .search {
@@ -258,7 +268,19 @@ const changeCurrent = (currentVal: number) => {
         font-size: 20px;
         /*margin-bottom: 2px*/
     }
-
+  .video_tags{
+    width: 100%;
+    height: 1.5rem;
+    font-size: 14px;
+    line-height: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+    .video_tags_item{
+       background-color: #ba7405;
+       padding: 0 .3125rem;
+       border-radius: .3125rem;
+    }
+  }
 }
 </style>
 <!--pc端-->
@@ -365,6 +387,7 @@ const changeCurrent = (currentVal: number) => {
         width: 45%;
         margin: 20px auto;
         display: flex;
+        margin-top: 30px;
     }
 
     .search {

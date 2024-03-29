@@ -1,12 +1,13 @@
 <template>
     <div>
         <div class="advertise" v-for="(item, index) in advertiseList" :key="index" @click="addone(item)">
-            <a :href="item.jump_url"><img class="img" :src="item.image" alt=""></a>
+            <a :href="item.jump_url"><img class="img" :src="ADres_url_prefix+item.image" alt=""></a>
         </div>
        
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { ApiGet } from "../../utils/request";
 export default {
     props:["advertiseList"],
@@ -15,6 +16,11 @@ export default {
         
         }
 
+    },
+    computed: {
+        ...mapState({
+            ADres_url_prefix: state => state.ADres_url_prefix,
+        }),
     },
     mounted() {},
     methods: {

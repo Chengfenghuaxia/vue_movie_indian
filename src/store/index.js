@@ -1,8 +1,12 @@
 import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate'
 import { ApiGet, ApiPost } from "../utils/request";
 
 // 创建Vuex存储实例
 export default createStore({
+    plugins: [createPersistedState({
+        paths: ['MovieInfo'] // 需要持久化的状态
+    })],
     state: {
         Navigation: false,
         Search: false,
@@ -11,8 +15,12 @@ export default createStore({
         Novel: false,
         HD: false,
         MovieList: [],
-        advertiseList:[],
-        movietypeList:[]
+        advertiseList: [],
+        movietypeList: [],
+        MovieInfo: {},
+        MovieTotal: 0,
+        res_url_prefix: "",
+        ADres_url_prefix: ""
     },
     mutations: {
         setNavigation(state, value) {
@@ -33,34 +41,38 @@ export default createStore({
         setHD(state, value) {
             state.HD = value;
         },
-        SetMovieList(state, value) {
-            state.MovieList = value
-     
+        setMovieInfo(state, value) {
+            state.MovieInfo = value
         },
-        SetadvertiseList(state, value){
-            state.advertiseList = value
+        SetMovieList(state, data) {
+            state.MovieList = data.list
+            state.MovieTotal = data.total
+            state.res_url_prefix = data.res_url_prefix
         },
-        SetmovietypeList(state, value){
+        SetadvertiseList(state, data) {
+            state.advertiseList = data.list,
+                state.ADres_url_prefix = data.res_url_prefix
+        },
+        SetmovietypeList(state, value) {
             state.movietypeList = value
         }
     },
     actions: {
         gelMoveiList({ commit }, data) {
             ApiPost("/movie/pagebytype", data).then(res => {
-                commit("SetMovieList",res.data.list)
+                commit("SetMovieList", res.data)
             })
         },
-        getadvertiseList({ commit }, data){
+        getadvertiseList({ commit }, data) {
             ApiPost("/advertise/getdata", data).then(res => {
-                if(res.code == 0){
-                    commit("SetadvertiseList",res.data.list)
+                if (res.code == 0) {
+                    commit("SetadvertiseList", res.data)
                 }
-               
             })
         },
-        getmovietypeList({ commit }, data){
+        getmovietypeList({ commit }, data) {
             ApiPost("/category/all", data).then(res => {
-                commit("SetmovietypeList",res.data)
+                commit("SetmovietypeList", res.data)
             })
         }
     },

@@ -15,7 +15,8 @@ const http = (options: any) => {
         // create an axios instance
         const service = axios.create({
             // baseURL: import.meta.env.VITE_URL_BASE, // api 的 base_url 注意 vue3
-            baseURL: `http://54.251.94.70:8119/`, // api 的 base_url 注意 vue3 // 固定api
+            // baseURL: `http://54.251.94.70:8119/`, // api 的 base_url 注意 vue3 // 固定api
+            baseURL: `http://18.140.72.41:8119/`, // api 的 base_url 注意 vue3 // 固定api
             timeout: 80000, // request timeout
         });
 

@@ -1,7 +1,7 @@
 <template>
     <div class="play_list">
         <div class="play_list_item" v-for="(item, index) in HomeList" :key="index" @click="getdata(item)">
-            <div class="video" :style="{ backgroundImage: 'url(' + item.picture + ')' }">
+            <div class="video" :style="{ backgroundImage: 'url(' + res_url_prefix + item.picture + ')' }">
 
             </div>
             <div class="video_detail">
@@ -15,6 +15,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 
 export default {
     props: ["MovieList"],
@@ -26,20 +27,23 @@ export default {
     },
     mounted() {
         this.getList()
-
     },
     computed: {
+        ...mapState({
+            res_url_prefix: state => state.res_url_prefix,
 
+        }),
     },
     methods: {
         fmtDate(time) {
-            const date = new Date(time);
+            let T = (time + '').length > 11 ? time : time * 1000
+            const date = new Date(T);
             return date.getFullYear() + '-' +
                 ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
                 ('0' + date.getDate()).slice(-2);
         },
-       async getList() {
-        this.HomeList = await  this.MovieList
+        async getList() {
+            this.HomeList = await this.MovieList
         },
         getdata(data) {
             this.$emit('getMVdata', data)

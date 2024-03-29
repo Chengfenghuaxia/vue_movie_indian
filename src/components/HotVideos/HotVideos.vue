@@ -2,13 +2,15 @@
     <div>
         <div class="hot_movies">
             <div class="hot_movies_item" @click="gotoHot(item)" v-for="(item, index) in hotmovieList">
-                <div v-if="item.picture" class="left_movie" :style="{ backgroundImage: 'url(' + item.picture + ')' }">
+                <div v-if="item.picture" class="left_movie"
+                    :style="{ backgroundImage: 'url(' + res_url_prefix + item.picture + ')' }">
                 </div>
                 <div v-else class="left_movie" :style="{ backgroundImage: 'url(' + imageUrl + ')' }"></div>
                 <div :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">{{ truncatedText(item.name) }}
                 </div>
-                <span :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">Release date：{{ fmtDate(item.release_time)
-                    }}</span>
+                <span :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">Release date：{{
+                fmtDate(item.release_time)
+            }}</span>
             </div>
 
         </div>
@@ -17,7 +19,7 @@
 
 </template>
 <script>
-
+import { mapState } from 'vuex'
 export default {
 
     props: ['HotVideoList'],
@@ -46,7 +48,9 @@ export default {
         hotmovieList() {
             return this.HotVideoList
         },
-
+        ...mapState({
+            res_url_prefix: state => state.res_url_prefix,
+        }),
     },
     methods: {
         truncatedText(text) {
@@ -57,7 +61,8 @@ export default {
             }
         },
         fmtDate(time) {
-            const date = new Date(time);
+            let T = (time + '').length > 11 ? time : time * 1000
+            const date = new Date(T);
             return date.getFullYear() + '-' +
                 ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
                 ('0' + date.getDate()).slice(-2);
