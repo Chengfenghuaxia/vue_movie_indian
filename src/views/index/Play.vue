@@ -5,6 +5,7 @@
     <div class="player_p">
       <video playsinline class="video_window" ref="videoa" controls
         :poster="data.res_url_prefix + data.data_MovieInfo.query.picture"></video>
+      <!-- <span class="Video_duration">视频时长:{{ formattedDuration }}</span> -->
     </div>
     <!-- 视频详情 -->
     <div class="Movie_detail_name">
@@ -95,9 +96,9 @@ const videoPlayer = ref(null);
 const videoa = ref(null);
 // 播放页所需数据
 const data = reactive({
-  limit: 10,
+  limit: 12,
   page: 1,
-  total:computed(() => store.state.MovieTotal),
+  total: computed(() => store.state.MovieTotal),
   token: "",
   tags: "",
   dvData: [],
@@ -118,6 +119,7 @@ const data = reactive({
       list: item.children.length < 8 ? item.children : item.children.slice(0, 8),
     }
   })),
+  duration: 0
 })
 
 // 初始化HLS
@@ -198,10 +200,6 @@ const handeChange = (page: number) => {
   store.dispatch('gelMoveiList', { limit: data.limit, page: page, type: 0 });
 }
 const onEnterFullscreen = () => {
-
-
-
-
   if (videoa.value.requestFullscreen) {
     videoa.value.requestFullscreen();
   } else if (videoa.value.webkitRequestFullscreen) { // Safari
@@ -211,9 +209,6 @@ const onEnterFullscreen = () => {
   } else if (videoa.value.msRequestFullscreen) { // IE/Edge
     videoa.value.msRequestFullscreen();
   }
-
-
-
 }
 const onExitFullscreen = () => {
   console.log("退出全屏");
@@ -228,15 +223,26 @@ const fullscreenChange = () => {
     onExitFullscreen();
   }
 }
+// 格式化视频时长
+const formattedDuration = computed(() => {
+  const hours = Math.floor(data.duration / 3600);
+  const minutes = Math.floor((data.duration % 3600) / 60);
+  const seconds = Math.floor(data.duration % 60);
+  return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+});
 
 //取广告然后传给子组件
 onMounted(() => {
-
   // 监听全屏变化事件
   document.addEventListener("fullscreenchange", fullscreenChange);
   document.addEventListener("webkitfullscreenchange", fullscreenChange);
   document.addEventListener("mozfullscreenchange", fullscreenChange);
   document.addEventListener("MSFullscreenChange", fullscreenChange);
+
+  const video = videoa.value;
+  video.addEventListener('loadedmetadata', () => {
+    data.duration = video.duration;
+  });
 })
 
 
@@ -386,6 +392,11 @@ onBeforeMount(async () => {
     width: 100%;
     max-width: 40rem;
     object-fit: cover;
+
+    .Video_duration {
+      color: #000;
+      text-align: left;
+    }
   }
 
   .Movie_detail {
@@ -464,5 +475,6 @@ onBeforeMount(async () => {
       border-radius: .3125rem;
     }
   }
+
 }
 </style>

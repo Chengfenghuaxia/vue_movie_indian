@@ -14,7 +14,7 @@
             </div>
 
         </div>
-        <div ref="observerElement">Loading more...</div>
+        <!-- <div ref="observerElement">Loading more...</div> -->
     </div>
 
 </template>
@@ -42,7 +42,7 @@ export default {
                 this.loadMore(this.limit, this.page);
             }
         });
-        this.observer.observe(this.$refs.observerElement);
+        // this.observer.observe(this.$refs.observerElement);
     },
     computed: {
         hotmovieList() {

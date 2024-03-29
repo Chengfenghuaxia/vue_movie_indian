@@ -3,7 +3,7 @@
         <div class="content" :class="{ 'active': currentIndex === index }" v-for="(item, index) in NavList" :key="index"
             @click="handTopSearch(item, index)">
 
-           {{ item.nav}}
+            {{ item.nav }}
         </div>
     </div>
 </template>
@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             NavList: [
-                
+
                 { nav: 'Home', color: '#ba7405' },
                 { nav: 'search', color: '#ba7405' },
                 { nav: 'video', color: '#ba7405' },
@@ -52,7 +52,7 @@ export default {
                         await this.router.push({ path: '/index' });
                         this.setNavigation(true)
                         window.scrollTo(0, 400);
-                    }else{
+                    } else {
                         this.gelMoveiList({ page: 1, limit: 12, type: 0 }) //回主页获取所有数据 
                     }
                     break;
@@ -65,7 +65,7 @@ export default {
                     this.router.push({ path: '/filmClassify' })
                     break;
                 case 'menu':
-                   console.log(e);
+                    console.log(e);
                     break;
                 // case 'fiction':
                 //     this.setNovel(true)
@@ -83,24 +83,51 @@ export default {
 }
 </script>
 <style scoped>
-.Nav {
-    height: 40px;
-    width: 100%;
-    line-height: 40px;
-    background-color: 000;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+/*wrap*/
+@media (max-width: 768px) {
+    .Nav {
+        height: 40px;
+        width: 100%;
+        line-height: 40px;
+        background-color: 000;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .content {
+        font-size: block;
+        color: #fff;
+    }
+
+    .active {
+        width: 100px;
+        height: 40px;
+        background-color: #ba7405;
+    }
 }
 
-.content {
-    font-size: block;
-    color: #fff;
-}
+/* PC */
+@media (min-width: 768px) {
+    .Nav {
+        height: 60px;
+        width: 100%;
+        line-height: 60px;
+        background-color: 000;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
 
-.active {
-    width: 100px;
-    height: 40px;
-    background-color: #ba7405;
+    .content {
+        font-size: block;
+        color: #fff;
+    }
+
+    .active {
+        width: 100px;
+        height: 60px;
+        background-color: #ba7405;
+    }
 }
 </style>

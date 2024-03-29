@@ -7,7 +7,8 @@
     <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" />
     <div class="HotMovie">Popular video</div>
     <!-- 热门视频 -->
-    <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.Hvideolist" @getMoviedata="getMoviedata" />
+    <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" />
+    <!-- <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.Hvideolist" @getMoviedata="getMoviedata" /> -->
     <el-pagination @change="handeChange" :style="{ float: 'right', right: '3.125rem' }" layout="prev, pager, next"
       :total="data.total" />
 
@@ -48,7 +49,7 @@ const data = reactive({
   })),
   Hvideolist: computed(() => store.state.MovieList),
   isMobile: isMobile(),
-  Homepage: computed(() => getHomepage({ limit: 10, page: 1, type: 3 }))
+  Homepage:computed(() => store.state.TopMovieList)
 })
 
 const router = useRouter();
@@ -87,16 +88,12 @@ const getMVdata = async (e) => {
 }
 const handeChange = (page: number) => {
   store.dispatch('gelMoveiList', { limit: data.limit, page: page, type: 0 });
+  window.scrollTo(0, 1400);
 }
-const getHomepage = async (data: any) => {
-  let res = await ApiPost("/movie/pagebytype", data)
-  return res.data.list
-}
+
 onMounted(() => {
   store.dispatch('gelMoveiList', { limit: data.limit, page: data.page, type: 0 });
   let query: object = router.currentRoute.value.query
-  console.log(query, '回来的数据');
-
 })
 </script>
 <!--移动端修改-->

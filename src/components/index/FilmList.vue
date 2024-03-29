@@ -1,23 +1,4 @@
-<!-- <template> -->
-<!-- v-if="d.list" -->
-<!-- <div class="c_content"  > -->
 <template>
-  <!-- v-if="d.list.length = 0" -->
-  <!-- <div class="item" v-for="item in d.list" :style="{width: `calc(${d.width-1}%)`}">
-        <div v-if="item.id != -99">
-          <a :href="`/filmDetail?link=${item.id}`" class="default_image link_content">
-            <div class="tag_group">
-              <span class="cus_tag ">{{ item.year ? item.year.slice(0, 4) : '未知' }}</span>
-              <span class="cus_tag ">{{ item.cName }}</span>
-              <span class="cus_tag ">{{ item.area.split(',')[0] }}</span>
-            </div>
-            <span class="cus_remark hidden-md-and-up">{{ item.remarks }}</span>
-            <img :src="item.picture" :alt="item.name?.split('[')[0]" @error="handleImg">
-          </a>
-          <a :href="`/filmDetail?link=${item.id}`" class="content_text_tag">{{ item.name.split("[")[0] }}</a>
-          <span class="cus_remark hidden-md-and-down">{{ item.remarks }}</span>
-        </div>
-      </div> -->
   <div v-if="d.vediosList.length>0">
     <div class="video_movies">
     <div class="video_movies_item" v-for="(item, index) in d.vediosList.slice(0, 4)">
@@ -249,8 +230,36 @@ const fmtDate = (time) => {
 
 /*pc*/
 @media (min-width: 768px) {
+  .video_movies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
 
+  .video_movies_item {
 
+    margin-bottom: 190px;
+    width: 45%;
+    margin-left: 5%;
+    height: 70px;
+
+  }
+
+  .left_movie {
+    width: 90%;
+    height: 200px;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 100px;
+    background-image: url('../../assets/image/images.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+
+  /*展示区域*/
   .c_content {
     width: 100%;
     display: flex;
@@ -259,18 +268,20 @@ const fmtDate = (time) => {
   }
 
   .c_content .item {
-    margin-bottom: 20px;
+    /*  flex-basis: calc(33% - 7px);
+      max-width: 33%;*/
+    margin: 0 4px 20px 4px;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .item .link_content {
-    border-radius: 5px;
     padding-top: 125%;
-    background-size: cover;
-    width: 100%;
-    display: flex;
     position: relative;
-    margin-bottom: 5px;
+    border-radius: 5px;
+    display: flex;
+    width: 100%;
+    background-size: cover;
   }
 
   img {
@@ -284,51 +295,34 @@ const fmtDate = (time) => {
   }
 
   .tag_group {
-    position: absolute;
-    bottom: 3px;
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    overflow: hidden;
-    justify-content: start;
-    height: 18px;
-    z-index: 10;
-    line-height: 18px;
-    padding-left: 10px;
-  }
-
-  .cus_tag {
-    flex-shrink: 0;
-    /* 不缩小元素 */
-    white-space: nowrap;
-    color: rgb(255, 255, 255);
-    padding: 0 3px;
-    margin-right: 8px;
-    background: rgba(0, 0, 0, 0.55);
-    font-size: 12px;
-    border-radius: 5px;
+    display: none;
   }
 
   .content_text_tag {
-    display: block;
-    font-size: 14px !important;
+    font-size: 11px !important;
     color: rgb(221, 221, 221);
     width: 96% !important;
-    padding: 2px 10px 2px 2px !important;
+    max-height: 40px;
+    line-height: 20px;
+    padding: 2px 0 2px 0 !important;
     text-align: left;
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     overflow: hidden;
   }
 
   .cus_remark {
+    z-index: 10;
+    position: absolute;
+    bottom: 0;
     display: block;
     width: 100%;
-    padding-left: 3px;
     font-size: 12px;
-    color: #999999;
-    text-align: left;
+    color: #c2c2c2;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 0 0 5px 5px;
   }
 }
 </style>

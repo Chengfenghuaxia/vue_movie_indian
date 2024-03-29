@@ -56,9 +56,7 @@ export default {
         },
         getAdver() {
             ApiPost("/advertise/getdata", { type: 2 }).then(res => {
-                console.log(res,'有数据吗');
                 this.dialogVg = res.data.list?res.data.list:[{image:""},{image:""}]
-
             })
         }
     }

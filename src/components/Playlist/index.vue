@@ -5,7 +5,7 @@
 
             </div>
             <div class="video_detail">
-                <h4 class="video_name">{{ item.name }}</h4>
+                <h4 class="video_name" :title="item.name">{{ item.name }}</h4>
                 <span :style="{ paddingLeft: '10px' }">play Count:{{ item.hits }} </span>
                 <span :style="{ float: 'right', paddingRight: '20px' }">release date:{{ fmtDate(item.release_time) }}
                 </span>
@@ -19,20 +19,22 @@ import { mapState } from 'vuex'
 
 export default {
     props: ["MovieList"],
+
     data() {
         return {
-            HomeList: []
+            HomeList: [],
+            text: "这是一段很长的文本，需要在容器宽度不够的情况下显示省略号，并且在鼠标悬停时显示完整内容。"
         }
 
     },
-    mounted() {
-        this.getList()
-    },
+
     computed: {
         ...mapState({
             res_url_prefix: state => state.res_url_prefix,
-
         }),
+        HomeList() {
+            return this.MovieList
+        }
     },
     methods: {
         fmtDate(time) {
@@ -42,11 +44,12 @@ export default {
                 ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
                 ('0' + date.getDate()).slice(-2);
         },
-        async getList() {
-            this.HomeList = await this.MovieList
-        },
+
         getdata(data) {
             this.$emit('getMVdata', data)
+        },
+        isPromise(obj) {
+            return !!obj && typeof obj.then === 'function';
         }
     }
 }
@@ -78,20 +81,29 @@ h4 {
 
             .video {
                 width: 100%;
-                height: 200px;
+                height: 280px;
                 background-size: cover;
                 background-position: center;
             }
 
             .video_detail {
                 width: 100%;
-                min-height: 50px;
+                // min-height: 50px;
+                height: 70px;
                 background: #fff;
                 position: absolute;
                 bottom: 0;
 
+
+
+                /* 超出部分显示省略号 */
                 .video_name {
                     margin: 10px 0 0 10px;
+                    white-space: nowrap;
+                    /* 保证文字在一行显示 */
+                    overflow: hidden;
+                    /* 隐藏超出部分 */
+                    text-overflow: ellipsis;
                 }
             }
 
@@ -138,13 +150,20 @@ h4 {
 
             .video_detail {
                 width: 100%;
-                min-height: 50px;
+                min-height: 70px;
                 background: #fff;
                 position: absolute;
                 bottom: 0;
 
+                
+                /* 超出部分显示省略号 */
                 .video_name {
                     margin: 10px 0 0 10px;
+                    white-space: nowrap;
+                    /* 保证文字在一行显示 */
+                    overflow: hidden;
+                    /* 隐藏超出部分 */
+                    text-overflow: ellipsis;
                 }
             }
 

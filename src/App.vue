@@ -17,6 +17,7 @@ const store = useStore();
 
 const triggerAction = () => {
   store.dispatch('gelMoveiList', { limit: 12, page: 1,type:0 });
+  store.dispatch('gelTopMoveiList', { limit: 12, page: 1,type:3 });
   store.dispatch('getadvertiseList', { type:-1 });
   store.dispatch('getmovietypeList', {});
 };
