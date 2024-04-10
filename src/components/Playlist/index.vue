@@ -6,7 +6,7 @@
             </div>
             <div class="video_detail">
                 <h4 class="video_name" :title="item.name">{{ item.name }}</h4>
-                <span :style="{ paddingLeft: '10px' }">play Count:{{ item.hits }} </span>
+                <span :style="{ paddingLeft: '10px' }">Hot:{{ item.hits }} </span>
                 <span :style="{ float: 'right', paddingRight: '20px' }">release date:{{ fmtDate(item.release_time) }}
                 </span>
             </div>
@@ -19,15 +19,12 @@ import { mapState } from 'vuex'
 
 export default {
     props: ["MovieList"],
-
     data() {
         return {
             HomeList: [],
-            text: "这是一段很长的文本，需要在容器宽度不够的情况下显示省略号，并且在鼠标悬停时显示完整内容。"
         }
 
     },
-
     computed: {
         ...mapState({
             res_url_prefix: state => state.res_url_prefix,
@@ -35,6 +32,14 @@ export default {
         HomeList() {
             return this.MovieList
         }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            setTimeout(() => {
+                const height = this.$el.offsetHeight;
+                this.$emit('updateHeight', height);
+            }, 1000);
+        });
     },
     methods: {
         fmtDate(time) {
@@ -66,7 +71,7 @@ h4 {
         text-align: left;
         margin-top: 10px;
         margin-bottom: 20px;
-        color: rgb(61, 126, 216);
+        color: #fff;
 
         .play_list_item {
             width: 96%;
@@ -90,11 +95,11 @@ h4 {
                 width: 100%;
                 // min-height: 50px;
                 height: 70px;
-                background: #fff;
+                // background: #fff;
+                // background-color: rgba(0, 0, 0, 0.5);
+                background-color: #000;
                 position: absolute;
                 bottom: 0;
-
-
 
                 /* 超出部分显示省略号 */
                 .video_name {
@@ -123,7 +128,7 @@ h4 {
         text-align: left;
         margin-top: 10px;
         margin-bottom: 20px;
-        color: rgb(61, 126, 216);
+        color: #fff;
         display: flex;
         justify-content: flex-start;
 
@@ -139,11 +144,11 @@ h4 {
             margin-top: 20px;
             margin-bottom: 20px;
             position: relative;
-            box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+            // box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
 
             .video {
                 width: 100%;
-                height: 200px;
+                height: 300px;
                 background-size: cover;
                 background-position: center;
             }
@@ -151,11 +156,12 @@ h4 {
             .video_detail {
                 width: 100%;
                 min-height: 70px;
-                background: #fff;
+                // background-color: rgba(0, 0, 0, 0.5);
+                background-color: #000;
                 position: absolute;
                 bottom: 0;
 
-                
+
                 /* 超出部分显示省略号 */
                 .video_name {
                     margin: 10px 0 0 10px;

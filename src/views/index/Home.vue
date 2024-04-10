@@ -1,22 +1,23 @@
 <template>
   <div class="container">
     <!-- <Tabs @selectTab="getTabsValue" /> -->
-    <TopNav />
-    <Advertising :advertiseList="data.advertiseList" />
-    <Playlist :MovieList="data.Homepage" @getMVdata="getMVdata" />
+    <!-- <TopNav @tagClicked="setScrollTop" /> -->
+    <Advertising :advertiseList="data.advertiseList" @getadheight="getadheight" />
+    <div class="HotMovie" v-if="data.Homepage.length != 0">Premium video</div>
+    <Playlist :MovieList="data.Homepage" @getMVdata="getMVdata" ref="gerHeight" @updateHeight="getHeight" />
+    <div class="HotMovie">Classification</div>
     <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" />
     <div class="HotMovie">Popular video</div>
     <!-- 热门视频 -->
     <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" />
     <!-- <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.Hvideolist" @getMoviedata="getMoviedata" /> -->
-    <el-pagination @change="handeChange" :style="{ float: 'right', right: '3.125rem' }" layout="prev, pager, next"
-      :total="data.total" />
-
+    <el-pagination @current-change="handleCurrentChange" :style="{ float: 'right', right: '3.125rem' }"
+      :page-size="data.limit" :current-page="data.currentPage" layout="prev, pager, next" :total="data.total" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, reactive, onMounted, computed } from "vue";
+import { reactive, onMounted, computed, ref, nextTick } from "vue";
 import { useRouter } from 'vue-router';
 import { ApiPost } from "../../utils/request";
 import { isMobile } from "../../utils/isMobil";
@@ -34,24 +35,31 @@ const data = reactive({
   page: 1,
   currentPage: 1,
   pageSize: 5,
+  MovieType: 0,  // 0全部 1地区分类 2 类型分类
   total: computed(() => store.state.MovieTotal),
   form: {
     type: -1
   },
   advertiseList: computed(() => store.state.advertiseList.filter(item => item.type == 1 && item.jump_type == 2)),
   movietypeList: computed(() => store.state.movietypeList.map((item, index) => {
-
-    return {
-      title: item.name,
-      show: item.show,
-      list: item.children.length < 8 ? item.children : item.children.slice(0, 8),
+    if (item.children) {
+      return {
+        title: item.name,
+        show: item.show,
+        list: item.children.length < 8 ? item.children : item.children.slice(0, 8),
+      }
+    } else {
+      return []
     }
+
   })),
   Hvideolist: computed(() => store.state.MovieList),
   isMobile: isMobile(),
-  Homepage:computed(() => store.state.TopMovieList)
+  Homepage: computed(() => store.state.TopMovieList),
+  ClassHeight: 130,
+  BestVideos: 60
 })
-
+const gerHeight = ref(null);
 const router = useRouter();
 const getTabsValue = async (value) => {
   store.dispatch('gelMoveiList', { area_id: value.id, limit: data.limit, page: data.page, type: value.name == 'ALL' ? 0 : 1 });
@@ -64,45 +72,75 @@ const handTohotMovie = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   let data = {
     query: e,
-    movieinfo: res.data
+    movieinfo: (res as any).data
   }
   router.push({ path: '/play' });
   store.commit('setMovieInfo', data)
 }
 const getMVdetail = async (info) => {
-  // console.log(info,'这是上面吗');
-  
-  store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.name == '全部' ? 0 : 2 });
+  data.currentPage = 1
+  data.MovieType = 2
+  data.page = 1
+  localStorage.setItem('category_id', info.id)
+  // store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: data.MovieType });
+  store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
 }
 const getMoviedata = (data) => {
   console.log(data);
 }
+
 const getMVdata = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   let data = {
     query: e,
-    movieinfo: res.data
+    movieinfo: (res as any).data
   }
   router.push({ path: '/play' });
   store.commit('setMovieInfo', data)
 }
 const handeChange = (page: number) => {
-  store.dispatch('gelMoveiList', { limit: data.limit, page: page, type: 0 });
+  let category_id = localStorage.getItem('category_id')
+  data.currentPage = page
+  store.dispatch('gelMoveiList', { category_id: category_id, limit: data.limit, page: page, type: data.MovieType });
   window.scrollTo(0, 1400);
 }
-
+const handleCurrentChange = (page: number) => {
+  let category_id = localStorage.getItem('category_id')
+  data.currentPage = page
+  store.dispatch('gelMoveiList', { category_id: category_id, limit: data.limit, page: page, type: data.MovieType });
+  window.scrollTo(0, 1400);
+}
+const setScrollTop = (row) => {
+  if (row.label == "Categories") {
+    window.scrollTo(0, data.ClassHeight);
+  } else if (row.label == "Best videos") {
+    window.scrollTo(0, data.BestVideos);
+  }
+}
+const getHeight = (H) => {
+  data.ClassHeight += H
+}
+const getadheight = (H) => {
+  data.ClassHeight += H
+  data.BestVideos += H
+}
 onMounted(() => {
   store.dispatch('gelMoveiList', { limit: data.limit, page: data.page, type: 0 });
-  let query: object = router.currentRoute.value.query
+
+  nextTick().then(async () => {
+    console.log(gerHeight.value.$el.offsetHeight);
+
+  })
+
 })
 </script>
 <!--移动端修改-->
 <style scoped>
 .HotMovie {
   text-align: left;
-  margin: .625rem .625rem 0rem .625rem;
+  padding: .625rem .625rem 0rem .625rem;
   font-weight: bold;
-  width: 95%;
+  width: 100%;
   border-bottom: .0625rem solid #ba7405;
   color: #ba7405;
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="topNav">
         <div class="topNav_item" :class="{ 'highlight': highlightIndex === index }" v-for="(item, index) in tags"
-            :key="index" @mousedown="highlightTag(index)" @mouseup="highlightedTag = null"
+            :key="index" @mousedown="highlightTag(item,index)" @mouseup="highlightedTag = null"
             @mouseleave="highlightedTag = null">{{
             item.label }}</div>
     </div>
@@ -33,11 +33,12 @@ export default {
 
     },
     methods: {
-        highlightTag(index) {
+        highlightTag(item,index) {
             this.highlightIndex = index;
             setTimeout(() => {
                 this.highlightIndex = null; // 在短暂时间后移除高亮效果
             }, 100); // 设置高亮持续时间为200毫秒
+            this.$emit('tagClicked', item);
         },
     }
 }

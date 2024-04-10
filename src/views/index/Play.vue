@@ -1,7 +1,7 @@
 <template>
   <div class="player_area" v-show="data.loading">
     <Advertising :advertiseList="data.advertiseList" :movietypeList="data.movietypeList" />
-    <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" />
+    <!-- <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" /> -->
     <div class="player_p">
       <video playsinline class="video_window" ref="videoa" controls
         :poster="data.res_url_prefix + data.data_MovieInfo.query.picture"></video>
@@ -63,8 +63,10 @@
     <!-- 广告弹窗 -->
     <Dialog :dvData="data.dvData" />
 
-    <el-pagination @change="handeChange" :style="{ float: 'right', right: '3.125rem' }" layout="prev, pager, next"
-      :total="data.total" />
+    <!-- <el-pagination @change="handeChange" :style="{ float: 'right', right: '3.125rem' }" layout="prev, pager, next"
+      :total="data.total" /> -->
+    <el-pagination @current-change="handeChange" :style="{ float: 'right', right: '3.125rem' }"
+      layout="prev, pager, next" :page-size="data.limit" :current-page="data.currentPage" :total="data.total" />
   </div>
 </template>
 
@@ -72,32 +74,32 @@
 import {
   onBeforeMount,
   onMounted,
+  onUnmounted,
   computed,
   reactive,
   ref,
   nextTick
 } from "vue";
-import Plyr from 'plyr';
 import Hls from 'hls.js';
 import { useRouter } from "vue-router";
 import Advertising from "../../components/Advertising/index.vue";
 import ClassNav from "../../components/ClassNav/index.vue";
 import Dialog from "../../components/Dialog/Dialog.vue";
-import RelateList from "../../components/index/RelateList.vue";
+// import RelateList from "../../components/index/RelateList.vue";
 import HotVideos from "../../components/HotVideos/HotVideos.vue";
 import 'video.js/dist/video-js.css'
-import { ApiGet, ApiPost } from "../../utils/request";
+import { ApiPost } from "../../utils/request";
 import axios from 'axios';
 import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter()
-const videoPlayer = ref(null);
 const videoa = ref(null);
 // 播放页所需数据
 const data = reactive({
   limit: 12,
   page: 1,
+  currentPage: 1,
   total: computed(() => store.state.MovieTotal),
   token: "",
   tags: "",
@@ -113,13 +115,18 @@ const data = reactive({
   MovieDetail: {},
   advertiseList: computed(() => store.state.advertiseList.filter(item => item.type == 1 && item.jump_type == 2)),
   movietypeList: computed(() => store.state.movietypeList.map(item => {
-    return {
-      title: item.name,
-      show: item.show,
-      list: item.children.length < 8 ? item.children : item.children.slice(0, 8),
+    if (item.children) {
+      return {
+        title: item.name,
+        show: item.show,
+        list: item.children.length < 8 ? item.children : item.children.slice(0, 8),
+      }
+    } else {
+      return []
     }
   })),
-  duration: 0
+  duration: 0,
+  hls: new Hls()
 })
 
 // 初始化HLS
@@ -137,37 +144,31 @@ const initHLS = (MVinfo) => {
       const blob = new Blob([m3u8Content], { type: 'application/x-mpegURL' });
       const url = URL.createObjectURL(blob);
       if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
+        data.hls.loadSource(url);
+        data.hls.attachMedia(video);
       }
     } else if (MVinfo.info.play_type == 2) {  //无加密
       if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(MVinfo.play_link);
-        hls.attachMedia(video);
+        data.hls.loadSource(MVinfo.play_link);
+        data.hls.attachMedia(video);
       }
     } else { //走外链
       if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(MVinfo.info.ext_link);
-        hls.attachMedia(video);
+        data.hls.loadSource(MVinfo.info.ext_link);
+        data.hls.attachMedia(video);
       }
     }
   });
 }
 const handTohotMovie = async (e) => {
+
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   data.data_MovieInfo.query = e
-  await initHLS(res.data)
+  await initHLS((res as any).data)
   window.scrollTo(0, 500);
 }
 
-const changePage = (page: number) => {
-  console.log(page);
-}
 const getMVdetail = (info) => {
-
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.name == '全部' ? 0 : 2 });
 }
 const truncatedText = (text) => {
@@ -189,6 +190,7 @@ const fmtTags = (tags: any) => {
   })
   return str
 }
+//校验时间格式
 const fmtDate = (time) => {
   let T = (time + '').length > 11 ? time : time * 1000
   const date = new Date(T);
@@ -197,32 +199,11 @@ const fmtDate = (time) => {
     ('0' + date.getDate()).slice(-2);
 }
 const handeChange = (page: number) => {
-  store.dispatch('gelMoveiList', { limit: data.limit, page: page, type: 0 });
+  let category_id = localStorage.getItem('PLAY_category_id')
+  data.currentPage = page
+  store.dispatch('gelMoveiList', { category_id: category_id, limit: data.limit, page: page, type: 2 });
 }
-const onEnterFullscreen = () => {
-  if (videoa.value.requestFullscreen) {
-    videoa.value.requestFullscreen();
-  } else if (videoa.value.webkitRequestFullscreen) { // Safari
-    videoa.value.webkitRequestFullscreen();
-  } else if (videoa.value.mozRequestFullScreen) { // Firefox
-    videoa.value.mozRequestFullScreen();
-  } else if (videoa.value.msRequestFullscreen) { // IE/Edge
-    videoa.value.msRequestFullscreen();
-  }
-}
-const onExitFullscreen = () => {
-  console.log("退出全屏");
-}
-const fullscreenChange = () => {
-  // 检查是否处于全屏状态，方法因浏览器而异
-  if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-    // 目前处于全屏状态
-    onEnterFullscreen();
-  } else {
-    // 目前未处于全屏状态
-    onExitFullscreen();
-  }
-}
+
 // 格式化视频时长
 const formattedDuration = computed(() => {
   const hours = Math.floor(data.duration / 3600);
@@ -230,27 +211,58 @@ const formattedDuration = computed(() => {
   const seconds = Math.floor(data.duration % 60);
   return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 });
+const duration = () => {
+  data.duration = videoa.value.duration;
+}
+let intervalId = null; // 用于存储定时器ID
+// 定义更新视频播放进度的函数
+const updateVideoTime = () => {
+  if (videoa.value) {
+    localStorage.setItem('videoTime', videoa.value.currentTime.toString());
+  }
+};
+// 同步视频播放进度
+const syncVideoTime = () => {
+
+
+  const video = videoa.value;
+  let movieinfo = data.data_MovieInfo.movieinfo
+  let accMVname = localStorage.getItem('Movie_name')
+  if (accMVname && movieinfo.info.name === accMVname) {
+    const savedTime = localStorage.getItem('videoTime');
+    if (savedTime) {
+      video.currentTime = parseFloat(savedTime);
+    }
+  } else {
+    localStorage.setItem('Movie_name', movieinfo.info.name);
+  }
+}
 
 //取广告然后传给子组件
 onMounted(() => {
-  // 监听全屏变化事件
-  document.addEventListener("fullscreenchange", fullscreenChange);
-  document.addEventListener("webkitfullscreenchange", fullscreenChange);
-  document.addEventListener("mozfullscreenchange", fullscreenChange);
-  document.addEventListener("MSFullscreenChange", fullscreenChange);
-
-  const video = videoa.value;
-  video.addEventListener('loadedmetadata', () => {
-    data.duration = video.duration;
-  });
+  nextTick().then(async () => {
+    syncVideoTime()
+  })
+  intervalId = setInterval(updateVideoTime, 5000); //每5秒同步一次播放进度
+  videoa.value.addEventListener('loadedmetadata', duration);
 })
-
-
 // 初始化页面数据
 onBeforeMount(async () => {
   let movieinfo = data.data_MovieInfo.movieinfo
+  localStorage.setItem('PLAY_category_id', movieinfo.info.cid)
   store.dispatch('gelMoveiList', { category_id: movieinfo ? movieinfo.info.cid : "", limit: data.limit, page: data.page, type: 2 });
   await initHLS(movieinfo)
+})
+onUnmounted(() => {
+  // 组件销毁前移除事件监听器
+  if (videoa.value) {
+    videoa.value.removeEventListener('loadedmetadata');
+  }
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+  }
+  data.hls.destroy()
+
 })
 </script>
 

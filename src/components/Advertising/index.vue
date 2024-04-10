@@ -22,7 +22,12 @@ export default {
             ADres_url_prefix: state => state.ADres_url_prefix,
         }),
     },
-    mounted() {},
+    mounted() {
+        setTimeout(() => {
+            const height = this.$el.offsetHeight;
+            this.$emit("getadheight", height)
+        }, 1000);
+    },
     methods: {
         addone(raw) {
             ApiGet("/advertise/addclickstats",{id:raw.id})

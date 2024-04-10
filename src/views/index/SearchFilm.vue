@@ -77,13 +77,14 @@ const data = reactive({
 const play = async (e: string | number) => {
     let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
     let data = {
-        query: JSON.stringify(e),
-        movieinfo: JSON.stringify(res.data)
+        query: e,
+        movieinfo: res.data
     }
-    await router.push({ path: '/play', query: data });
+    await router.push({ path: '/play' });
+    store.commit('setMovieInfo', data)
     window.scrollTo(0, 500);
 }
-const getList = (current) => {
+const getList = (current,page) => {
     ApiPost('/movie/pagebyname', { name: data.search, page: current, limit: 10 }).then((resp: any) => {
         if (resp.code == 0) {
             data.list = resp.data.list
@@ -100,7 +101,8 @@ const searchMovie = () => {
         ElMessage.error({ message: '搜索信息不能为空', duration: 1000 })
         return
     }
-    getList(data.page.current)
+    data.page.current = 1
+    getList(data.page.current,1)
 
 }
 const getMVdata = (data) => {
@@ -108,7 +110,8 @@ const getMVdata = (data) => {
 
 }
 const fmtrelease = (time) => {
-    const date = new Date(time);
+    let T = (time + '').length > 11 ? time : time * 1000
+    const date = new Date(T);
     return date.getFullYear() + '-' +
         ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
         ('0' + date.getDate()).slice(-2);

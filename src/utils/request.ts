@@ -58,9 +58,11 @@ const http = (options: any) => {
                     ElMessage.error(error.response.data.msg)
                     // ElMessage.error(`未获取授权信息, 请先登录!!!`)
                 } else if (error.response.status == 403) {
-                    ElMessage.error(`无访问权限!!!`)
+                    // ElMessage.error(`无访问权限!!!`)
+                    ElMessage.error(`No access!!!`)
                 } else {
-                    ElMessage.error("服务器繁忙，请稍后再试");
+                    // ElMessage.error("服务器繁忙，请稍后再试");
+                    ElMessage.error("Service is busy");
                 }
 
                 return Promise.reject(error);

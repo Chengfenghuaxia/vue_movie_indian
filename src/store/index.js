@@ -46,15 +46,15 @@ export default createStore({
             state.MovieInfo = value
         },
         SetMovieList(state, data) {
-            state.MovieList = data.list
+            state.MovieList = data.list||[]
             state.MovieTotal = data.total
             state.res_url_prefix = data.res_url_prefix
         },
         SetTopMovieList(state, data) {
-            state.TopMovieList = data.list
+            state.TopMovieList = data.list||[]
         },
         SetadvertiseList(state, data) {
-            state.advertiseList = data.list,
+            state.advertiseList = data.list||[]
                 state.ADres_url_prefix = data.res_url_prefix
         },
         SetmovietypeList(state, value) {

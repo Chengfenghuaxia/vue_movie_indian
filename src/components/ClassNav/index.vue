@@ -29,16 +29,21 @@ export default {
     },
     methods: {
         gotomovie(i, index) {
-            console.log(this.$route.fullPath.includes('/index'),'111');
             if (!this.$route.fullPath.includes('/index')) {
-                console.log('进入跳转');
-                // console.log(this.$router);
-                 this.$router.push({ path: '/index', query: i });
+                this.$router.push({ path: '/index', query: i });
             }
-            
-            this.currentIndex = index
-            this.indexNmae = i.name
-            this.$emit('getMVdetail', i)
+            if ((this.currentIndex===0||this.currentIndex) && this.indexNmae && i.name == this.indexNmae) {
+                i.type = 0
+                this.$emit('getMVdetail', i)
+                this.currentIndex = ""
+                this.indexNmae = ""
+            } else {
+                i.type = 2
+                this.currentIndex = index
+                this.indexNmae = i.name
+                this.$emit('getMVdetail', i)
+            }
+
         },
 
     }

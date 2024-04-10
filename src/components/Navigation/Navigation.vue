@@ -19,7 +19,7 @@ export default {
                 { nav: 'Home', color: '#ba7405' },
                 { nav: 'search', color: '#ba7405' },
                 { nav: 'video', color: '#ba7405' },
-                { nav: 'high definition', color: '#ba7405' },
+                { nav: 'HD_movie', color: '#ba7405' },
             ],
             router: {},
             currentIndex: "",
@@ -71,7 +71,7 @@ export default {
                 //     this.setNovel(true)
                 //     this.router.push({ path: '/Ceshi' })
                 //     break;
-                case 'high definition':
+                case 'HD_movie':
                     this.setHD(true)
                     this.router.push({ path: '/Ceshi' })
             }
@@ -93,15 +93,19 @@ export default {
         display: flex;
         justify-content: space-around;
         align-items: center;
+
+
     }
 
     .content {
         font-size: block;
+        width: 25%;
         color: #fff;
     }
 
     .active {
-        width: 100px;
+        display: inline;
+        font-weight: bold;
         height: 40px;
         background-color: #ba7405;
     }

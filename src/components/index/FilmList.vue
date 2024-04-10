@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, reactive, watch, watchEffect } from 'vue'
+import { defineProps, onMounted, reactive } from 'vue'
 import { ApiPost } from "../../utils/request";
 import { useRouter } from "vue-router";
 import { useStore } from 'vuex';
@@ -46,6 +46,8 @@ const handleImg = (e: Event) => {
 }
 
 const handlePlayVideo = async (e) => {
+  console.log(e.id);
+  
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   let data = {
     query: e,
@@ -56,27 +58,7 @@ const handlePlayVideo = async (e) => {
 }
 
 
-// 监听父组件传递的参数的变化
-watchEffect(() => {
-  // 首先获取当前设备类型
-  // const userAgent = navigator.userAgent.toLowerCase();
-  // let isMobile = /mobile|android|iphone|ipad|phone/i.test(userAgent)
-  // // 如果是PC, 为防止flex布局最后一行元素不足出现错位, 使用空元素补齐list
-  // let c = isMobile ? 3 : props.col ? props.col : 0
-  // let l: any = props.list
-  // let len = l.length
-  // d.width = isMobile ? 31 : Math.floor(100 / c)
-  // if (len % c != 0) {
-  //   for (let i = 0; i < c - len % c; i++) {
-  //     let temp: any = {...l[0] as any}
-  //     temp.id = -99
-  //     l.push(temp)
-  //   }
-  // }
-  // d.list = l
-  console.log('type: ', props.type);
 
-})
 
 const getVidiosList = async (type) => {
   console.log('type: ', type);
