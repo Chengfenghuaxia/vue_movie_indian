@@ -9,7 +9,7 @@
     <el-footer>
       <Footer />
     </el-footer>
-    <TreeList v-if="isMobile()" @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
+    <TreeList v-if="isMobile()" ref="SearchTree"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
   </el-container>
 </template>
 
@@ -19,6 +19,8 @@ import Header from "../components/index/Header.vue";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
 import TreeList from "../components/TreeList/index.vue";
+import ClickOutsideDirective from "../utils/clickOutsideDirective.js";
+
 import { reactive, computed, onMounted, ref } from "vue";
 import { useStore, mapMutations } from 'vuex';
 const store = useStore();
@@ -46,9 +48,14 @@ const data = reactive({
 
 const Searcha = ref(null);
 const Nanigations = ref(null);
+const SearchTree = ref(null);
+
 const handSearch = () => {
   //执行搜索逻辑
 }
+
+const directiveValue = ClickOutsideDirective;
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
 })
@@ -66,17 +73,37 @@ const filterList = (info, index) => {
 }
 const opendetail = (e) => {
   data.show = !data.show
+  if (data.show) {
+    // 添加点击外部关闭的事件监听器
+    document.addEventListener('click', closeDivOutside);
+  } else {
+    // 移除事件监听器
+    document.removeEventListener('click', closeDivOutside);
+  }
 }
 const handleClickOutside = () => {
   if (Searcha.value && !Searcha.value.$el.contains(event.target) && !Nanigations.value.$el.children[1].contains(event.target)) {
     store.commit('setSearch', false)
     console.log(Nanigations.value.$el.children[1].contains(event.target));
-
   }
 }
+
+
 const openlist = (index) => {
 
 }
+
+const closeDivOutside = (event) => {
+     // 检查点击的位置是否在指定的 div 外部
+     console.log('SearchTree.value: ', SearchTree);
+  if (!SearchTree.value.$el.contains(event.target)) {
+    data.show = false;
+    // 移除事件监听器
+    document.removeEventListener('click', closeDivOutside);
+  }
+}
+
+
 // 映射state
 const isSearch = computed(() => store.state.Search);
 
