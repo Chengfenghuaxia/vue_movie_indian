@@ -9,7 +9,7 @@
     <el-footer>
       <Footer />
     </el-footer>
-    <TreeList v-if="isMobile()" ref="SearchTree"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
+    <TreeList v-if="isMobile()" ref="SearchTree" @closeList="closeList"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
   </el-container>
 </template>
 
@@ -19,7 +19,6 @@ import Header from "../components/index/Header.vue";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
 import TreeList from "../components/TreeList/index.vue";
-import ClickOutsideDirective from "../utils/clickOutsideDirective.js";
 
 import { reactive, computed, onMounted, ref } from "vue";
 import { useStore, mapMutations } from 'vuex';
@@ -54,8 +53,6 @@ const handSearch = () => {
   //执行搜索逻辑
 }
 
-const directiveValue = ClickOutsideDirective;
-
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
 })
@@ -72,7 +69,9 @@ const filterList = (info, index) => {
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
 }
 const opendetail = (e) => {
-  data.show = !data.show
+  setTimeout(()=>{
+    data.show = !data.show
+  },1500)
   if (data.show) {
     // 添加点击外部关闭的事件监听器
     document.addEventListener('click', closeDivOutside);
@@ -88,6 +87,9 @@ const handleClickOutside = () => {
   }
 }
 
+const closeList = (val)=>{
+   data.show = val
+}
 
 const openlist = (index) => {
 

@@ -70,7 +70,7 @@ export default {
                 this.currentIndex = index
                 this.indexId = info.id
             }
-
+            this.$emit("closeList",false)
             this.gelMoveiList({ category_id: info.id, limit: this.limit, page: this.page, type: info.type });
         },
         toggleSubMenu(index) {
