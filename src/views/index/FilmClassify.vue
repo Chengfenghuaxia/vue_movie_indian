@@ -6,20 +6,20 @@
     </div> -->
 
     <!--影片列表展示-->
-    <div class="content">
+    <div class="content" :style="{marginTop:'20px'}">
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text">Ranking display</span>
-          <a :href="`/filmClassifySearch?type=4`" class="c_nav_more ">more<b
-              class="iconfont icon-more" /></a>
+          <span class="c_nav_text">{{ en.Ranking }}</span>
+          <!-- <a :href="`/filmClassifySearch?type=4`" class="c_nav_more ">{{ en.more }}<b
+              class="iconfont icon-more" /></a> -->
         </div>
         <FilmList :col="7" :list="d.content.news" :type="4" />
       </div>
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text">Ranking list</span>
-          <a :href="`/filmClassifySearch?type=5`" class="c_nav_more ">more<b
-              class="iconfont icon-more" /></a>
+          <span class="c_nav_text">{{ en.Ranking1 }}</span>
+          <!-- <a :href="`/filmClassifySearch?type=5`" class="c_nav_more ">{{ en.more }}<b
+              class="iconfont icon-more" /></a> -->
         </div>
         <FilmList :col="7" :list="d.content.top" :type="5" />
       </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-
+import {  en } from '../../config/config';
 import { onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
 import FilmList from "../../components/index/FilmList.vue";
@@ -69,7 +69,7 @@ const handlePlayVideo = async(e) =>{
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   let data = {
     query: JSON.stringify(e),
-    movieinfo: JSON.stringify(res.data)
+    movieinfo: JSON.stringify((res as any).data)
   }
   router.push({ path: '/play', query: data });
 } 
@@ -79,8 +79,8 @@ onMounted(() => {
   getFilmData()
   let query = router.currentRoute.value.query
   if (query.query) {
-    d.data = JSON.parse(query.query)
-    d.title = JSON.parse(query.value)
+    d.data = JSON.parse((query as any).query)
+    d.title = JSON.parse((query as any).value)
   }
 })
 </script>

@@ -2,8 +2,23 @@
     <div class="container">
         <div class="search_group">
             <input v-model="data.search" @keydown="e => { e.keyCode == 13 && searchMovie() }"
-                placeholder="Enter keywords to search anime, series, movies " class="search" />
+                :placeholder="en.videoName" class="search" />
             <el-button @click="searchMovie" :icon="Search" style="" />
+
+        </div>
+        <div class="searchHistorys" v-if="data.searchHistory1.length > 0">
+            <div :style="{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }">
+                <!-- <p :style="{ textAlign: 'left', marginLeft: '20PX' }">Search history:</p> -->
+                <img src="../../assets/image/delete.png" @click="deletehistory"
+                    :style="{ width: '20px', height: '20px', marginLeft: '20PX' }" alt="">
+            </div>
+
+            <div v-if="data.searchHistory1.length === 0">暂无搜索记录</div>
+            <div v-else :style="{ textAlign: 'left' }">
+                <div @click="HistorySearch(item)" v-for="(item, index) in data.searchHistory1" :key="index" class="tag">
+                    {{ item }}</div>
+
+            </div>
         </div>
         <div v-if="data.list && data.list.length > 0" class="search_res">
             <div class="title">
@@ -13,7 +28,7 @@
             </div>
             <div class="content">
                 <div class="film_item" v-for="m in data.list">
-                    <span :style="{ backgroundImage: `url('${data.res_url_prefix+m.picture}')` }"></span>
+                    <span :style="{ backgroundImage: `url('${data.res_url_prefix + m.picture}')` }"></span>
                     <div class="film_intro">
                         <h3>{{ truncatedText(m.name) }}</h3>
                         <p class="tags">
@@ -29,9 +44,9 @@
                         </div>
 
 
-                        <p><em>Protagonist:</em>{{ m.actor }}</p>
+                        <p><em>{{ en.Protagonist }}:</em>{{ m.actor }}</p>
                         <p class="blurb"><em>plot:</em>{{ m.blurb.replaceAll('　　', '') }}</p>
-                        <el-button :icon="CaretRight" @click="play(m)">Play now</el-button>
+                        <el-button :icon="CaretRight" @click="play(m)">{{ en.Play }}</el-button>
                     </div>
                 </div>
             </div>
@@ -48,8 +63,9 @@
 </template>
 
 <script lang="ts" setup>
-
-import { onMounted, reactive,computed, watch } from "vue";
+import { isMobile } from "../../utils/isMobil";
+import { zh, en } from '../../config/config';
+import { onMounted, reactive, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiPost } from "../../utils/request";
 import { ArrowLeftBold, ArrowRightBold, CaretRight, Search } from '@element-plus/icons-vue'
@@ -59,6 +75,10 @@ const store = useStore();
 const router = useRouter()
 const route = useRoute()
 const data = reactive({
+    searchHistory: "",
+    searchHistory1: JSON.parse(localStorage.getItem('searchHistory')) || [],
+    showSuggestions: false,
+    mouseDownOnSuggestions: false,
     list: [],
     page: {
         current: 1,
@@ -66,26 +86,44 @@ const data = reactive({
         pageSize: 10
     },
     oldSearch: '',
-    search: '',
+    // search: '',
+    search: "",
     Hvideolist: [],
     res_url_prefix: computed(() => store.state.res_url_prefix),
+  
 })
 // 监听路由参数的变化
 
 
 // 点击播放
 const play = async (e: string | number) => {
-    let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
+    // let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
+    let res = await ApiPost('/movie/getmovieinfo', { id: (e as any).id })
     let data = {
         query: e,
-        movieinfo: res.data
+        movieinfo: (res as any).data
     }
     await router.push({ path: '/play' });
     store.commit('setMovieInfo', data)
     window.scrollTo(0, 500);
 }
-const getList = (current,page) => {
-    ApiPost('/movie/pagebyname', { name: data.search, page: current, limit: 10 }).then((resp: any) => {
+const getList = (current, page?: number, name?: string) => {
+    ApiPost('/movie/pagebyname', { name: name || data.search, page: current, limit: 10 }).then((resp: any) => {
+
+        const index = data.searchHistory1.indexOf(data.search);
+        if (index !== -1) {
+            data.searchHistory1.splice(index, 1);
+        }
+        if (data.search) {
+            data.searchHistory1.unshift(data.search);
+        }
+
+        // 如果搜索记录超过10条，则移除最旧的一条记录
+        let num = isMobile()?10:20
+        if (data.searchHistory1.length > num) {
+            data.searchHistory1.pop();
+        }
+        localStorage.setItem('searchHistory', JSON.stringify(data.searchHistory1));
         if (resp.code == 0) {
             data.list = resp.data.list
             data.page.total = resp.data.total
@@ -98,11 +136,11 @@ const getList = (current,page) => {
 // 搜索按钮事件
 const searchMovie = () => {
     if (data.search.length <= 0) {
-        ElMessage.error({ message: '搜索信息不能为空', duration: 1000 })
+        ElMessage.error({ message: 'Can not be empty', duration: 1000 })
         return
     }
     data.page.current = 1
-    getList(data.page.current,1)
+    getList(data.page.current, 1)
 
 }
 const getMVdata = (data) => {
@@ -124,15 +162,23 @@ const truncatedText = (text) => {
         return text;
     }
 }
-onMounted(() => {
+const HistorySearch = (name) => {
+    data.search = name
+    getList(1, 1, name)
+    data.showSuggestions = false;
+}
+const deletehistory = () => {
+    localStorage.removeItem('searchHistory');
+    data.searchHistory1 = []
+}
 
+
+onMounted(() => {
+   
 })
 // 分页器
 const changeCurrent = (currentVal: number) => {
-    console.log(currentVal);
-    
     getList(currentVal)
-
 }
 
 </script>
@@ -271,19 +317,31 @@ const changeCurrent = (currentVal: number) => {
         font-size: 20px;
         /*margin-bottom: 2px*/
     }
-  .video_tags{
-    width: 100%;
-    height: 1.5rem;
-    font-size: 14px;
-    line-height: 1.5rem;
-    display: flex;
-    justify-content: space-around;
-    .video_tags_item{
-       background-color: #ba7405;
-       padding: 0 .3125rem;
-       border-radius: .3125rem;
+
+    .video_tags {
+        width: 100%;
+        height: 1.5rem;
+        font-size: 14px;
+        line-height: 1.5rem;
+        display: flex;
+        justify-content: space-around;
+
+        .video_tags_item {
+            background-color: #ba7405;
+            padding: 0 .3125rem;
+            border-radius: .3125rem;
+        }
     }
-  }
+
+    .tag {
+        display: inline-block;
+        padding: 6px 12px;
+        margin: 4px;
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        font-size: 12px;
+        text-align: left;
+    }
 }
 </style>
 <!--pc端-->
@@ -425,5 +483,14 @@ const changeCurrent = (currentVal: number) => {
         font-size: 20px;
     }
 
+    .tag {
+        display: inline-block;
+        padding: 6px 12px;
+        margin: 4px;
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        font-size: 12px;
+        text-align: left;
+    }
 }
 </style>

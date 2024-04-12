@@ -9,47 +9,51 @@
     </div>
     <!-- 视频详情 -->
     <div class="Movie_detail_name">
-      <el-form-item label="Film title:">
+
         <span style="font-size:1rem;">{{ data.data_MovieInfo.query.name }}</span>
-      </el-form-item>
+
     </div>
-    <div class="Movie_detail">
-      <div class="Movie_detail_left">
-        <el-form label-width="auto" style="max-width: 37.5rem">
+    <div class="Movie_detail_digua">
 
-          <el-form-item label="Starring:">
+      <div class="Movie_detail">
+        <div class="Movie_detail_left">
+          <el-form style="max-width: 37.5rem">
+
+            <!-- <el-form-item label="Starring:">
             <span style="font-size:1rem;">{{ data.data_MovieInfo.query.actor }}</span>
-          </el-form-item>
-          <el-form-item label="Area:">
-            <span style="font-size:1rem;">{{ data.data_MovieInfo.query.area }}</span>
-          </el-form-item>
-          <el-form-item label="RE:">
-            <span style="font-size:.875rem;">{{ fmtDate(Number(data.data_MovieInfo.query.release_time)) }}</span>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="Movie_detail_right">
-        <el-form label-width="auto" style="max-width: 37.5rem;">
+          </el-form-item> -->
+            <el-form-item label="Area:">
+              <span style="font-size:1rem;">{{ data.data_MovieInfo.query.area }}</span>
+            </el-form-item>
+            <el-form-item label="RE:">
+              <span style="font-size:.875rem;">{{ fmtDate(Number(data.data_MovieInfo.query.release_time)) }}</span>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div class="Movie_detail_right">
+          <el-form style="max-width: 37.5rem;">
 
-          <el-form-item label="Language:">
-            <span style="font-size:1rem;">{{ data.data_MovieInfo.query.language }}</span>
-          </el-form-item>
-          <el-form-item label="Time of play:">
-            <span style="font-size:1rem;">{{ data.data_MovieInfo.query.hits }}</span>
-          </el-form-item>
-          <!-- <el-form-item label="Type:">
+            <el-form-item label="Language:">
+              <span style="font-size:1rem;">{{ data.data_MovieInfo.query.language }}</span>
+            </el-form-item>
+            <el-form-item label="Time of play:">
+              <span style="font-size:1rem;">{{ data.data_MovieInfo.query.hits }}</span>
+            </el-form-item>
+            <!-- <el-form-item label="Type:">
             <span style="font-size:.875rem;">{{ fmtTags(data.data_MovieInfo.query.tags) }}</span>
           </el-form-item> -->
-          <div class="video_tags">
-            <div class="video_tags_item" v-for="(item, index) in data.data_MovieInfo.query.tags" :key="index">{{ item }}
+            <div class="video_tags">
+              <div class="video_tags_item" v-for="(item, index) in data.data_MovieInfo.query.tags" :key="index">{{ item
+                }}
+              </div>
             </div>
-          </div>
-        </el-form>
+          </el-form>
+        </div>
       </div>
-
     </div>
-    <p class="blurb">Brief introduction：</p>
-    <div class="Movie_details">
+
+    <p class="blurb" v-if="data.data_MovieInfo.query.blurb">{{ en.brief }}</p>
+    <div class="Movie_details" v-if="data.data_MovieInfo.query.blurb">
       <span>
         {{ data.data_MovieInfo.query.blurb }}
       </span>
@@ -57,7 +61,7 @@
     </div>
     <!--相关推荐-->
     <div class="correlation">
-      <div class="HotMovie" :style="{ color: '#ba7405' }">Related Recommendation</div>
+      <div class="HotMovie" :style="{ color: '#ba7405' }">{{ en.related_suggestion }}</div>
       <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.relate" />
     </div>
     <!-- 广告弹窗 -->
@@ -71,6 +75,7 @@
 </template>
 
 <script lang="ts" setup>
+import { en } from '../../config/config';
 import {
   onBeforeMount,
   onMounted,
@@ -306,7 +311,10 @@ onUnmounted(() => {
     width: 100;
     height: 9.375rem;
     display: flex;
+    height: 7.375rem;
+    padding-top: 20px;
   }
+
 
   .Movie_detail_left {
     width: 50%;
@@ -416,7 +424,8 @@ onUnmounted(() => {
     width: 96%;
     margin-left: 2%;
     border-radius: .3125rem;
-    height: 10.375rem;
+    height: 7.375rem;
+    padding-top: 20px;
     background: #ece5d9;
     display: flex;
   }

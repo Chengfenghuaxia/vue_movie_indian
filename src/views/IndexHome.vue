@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <Nanigation ref="Nanigations" />
+      <Nanigation ref="Nanigations" @opendetail="opendetail" />
     </el-header>
     <el-main :style="isMobile() ? { marginTop: '-15px' } : { marginTop: '-10px' }">
       <router-view></router-view>
@@ -9,6 +9,7 @@
     <el-footer>
       <Footer />
     </el-footer>
+    <TreeList v-if="isMobile()" @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
   </el-container>
 </template>
 
@@ -17,12 +18,32 @@ import { isMobile } from "../utils/isMobil";
 import Header from "../components/index/Header.vue";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
+import TreeList from "../components/TreeList/index.vue";
 import { reactive, computed, onMounted, ref } from "vue";
 import { useStore, mapMutations } from 'vuex';
-const data = reactive({
-  value: '',
-})
 const store = useStore();
+const data = reactive({
+  currentIndex: null,
+  indexNmae: "",
+  value: '',
+  show: false,
+  limit: 10,
+  page: 1,
+  menulist: ["Asia", "India", "Japanese", "Occident", "Cartoon", "Taiwan", "Sri Lankan"],
+  movietypeList: computed(() => store.state.movietypeList.map((item, index) => {
+    if (item.children) {
+      return {
+        name: item.name,
+        show: item.show,
+        open: false,
+        subMenus: item.children.length < 8 ? item.children : item.children.slice(0, 8),
+      }
+    } else {
+      return []
+    }
+  })),
+})
+
 const Searcha = ref(null);
 const Nanigations = ref(null);
 const handSearch = () => {
@@ -30,25 +51,63 @@ const handSearch = () => {
 }
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
-console.log(isMobile());
-
 })
-
+const filterList = (info, index) => {
+  if ((data.currentIndex === 0 || data.currentIndex) && data.indexNmae && info.name == data.indexNmae) {
+    data.currentIndex = null
+    data.indexNmae = ""
+    info.type = 0
+  } else {
+    info.type = 2
+    data.currentIndex = index
+    data.indexNmae = info.name
+  }
+  store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
+}
+const opendetail = (e) => {
+  data.show = !data.show
+}
 const handleClickOutside = () => {
-  if (Searcha.value&&!Searcha.value.$el.contains(event.target) && !Nanigations.value.$el.children[1].contains(event.target)) {
+  if (Searcha.value && !Searcha.value.$el.contains(event.target) && !Nanigations.value.$el.children[1].contains(event.target)) {
     store.commit('setSearch', false)
     console.log(Nanigations.value.$el.children[1].contains(event.target));
-    
+
   }
 }
+const openlist = (index) => {
 
+}
 // 映射state
 const isSearch = computed(() => store.state.Search);
 
 </script>
 
 
-<style scoped>
+<style scoped lang="less">
+.menu_list {
+  width: 200px;
+  min-height: 180px;
+  background-color: rgb(68, 89, 126);
+  position: fixed;
+  right: 10px;
+  top: 50px;
+  border-radius: 7px;
+  color: #fff;
+  text-align: left;
+
+  .menu_list_item {
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+    line-height: 40px;
+  }
+
+  .active {
+
+    background-color: #ccc;
+  }
+}
+
 :deep(.el-main) {
   padding-top: 70px !important;
   padding-bottom: 30px !important;

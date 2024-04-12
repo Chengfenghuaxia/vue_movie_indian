@@ -23,6 +23,7 @@ import { defineProps, onMounted, reactive } from 'vue'
 import { ApiPost } from "../../utils/request";
 import { useRouter } from "vue-router";
 import { useStore } from 'vuex';
+import {ElMessage} from "element-plus";
 const store = useStore();
 const router = useRouter()
 const props = defineProps({
@@ -42,7 +43,8 @@ const d = reactive({
 
 // 图片加载失败事件
 const handleImg = (e: Event) => {
-  e.target.style.display = "none"
+  // e.target.style.display = "none"
+  (e.target as any).style.display = "none"
 }
 
 const handlePlayVideo = async (e) => {
@@ -51,7 +53,7 @@ const handlePlayVideo = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   let data = {
     query: e,
-    movieinfo: res.data
+    movieinfo: (res as any).data
   }
   router.push({ path: '/play'});
   store.commit('setMovieInfo', data)

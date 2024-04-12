@@ -5,9 +5,9 @@
     <Advertising :advertiseList="data.advertiseList" @getadheight="getadheight" />
     <div class="HotMovie" v-if="data.Homepage.length != 0">Premium video</div>
     <Playlist :MovieList="data.Homepage" @getMVdata="getMVdata" ref="gerHeight" @updateHeight="getHeight" />
-    <div class="HotMovie">Classification</div>
-    <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" />
-    <div class="HotMovie">Popular video</div>
+    <div class="HotMovie">{{ data.lang.class }}</div>
+    <!-- <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" /> -->
+    <!-- <div class="HotMovie">{{ data.lang.hot_movie }}</div> -->
     <!-- 热门视频 -->
     <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" />
     <!-- <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.Hvideolist" @getMoviedata="getMoviedata" /> -->
@@ -27,10 +27,11 @@ import Advertising from "../../components/Advertising/index.vue";
 import ClassNav from "../../components/ClassNav/index.vue";
 import HotVideos from "../../components/HotVideos/HotVideos.vue";
 import Playlist from "../../components/Playlist/index.vue";
-
+import {  en } from '../../config/config';
 import { useStore } from 'vuex';
 const store = useStore();
 const data = reactive({
+  lang: en,
   limit: 12,
   page: 1,
   currentPage: 1,
@@ -51,7 +52,6 @@ const data = reactive({
     } else {
       return []
     }
-
   })),
   Hvideolist: computed(() => store.state.MovieList),
   isMobile: isMobile(),
@@ -82,7 +82,6 @@ const getMVdetail = async (info) => {
   data.MovieType = 2
   data.page = 1
   localStorage.setItem('category_id', info.id)
-  // store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: data.MovieType });
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
 }
 const getMoviedata = (data) => {

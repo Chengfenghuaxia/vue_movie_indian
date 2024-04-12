@@ -32,6 +32,7 @@ export default {
             if (!this.$route.fullPath.includes('/index')) {
                 this.$router.push({ path: '/index', query: i });
             }
+            //如果二次点击按钮，改为查找全部取消按钮高亮
             if ((this.currentIndex===0||this.currentIndex) && this.indexNmae && i.name == this.indexNmae) {
                 i.type = 0
                 this.$emit('getMVdetail', i)

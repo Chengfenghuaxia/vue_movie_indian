@@ -7,7 +7,7 @@
             <div class="video_detail">
                 <h4 class="video_name" :title="item.name">{{ item.name }}</h4>
                 <span :style="{ paddingLeft: '10px' }">Hot:{{ item.hits }} </span>
-                <span :style="{ float: 'right', paddingRight: '20px' }">release date:{{ fmtDate(item.release_time) }}
+                <span :style="{ float: 'right', paddingRight: '20px' }">{{ fmtDate(item.release_time) }}
                 </span>
             </div>
         </div>
