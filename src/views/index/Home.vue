@@ -136,15 +136,8 @@ const getadheight = (H) => {
   data.BestVideos += H
 }
 onMounted(() => {
-  store.dispatch('gelMoveiList', { limit: data.limit, page: data.page, type: 0 });
-  nextTick().then(async () => {
-    console.log(gerHeight.value.$el.offsetHeight);
-
-  })
-  // 监听全局事件
+  // store.dispatch('gelMoveiList', { limit: data.limit, page: data.page, type: 0 });
   globalEvent.on('button-clicked', () => {
-    // 在这里执行相应的操作
-    console.log('按钮被点击了');
     data.currentPage = 1
   });
 

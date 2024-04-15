@@ -62,7 +62,7 @@ const routes = [
         children: [
             {
                 path: 'index', component: Home,
-          
+
                 children: [
                     { path: 'cartoon', component: Home },
                     { path: 'occident', component: Home },
@@ -108,14 +108,14 @@ const router = createRouter({
     // history: createWebHistory(),
     history: createWebHashHistory(),
     routes: routes
-  
+
 })
 
 let newchildren = getrouter()
 
 newchildren.then(res => {
     console.log(res, '新路由');
-    res.forEach(item=>{
+    res.forEach(item => {
         router.addRoute
     })
     // router.addRoute( { path: 'film/detail', component: Temp }); // 添加动态路由
@@ -146,8 +146,12 @@ router.beforeEach((to, from, next) => {
         }
     });
     if (info) {
-        let data = { category_id: info.id, limit: info.limit || 10, page: info.page || 1, type: info.type || 2 }
-        store.dispatch('gelMoveiList', data);
+        console.log(info, '路由变化的参数');
+        if (to.fullPath !== '/index') {
+            let data = { category_id: info.id, limit: info.limit || 10, page: info.page || 1, type: info.type || 2 }
+            store.dispatch('gelMoveiList', data);
+        }
+
     }
 
 

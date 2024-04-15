@@ -2,8 +2,9 @@
     <div>
         <div class="Nav" v-if="isMobile">
             <div class="Nav_home" @click="gotuhome">Home</div>
-            <div class="Nav_search" >
-                <img @click="searchMovie" :style="{width:'20px',height:'20px',marginTop:'20px'}" src="../../assets/image/search1.png" alt="">
+            <div class="Nav_search">
+                <img @click="searchMovie" :style="{ width: '20px', height: '20px', marginTop: '20px' }"
+                    src="../../assets/image/search1.png" alt="">
 
             </div>
             <div class="Nav_icon">
@@ -13,7 +14,7 @@
         <div class="Nav" v-else>
             <div :style="{ width: '10%' }"></div>
             <div class="Nav_home" @click="gotuhome">Home</div>
-            <i class="fas fa-heart"></i> <!-- 使用 Font Awesome 图标 -->
+            <!-- <i class="fas fa-heart"></i> 使用 Font Awesome 图标 -->
             <div class="menulist">
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal"
                     background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
@@ -21,7 +22,7 @@
                         v-show="item.children">
                         <template #title>{{ item.name }}</template>
                         <el-menu-item :index="subItem.id" v-for="(subItem, subIndex) in item.children"
-                            @click="ceshi(subItem)" :key="subIndex">{{ subItem.name
+                            @click="toclassMovie(subItem)" :key="subIndex">{{ subItem.name
                             }}</el-menu-item>
                     </el-sub-menu>
                 </el-menu>
@@ -40,6 +41,7 @@
 <script>
 
 import { isMobile } from "../../utils/isMobil";
+import { globalEvent } from '../../utils/globalEvent';
 import { mapMutations, mapActions, mapState } from 'vuex'
 import { useRouter } from 'vue-router';
 import { en } from '../../config/config';
@@ -77,7 +79,7 @@ export default {
     methods: {
         opendetail() {
             this.$emit("opendetail", this.show)
-         
+
         },
 
         ...mapMutations([
@@ -124,18 +126,28 @@ export default {
             }
         },
         async gotuhome() {
+            localStorage.removeItem('category_id')
+            globalEvent.emit('button-clicked');
+            //如果routerInfo有筛选信息，则吧type充值为0 点击home查找所有
+            let routerInfo = JSON.parse(localStorage.getItem('routerInfo'))
+            if (routerInfo) {
+                routerInfo.type = 0
+               
+            }
+            
+            localStorage.setItem('routerInfo', JSON.stringify(routerInfo))
+            await this.gelMoveiList({ page: 1, limit: 12, type: 0 }) //回主页获取所有数据 
             if (this.$route.fullPath != '/index') {
-                this.gelMoveiList({ page: 1, limit: 12, type: 0 }) //回主页获取所有数据
-                await this.router.push({ path: '/index' });
+                this.router.push({ path: '/index' });
                 this.setNavigation(true)
                 window.scrollTo(0, 400);
-            } else {
-                this.gelMoveiList({ page: 1, limit: 12, type: 0 }) //回主页获取所有数据 
             }
 
             if (!this.isMobile) {
                 this.activeIndex2 = 0
             }
+
+
         },
         searchMovie() {
             this.router.push({ path: '/search', });
@@ -146,14 +158,17 @@ export default {
         handleSelect(key, keyPath) {
             // console.log(key, keyPath);
         },
-        ceshi(item) {
+        // PC端点击菜单
+        toclassMovie(item) {
+            globalEvent.emit('button-clicked');
+            localStorage.setItem("routerInfo", JSON.stringify(item));
+            localStorage.setItem('category_id', item.id)
             this.gelMoveiList({ category_id: item.id, page: 1, limit: 12, type: 2 })
         }
     }
 }
 </script>
 <style scoped lang="less">
-
 /*wrap*/
 @media (max-width: 768px) {
     .Nav {
@@ -167,11 +182,11 @@ export default {
 
         .Nav_home {
             padding-left: 10px;
-     
+
         }
 
         .Nav_search {
-                   img{
+            img {
                 margin-left: 240px;
             }
         }
@@ -199,10 +214,10 @@ export default {
         height: 40px;
         background-color: #ba7405;
     }
- 
-   .arrow{
-    margin-right:20px
-   }
+
+    .arrow {
+        margin-right: 20px
+    }
 }
 
 /* PC */
@@ -220,7 +235,7 @@ export default {
         }
 
         .menulist {
-width: 50%;
+            width: 50%;
             cursor: pointer;
             line-height: 60px;
             display: flex;
@@ -231,7 +246,8 @@ width: 50%;
             width: 10%;
             cursor: pointer;
             line-height: 60px;
-        display: flex;
+            display: flex;
+
             img {
                 width: 22px;
                 height: 22px;
