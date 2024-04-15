@@ -14,11 +14,7 @@
         <div class="Nav" v-else>
             <div :style="{ width: '10%' }"></div>
             <div class="Nav_home" @click="gotuhome">Home</div>
-<<<<<<< HEAD
             <!-- <i class="fas fa-heart"></i> -->
-=======
-            <!-- <i class="fas fa-heart"></i> 使用 Font Awesome 图标 -->
->>>>>>> 39e310f933f74e96ab9f604ab765adadf337d5f6
             <div class="menulist">
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" :collapse="true"
                     background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
