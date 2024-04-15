@@ -13,9 +13,9 @@
         <div class="Nav" v-else>
             <div :style="{ width: '10%' }"></div>
             <div class="Nav_home" @click="gotuhome">Home</div>
-            <i class="fas fa-heart"></i> <!-- 使用 Font Awesome 图标 -->
+            <!-- <i class="fas fa-heart"></i> -->
             <div class="menulist">
-                <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal"
+                <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" :collapse="true"
                     background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
                     <el-sub-menu :index="index" v-for="(item, index) in movietypeList" :key="index"
                         v-show="item.children">
