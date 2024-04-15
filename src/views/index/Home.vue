@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onMounted, computed, ref, nextTick } from "vue";
+import { reactive, onMounted, computed, ref, nextTick, watch } from "vue";
 import { useRouter } from 'vue-router';
 import { ApiPost } from "../../utils/request";
 import { isMobile } from "../../utils/isMobil";
@@ -27,9 +27,20 @@ import Advertising from "../../components/Advertising/index.vue";
 import ClassNav from "../../components/ClassNav/index.vue";
 import HotVideos from "../../components/HotVideos/HotVideos.vue";
 import Playlist from "../../components/Playlist/index.vue";
-import {  en } from '../../config/config';
+import { en } from '../../config/config';
 import { useStore } from 'vuex';
 const store = useStore();
+const router = useRouter();
+
+watch(
+  () => router.currentRoute,
+  (to, from) => {
+    console.log('路由从', from, '变为', to);
+    // 在这里执行相应的操作，例如更新组件数据等
+  }
+);
+
+
 const data = reactive({
   lang: en,
   limit: 12,
@@ -60,7 +71,7 @@ const data = reactive({
   BestVideos: 60
 })
 const gerHeight = ref(null);
-const router = useRouter();
+
 const getTabsValue = async (value) => {
   store.dispatch('gelMoveiList', { area_id: value.id, limit: data.limit, page: data.page, type: value.name == 'ALL' ? 0 : 1 });
 }
@@ -87,7 +98,6 @@ const getMVdetail = async (info) => {
 const getMoviedata = (data) => {
   console.log(data);
 }
-
 const getMVdata = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
   let data = {

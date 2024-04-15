@@ -26,6 +26,31 @@ import FilmClass from "../views/manage/film/FilmClass.vue";
 import Film from "../views/manage/film/Film.vue";
 import FileUpload from "../views/manage/file/FileUpload.vue";
 import FilmAdd from "../views/manage/film/FilmAdd.vue";
+import { useStore } from 'vuex';
+import { ApiPost } from "../utils/request";
+let list = []
+
+
+async function getrouter() {
+    let res = (await ApiPost("/category/all", {}))
+    let routerList = []
+    res.data.map(item => {
+        if (item.children) {
+            item.children.forEach(item1 => {
+                let data = {
+                    path: item1.name,
+                    component: Home
+                }
+                routerList.push(data)
+            })
+        }
+
+    })
+    console.log(routerList, '获取到的路由');
+    return routerList
+}
+
+
 
 
 // 2. 定义一个路由
@@ -35,13 +60,23 @@ const routes = [
         component: IndexHome,
         redirect: '/index',
         children: [
-            { path: 'index', component: Home },
+            {
+                path: 'index', component: Home,
+          
+                children: [
+                    { path: 'cartoon', component: Home },
+                    { path: 'occident', component: Home },
+                    { path: 'Taiwan', component: Home },
+                    { path: 'SriLankan', component: Home },
+                    { path: 'india', component: Home },
+                ]
+            },
             { path: 'filmDetail', component: FilmDetails },
             { path: 'play', component: Play },
             { path: 'search', component: SearchFilm },
             { path: 'filmClassify', component: FilmClassify },
             { path: 'filmClassifySearch', component: FilmClassifySearch },
-            {path: 'Ceshi', component: Ceshi},
+            { path: 'Ceshi', component: Ceshi },
         ]
     },
     { path: '/login', component: Login },
@@ -66,15 +101,58 @@ const routes = [
     { path: `/:pathMatch(.*)*`, component: NotFound },
 ]
 
+
+
 // 创建路由实例并传递 routes配置
 const router = createRouter({
     // history: createWebHistory(),
     history: createWebHashHistory(),
-    routes
+    routes: routes
+  
 })
+
+let newchildren = getrouter()
+
+newchildren.then(res => {
+    console.log(res, '新路由');
+    res.forEach(item=>{
+        router.addRoute
+    })
+    // router.addRoute( { path: 'film/detail', component: Temp }); // 添加动态路由
+})
+
+
+
+
+
 
 // 添加全局前置守卫拦截未登录的跳转
 router.beforeEach((to, from, next) => {
+    console.log('路由从', from.fullPath, '变为', to.fullPath);
+    const store = useStore();
+    let info = JSON.parse(localStorage.getItem("routerInfo"))
+
+
+    list = store.state.movietypeList.map(item => {
+        return { ...item.children }
+    })
+
+
+    list.forEach(item1 => {
+        for (var key in item1) {
+            if (to.fullPath.includes(item1[key].name)) {
+                info = item1[key]
+            }
+        }
+    });
+    if (info) {
+        let data = { category_id: info.id, limit: info.limit || 10, page: info.page || 1, type: info.type || 2 }
+        store.dispatch('gelMoveiList', data);
+    }
+
+
+
+
     // 如果访问的是 /manage 下的路由, 且 token信息为空 则跳转到登录界面
     let matchPath = new RegExp(/^\/manage\//).test(to.path)
     let token = getToken()
@@ -87,6 +165,8 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from) => {
     window.scrollTo(0, 0);
 });
+
+
 
 
 

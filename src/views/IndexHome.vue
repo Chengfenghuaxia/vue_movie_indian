@@ -9,7 +9,8 @@
     <el-footer>
       <Footer />
     </el-footer>
-    <TreeList v-if="isMobile()" ref="SearchTree"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
+    <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show"
+      :treelist="data.movietypeList" />
   </el-container>
 </template>
 
@@ -72,7 +73,10 @@ const filterList = (info, index) => {
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
 }
 const opendetail = (e) => {
-  data.show = !data.show
+  setTimeout(() => {
+    data.show = !data.show
+  }, 300);
+ 
   if (data.show) {
     // 添加点击外部关闭的事件监听器
     document.addEventListener('click', closeDivOutside);
@@ -88,14 +92,18 @@ const handleClickOutside = () => {
   }
 }
 
-
+const closedetail = (type) => {
+  setTimeout(() => {
+    data.show = type
+  }, 100);
+}
 const openlist = (index) => {
 
 }
 
 const closeDivOutside = (event) => {
-     // 检查点击的位置是否在指定的 div 外部
-     console.log('SearchTree.value: ', SearchTree);
+  // 检查点击的位置是否在指定的 div 外部
+  console.log('SearchTree.value: ', SearchTree);
   if (!SearchTree.value.$el.contains(event.target)) {
     data.show = false;
     // 移除事件监听器

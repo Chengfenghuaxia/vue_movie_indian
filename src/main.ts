@@ -10,6 +10,7 @@ import store from './store';
 import VueGtag from "vue-gtag";
 import 'vant/lib/index.css';
 import 'plyr/dist/plyr.css';// 引入自定义loading样式
+
 // 使用自定义loading
 
 

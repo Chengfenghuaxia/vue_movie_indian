@@ -2,16 +2,20 @@
 
     <div class="menu_list" v-if="show">
         <div v-for="(menu, index) in menulist" :key="index">
-            <div class="menu" @click="toggleSubMenu(index)" :style="{display:'flex',justifyContent:'space-between'}">
-               <div>{{ menu.name }}  </div> 
+            <div class="menu" @click="toggleSubMenu(index)"
+                :style="{ display: 'flex', justifyContent: 'space-between' }">
+                <div>{{ menu.name }} </div>
                 <div v-if="menu.subMenus && menu.subMenus.length > 0" class="arrow">
-                <img v-if="!menu.open" :style="{width:'14px',marginRight:'10px'}" src="../../assets/image/top.png" alt="">
-                <img v-else :style="{width:'14px',marginRight:'10px'}" src="../../assets/image/donw.png" alt="">
+                    <img v-if="menu.open" :style="{ width: '14px', marginRight: '10px' }"
+                        src="../../assets/image/top.png" alt="">
+                    <img v-else :style="{ width: '14px', marginRight: '10px' }" src="../../assets/image/donw.png"
+                        alt="">
                 </div>
             </div>
             <div v-if="menu.open" class="submenu">
                 <div v-for="(subMenu, subIndex) in menu.subMenus" :key="subIndex" class="sub-menu"
-                    :class="{ 'active': (currentIndex == subIndex)&&subMenu.id==indexId }" @click="filterList(subMenu, subIndex)">
+                    :class="{ 'active': (currentIndex == subIndex) && subMenu.id == indexId }"
+                    @click="filterList(subMenu, subIndex)">
                     {{ subMenu.name }}
                 </div>
             </div>
@@ -27,6 +31,7 @@ export default {
     props: ["treelist", "show"],
     data() {
         return {
+            indexname: "",
             menulist: [],
             currentIndex: null,
             indexId: "",
@@ -38,7 +43,6 @@ export default {
     computed: {
         ...mapState({
             movietypeList: state => state.movietypeList.map(item => {
-
                 return {
                     ...item,
                     open: false
@@ -46,21 +50,27 @@ export default {
             }),
         }),
     },
-    mounted() {
+    created(){
         setTimeout(() => {
-            this.menulist = this.movietypeList.map(item => {
 
+            this.menulist = this.movietypeList.map(item => {
                 return {
                     name: item.name,
                     open: item.open,
                     subMenus: item.children
                 }
             })
-        }, 1000);
+        }, 1500);
+        
+    },
+    mounted() {
+   
     },
     methods: {
+       
         ...mapActions(['gelMoveiList']),
         filterList(info, index) {
+
             if ((this.currentIndex === 0 || this.currentIndex) && this.indexId && info.name == this.indexId) {
                 this.currentIndex = null
                 this.indexId = ""
@@ -70,13 +80,17 @@ export default {
                 this.currentIndex = index
                 this.indexId = info.id
             }
-
-            this.gelMoveiList({ category_id: info.id, limit: this.limit, page: this.page, type: info.type });
+            info.limit = this.limit
+            info.page = this.page
+            localStorage.setItem("routerInfo", JSON.stringify(info));
+            this.$router.push({ path: `/index/${info.name}` });
+            // 点击筛选后关闭弹窗
+            this.$emit("closedetail",false)
         },
         toggleSubMenu(index) {
-
             this.menulist.forEach((menu, i) => {
                 if (i === index) {
+                    this.indexname = menu.name
                     if (typeof menu.open === 'undefined') {
                     } else {
                         menu.open = !menu.open;
@@ -98,7 +112,7 @@ export default {
         min-height: 180px;
         max-height: 450px;
         overflow-y: scroll;
-       
+
         background-color: rgb(68, 89, 126);
         position: fixed;
         right: 10px;
@@ -138,9 +152,5 @@ export default {
 }
 
 /* PC */
-@media (min-width: 768px) {
-  
-
- 
-}
+@media (min-width: 768px) {}
 </style>

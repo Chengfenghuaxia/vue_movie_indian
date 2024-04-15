@@ -2,7 +2,6 @@
     <div>
         <div class="Nav" v-if="isMobile">
             <div class="Nav_home" @click="gotuhome">Home</div>
-            <!-- <div class="Nav_search" @click="searchMovie">search</div> -->
             <div class="Nav_search" >
                 <img @click="searchMovie" :style="{width:'20px',height:'20px',marginTop:'20px'}" src="../../assets/image/search1.png" alt="">
 
@@ -14,6 +13,7 @@
         <div class="Nav" v-else>
             <div :style="{ width: '10%' }"></div>
             <div class="Nav_home" @click="gotuhome">Home</div>
+            <i class="fas fa-heart"></i> <!-- 使用 Font Awesome 图标 -->
             <div class="menulist">
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal"
                     background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
@@ -153,6 +153,7 @@ export default {
 }
 </script>
 <style scoped lang="less">
+
 /*wrap*/
 @media (max-width: 768px) {
     .Nav {
@@ -263,4 +264,7 @@ width: 50%;
 
 
 }
+</style>
+<style>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 </style>
