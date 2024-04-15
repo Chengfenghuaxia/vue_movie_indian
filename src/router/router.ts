@@ -67,7 +67,7 @@ const routes = [
                     { path: 'cartoon', component: Home },
                     { path: 'occident', component: Home },
                     { path: 'Taiwan', component: Home },
-                    { path: 'SriLankan', component: Home },
+                    { path: 'Japanese', component: Home },
                     { path: 'india', component: Home },
                 ]
             },
