@@ -9,12 +9,7 @@
     <el-footer>
       <Footer />
     </el-footer>
-<<<<<<< HEAD
-    <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show"
-      :treelist="data.movietypeList" />
-=======
     <TreeList v-if="isMobile()" ref="SearchTree" @closeList="closeList"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
->>>>>>> 9f0510d813c6f95c7e65acfafdc1969cffb5e9ac
   </el-container>
 </template>
 
@@ -36,7 +31,17 @@ const data = reactive({
   limit: 10,
   page: 1,
   menulist: ["Asia", "India", "Japanese", "Occident", "Cartoon", "Taiwan", "Sri Lankan"],
-  movietypeList: computed(() => store.state.movietypeList.map((item, index) => {
+  movietypeList: null
+})
+
+const Searcha = ref(null);
+const Nanigations = ref(null);
+const SearchTree = ref(null);
+
+const handSearch = () => {
+  //执行搜索逻辑
+}
+ data.movietypeList = computed(() => store.state.movietypeList.map((item, index) => {
     if (item.children) {
       return {
         name: item.name,
@@ -48,15 +53,7 @@ const data = reactive({
       return []
     }
   })),
-})
 
-const Searcha = ref(null);
-const Nanigations = ref(null);
-const SearchTree = ref(null);
-
-const handSearch = () => {
-  //执行搜索逻辑
-}
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
@@ -74,10 +71,9 @@ const filterList = (info, index) => {
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
 }
 const opendetail = (e) => {
-  setTimeout(() => {
+  // setTimeout(() => {
     data.show = !data.show
-  }, 300);
- 
+  // }, 300);
   if (data.show) {
     // 添加点击外部关闭的事件监听器
     document.addEventListener('click', closeDivOutside);
@@ -93,23 +89,16 @@ const handleClickOutside = () => {
   }
 }
 
-<<<<<<< HEAD
-const closedetail = (type) => {
-  setTimeout(() => {
-    data.show = type
-  }, 100);
-}
-=======
 const closeList = (val)=>{
    data.show = val
 }
 
->>>>>>> 9f0510d813c6f95c7e65acfafdc1969cffb5e9ac
 const openlist = (index) => {
 
 }
 
 const closeDivOutside = (event) => {
+  console.log('event: ', event);
   // 检查点击的位置是否在指定的 div 外部
   console.log('SearchTree.value: ', SearchTree);
   if (!SearchTree.value.$el.contains(event.target)) {
