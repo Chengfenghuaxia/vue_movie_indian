@@ -9,7 +9,7 @@
     <el-footer>
       <Footer />
     </el-footer>
-    <TreeList v-if="isMobile()" ref="SearchTree" @closeList="closeList"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
+    <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closeList"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
   </el-container>
 </template>
 
@@ -90,6 +90,7 @@ const handleClickOutside = () => {
 }
 
 const closeList = (val)=>{
+  console.log('val: ', val);
    data.show = val
 }
 
