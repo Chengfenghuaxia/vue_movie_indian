@@ -9,8 +9,12 @@
     <el-footer>
       <Footer />
     </el-footer>
+<<<<<<< HEAD
     <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show"
       :treelist="data.movietypeList" />
+=======
+    <TreeList v-if="isMobile()" ref="SearchTree" @closeList="closeList"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
+>>>>>>> 9f0510d813c6f95c7e65acfafdc1969cffb5e9ac
   </el-container>
 </template>
 
@@ -20,7 +24,6 @@ import Header from "../components/index/Header.vue";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
 import TreeList from "../components/TreeList/index.vue";
-import ClickOutsideDirective from "../utils/clickOutsideDirective.js";
 
 import { reactive, computed, onMounted, ref } from "vue";
 import { useStore, mapMutations } from 'vuex';
@@ -54,8 +57,6 @@ const SearchTree = ref(null);
 const handSearch = () => {
   //执行搜索逻辑
 }
-
-const directiveValue = ClickOutsideDirective;
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
@@ -92,11 +93,18 @@ const handleClickOutside = () => {
   }
 }
 
+<<<<<<< HEAD
 const closedetail = (type) => {
   setTimeout(() => {
     data.show = type
   }, 100);
 }
+=======
+const closeList = (val)=>{
+   data.show = val
+}
+
+>>>>>>> 9f0510d813c6f95c7e65acfafdc1969cffb5e9ac
 const openlist = (index) => {
 
 }
