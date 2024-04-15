@@ -97,7 +97,6 @@ const data = reactive({
 
 // 点击播放
 const play = async (e: string | number) => {
-    // let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
     let res = await ApiPost('/movie/getmovieinfo', { id: (e as any).id })
     let data = {
         query: e,
@@ -105,7 +104,7 @@ const play = async (e: string | number) => {
     }
     await router.push({ path: '/play' });
     store.commit('setMovieInfo', data)
-    window.scrollTo(0, 500);
+    // window.scrollTo(0, 500);
 }
 const getList = (current, page?: number, name?: string) => {
     ApiPost('/movie/pagebyname', { name: name || data.search, page: current, limit: 10 }).then((resp: any) => {

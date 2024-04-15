@@ -10,7 +10,7 @@
     <!-- 视频详情 -->
     <div class="Movie_detail_name">
 
-        <span style="font-size:1rem;">{{ data.data_MovieInfo.query.name }}</span>
+      <span style="font-size:1rem;">{{ data.data_MovieInfo.query.name }}</span>
 
     </div>
     <div class="Movie_detail_digua">
@@ -233,14 +233,17 @@ const syncVideoTime = () => {
   const video = videoa.value;
   let movieinfo = data.data_MovieInfo.movieinfo
   let accMVname = localStorage.getItem('Movie_name')
-  if (accMVname && movieinfo.info.name === accMVname) {
-    const savedTime = localStorage.getItem('videoTime');
-    if (savedTime) {
-      video.currentTime = parseFloat(savedTime);
+  if (movieinfo) {
+    if (accMVname && movieinfo.info.name === accMVname) {
+      const savedTime = localStorage.getItem('videoTime');
+      if (savedTime) {
+        video.currentTime = parseFloat(savedTime);
+      }
+    } else {
+      localStorage.setItem('Movie_name', movieinfo.info.name);
     }
-  } else {
-    localStorage.setItem('Movie_name', movieinfo.info.name);
   }
+
 }
 
 //取广告然后传给子组件
@@ -254,9 +257,11 @@ onMounted(() => {
 // 初始化页面数据
 onBeforeMount(async () => {
   let movieinfo = data.data_MovieInfo.movieinfo
-  localStorage.setItem('PLAY_category_id', movieinfo.info.cid)
-  store.dispatch('gelMoveiList', { category_id: movieinfo ? movieinfo.info.cid : "", limit: data.limit, page: data.page, type: 2 });
-  await initHLS(movieinfo)
+  if (movieinfo) {
+    localStorage.setItem('PLAY_category_id', movieinfo.info.cid)
+    store.dispatch('gelMoveiList', { category_id: movieinfo ? movieinfo.info.cid : "", limit: data.limit, page: data.page, type: 2 });
+    await initHLS(movieinfo)
+  }
 })
 onUnmounted(() => {
   // 组件销毁前移除事件监听器

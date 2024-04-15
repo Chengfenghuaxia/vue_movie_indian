@@ -83,6 +83,7 @@ export default {
             info.limit = this.limit
             info.page = this.page
             localStorage.setItem("routerInfo", JSON.stringify(info));
+            localStorage.setItem('category_id', info.id)
             this.$router.push({ path: `/index/${info.name}` });
             // 点击筛选后关闭弹窗
             this.$emit("closedetail",false)

@@ -20,6 +20,7 @@
 import { reactive, onMounted, computed, ref, nextTick, watch } from "vue";
 import { useRouter } from 'vue-router';
 import { ApiPost } from "../../utils/request";
+import { globalEvent } from '../../utils/globalEvent';
 import { isMobile } from "../../utils/isMobil";
 import Tabs from "../../components/Tabs/Tabs.vue";
 import TopNav from "../../components/TopNav/index.vue";
@@ -116,7 +117,8 @@ const handeChange = (page: number) => {
 const handleCurrentChange = (page: number) => {
   let category_id = localStorage.getItem('category_id')
   data.currentPage = page
-  store.dispatch('gelMoveiList', { category_id: category_id, limit: data.limit, page: page, type: data.MovieType });
+  //如果是通过点击树形空间进行筛选，则让分页改为1，高亮同步
+  store.dispatch('gelMoveiList', { category_id: category_id, limit: data.limit, page: page, type: category_id ? 2 : data.MovieType });
   window.scrollTo(0, 1400);
 }
 const setScrollTop = (row) => {
@@ -135,11 +137,16 @@ const getadheight = (H) => {
 }
 onMounted(() => {
   store.dispatch('gelMoveiList', { limit: data.limit, page: data.page, type: 0 });
-
   nextTick().then(async () => {
     console.log(gerHeight.value.$el.offsetHeight);
 
   })
+  // 监听全局事件
+  globalEvent.on('button-clicked', () => {
+    // 在这里执行相应的操作
+    console.log('按钮被点击了');
+    data.currentPage = 1
+  });
 
 })
 </script>

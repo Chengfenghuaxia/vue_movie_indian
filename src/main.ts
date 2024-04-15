@@ -15,6 +15,10 @@ import 'plyr/dist/plyr.css';// 引入自定义loading样式
 
 
 const app = createApp(App)
+
+
+
+
 app.use(store)
 app.use(Vant);
 app.use(ElementPlus)

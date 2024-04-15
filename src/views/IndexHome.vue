@@ -9,12 +9,8 @@
     <el-footer>
       <Footer />
     </el-footer>
-<<<<<<< HEAD
     <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show"
       :treelist="data.movietypeList" />
-=======
-    <TreeList v-if="isMobile()" ref="SearchTree" @closeList="closeList"  @openlist="openlist" :show="data.show" :treelist="data.movietypeList" />
->>>>>>> 9f0510d813c6f95c7e65acfafdc1969cffb5e9ac
   </el-container>
 </template>
 
@@ -24,8 +20,8 @@ import Header from "../components/index/Header.vue";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
 import TreeList from "../components/TreeList/index.vue";
-
-import { reactive, computed, onMounted, ref } from "vue";
+import { globalEvent } from '../utils/globalEvent';
+import { reactive, computed, onMounted, ref, } from "vue";
 import { useStore, mapMutations } from 'vuex';
 const store = useStore();
 const data = reactive({
@@ -93,18 +89,14 @@ const handleClickOutside = () => {
   }
 }
 
-<<<<<<< HEAD
 const closedetail = (type) => {
   setTimeout(() => {
     data.show = type
   }, 100);
+  //通知home组件发生了点击事件
+  globalEvent.emit('button-clicked');
+  
 }
-=======
-const closeList = (val)=>{
-   data.show = val
-}
-
->>>>>>> 9f0510d813c6f95c7e65acfafdc1969cffb5e9ac
 const openlist = (index) => {
 
 }
