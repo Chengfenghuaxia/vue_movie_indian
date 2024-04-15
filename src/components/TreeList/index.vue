@@ -1,6 +1,6 @@
 <template>
 
-    <div class="menu_list" v-if="show">
+    <div class="menu_list" v-if="show && menulist.length> 0" >
         <div v-for="(menu, index) in menulist" :key="index">
             <div class="menu" @click="toggleSubMenu(index)"
                 :style="{ display: 'flex', justifyContent: 'space-between' }">
@@ -28,7 +28,7 @@
 import { mapActions, mapState } from 'vuex'
 import { useStore } from 'vuex';
 export default {
-    props: ["treelist", "show"],
+    props: ["show"],
     data() {
         return {
             indexname: "",
@@ -52,12 +52,12 @@ export default {
     },
     created(){
         setTimeout(() => {
-
             this.menulist = this.movietypeList.map(item => {
                 return {
                     name: item.name,
                     open: item.open,
-                    subMenus: item.children
+                    subMenus: item.children,
+                    show: item.show,
                 }
             })
         }, 1500);

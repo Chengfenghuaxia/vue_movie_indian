@@ -9,14 +9,12 @@
     <el-footer>
       <Footer />
     </el-footer>
-    <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show"
-      :treelist="data.movietypeList" />
+    <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show" />
   </el-container>
 </template>
 
 <script setup lang="ts">
 import { isMobile } from "../utils/isMobil";
-import Header from "../components/index/Header.vue";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
 import TreeList from "../components/TreeList/index.vue";
@@ -31,8 +29,7 @@ const data = reactive({
   show: false,
   limit: 10,
   page: 1,
-  menulist: ["Asia", "India", "Japanese", "Occident", "Cartoon", "Taiwan", "Sri Lankan"],
-  movietypeList: null
+  menulist: ["Asia", "India", "Japanese", "Occident", "Cartoon", "Taiwan", "Sri Lankan"]
 })
 
 const Searcha = ref(null);
@@ -42,19 +39,6 @@ const SearchTree = ref(null);
 const handSearch = () => {
   //执行搜索逻辑
 }
- data.movietypeList = computed(() => store.state.movietypeList.map((item, index) => {
-    if (item.children) {
-      return {
-        name: item.name,
-        show: item.show,
-        open: false,
-        subMenus: item.children.length < 8 ? item.children : item.children.slice(0, 8),
-      }
-    } else {
-      return []
-    }
-  })),
-
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
