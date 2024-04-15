@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header style="background-color: #000;">
       <Nanigation ref="Nanigations" @opendetail="opendetail" />
     </el-header>
     <el-main :style="isMobile() ? { marginTop: '-15px' } : { marginTop: '-10px' }">
