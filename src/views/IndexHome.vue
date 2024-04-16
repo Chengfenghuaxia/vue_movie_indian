@@ -90,7 +90,11 @@ const closeDivOutside = (event) => {
   console.log('event: ', event);
   // 检查点击的位置是否在指定的 div 外部
   console.log('SearchTree.value: ', SearchTree);
+  if (event.target.nodeName && event.target.nodeName === "IMG") {
+    return
+  } 
   if (!SearchTree.value.$el.contains(event.target)) {
+    console.log("在菜单区域外")
     data.show = false;
     // 移除事件监听器
     document.removeEventListener('click', closeDivOutside);
