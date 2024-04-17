@@ -67,8 +67,7 @@
     <!-- 广告弹窗 -->
     <Dialog :dvData="data.dvData" />
 
-    <!-- <el-pagination @change="handeChange" :style="{ float: 'right', right: '3.125rem' }" layout="prev, pager, next"
-      :total="data.total" /> -->
+
     <el-pagination @current-change="handeChange" :style="{ float: 'right', right: '3.125rem' }"
       layout="prev, pager, next" :page-size="data.limit" :current-page="data.currentPage" :total="data.total" />
   </div>
@@ -197,11 +196,11 @@ const fmtTags = (tags: any) => {
 }
 //校验时间格式
 const fmtDate = (time) => {
-  let T = (time + '').length > 11 ? time : time * 1000
+  let T = (time + '').length > 11 ? time : time * 1000;
   const date = new Date(T);
-  return date.getFullYear() + '-' +
-    ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-    ('0' + date.getDate()).slice(-2);
+  return ('0' + date.getDate()).slice(-2) + '/' +
+    ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+    date.getFullYear();
 }
 const handeChange = (page: number) => {
   let category_id = localStorage.getItem('PLAY_category_id')
@@ -278,7 +277,7 @@ onUnmounted(() => {
 
 <style scoped lang="less">
 @import "/src/assets/css/film.css";
-
+@import "/src/assets/css/pagination.css";
 /* PC端 */
 @media (min-width: 48rem) {
   :deep(.plyr--video) {
@@ -308,11 +307,12 @@ onUnmounted(() => {
     width: 100%;
     height: 37.5rem;
     object-fit: cover;
+
   }
 
   .Movie_detail {
-    color: black;
-    background: #ece5d9;
+    color: #fff;
+    // background: #ece5d9;
     width: 100;
     height: 9.375rem;
     display: flex;
@@ -348,7 +348,7 @@ onUnmounted(() => {
 
   .Movie_detail_name {
     margin-left: 1.25rem;
-    color: black;
+    color: #fff;
     width: 94%;
     font-size: .875rem;
     min-height: 1.875rem;
@@ -417,6 +417,7 @@ onUnmounted(() => {
     width: 100%;
     max-width: 40rem;
     object-fit: cover;
+    margin-top: 10px;
 
     .Video_duration {
       color: #000;
@@ -425,13 +426,13 @@ onUnmounted(() => {
   }
 
   .Movie_detail {
-    color: black;
+    color: #fff;
     width: 96%;
     margin-left: 2%;
     border-radius: .3125rem;
     height: 7.375rem;
     padding-top: 20px;
-    background: #ece5d9;
+   
     display: flex;
   }
 
@@ -472,7 +473,7 @@ onUnmounted(() => {
 
   .Movie_detail_name {
     margin-left: 1.25rem;
-    color: black;
+    color: #fff;
     width: 94%;
     font-size: .875rem;
     min-height: 1.875rem;

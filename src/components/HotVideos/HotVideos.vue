@@ -6,11 +6,11 @@
                     :style="{ backgroundImage: 'url(' + res_url_prefix + item.picture + ')' }">
                 </div>
                 <div v-else class="left_movie" :style="{ backgroundImage: 'url(' + imageUrl + ')' }"></div>
-                <div :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">{{ truncatedText(item.name) }}
+                <div :style="{ textAlign: 'left', fontSize: '16px', color: '#fff' }">{{ truncatedText(item.name) }}
                 </div>
-                <span :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">Release date：{{
-                fmtDate(item.release_time)
-            }}</span>
+                <span :style="{ textAlign: 'left',  fontSize: '14px', color: '#fff' }">{{
+                    fmtDate(item.release_time)
+                    }}</span>
             </div>
 
         </div>
@@ -27,7 +27,7 @@ export default {
         return {
             hotmovieList: [],
             imageUrl: 'require(../../assets/image/images.jpg)',
-            maxLength: 10, // 最大显示长度
+            maxLength: 9, // 最大显示长度
             limit: 0,
             page: 0
         }
@@ -61,11 +61,11 @@ export default {
             }
         },
         fmtDate(time) {
-            let T = (time + '').length > 11 ? time : time * 1000
+            let T = (time + '').length > 11 ? time : time * 1000;
             const date = new Date(T);
-            return date.getFullYear() + '-' +
-                ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + date.getDate()).slice(-2);
+            return ('0' + date.getDate()).slice(-2) + '/' +
+                ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+                date.getFullYear();
         },
         gotomovie(i) {
             console.log(i);
@@ -90,6 +90,7 @@ export default {
         justify-content: flex-start;
         margin-bottom: 10px;
         margin-top: 10px;
+        color:#fff
     }
 
     .hot_movies_item {

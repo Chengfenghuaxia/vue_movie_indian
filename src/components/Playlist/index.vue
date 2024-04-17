@@ -4,9 +4,11 @@
             <div class="video" :style="{ backgroundImage: 'url(' + res_url_prefix + item.picture + ')' }">
 
             </div>
-            <div class="video_detail">
-                <h4 class="video_name" :title="item.name">{{ item.name }}</h4>
-                <span :style="{ paddingLeft: '10px' }">Hot:{{ item.hits }} </span>
+            <div class="video_detail" @click.stop="xigua">
+                <!-- <h4 class="video_name" :title="item.name">{{ item.name }}</h4> -->
+                <p class="video_name">{{ item.name }}</p>
+                <span :style="{ paddingLeft: '10px' }"> <i class="fa-solid fa-eye"></i> <span
+                        :style="{ paddingLeft: '5PX' }">{{ item.hits }}</span> </span>
                 <span :style="{ float: 'right', paddingRight: '20px' }">{{ fmtDate(item.release_time) }}
                 </span>
             </div>
@@ -42,12 +44,15 @@ export default {
         });
     },
     methods: {
+        xigua(){
+         console.log('嘻嘻哈哈');
+        },
         fmtDate(time) {
-            let T = (time + '').length > 11 ? time : time * 1000
+            let T = (time + '').length > 11 ? time : time * 1000;
             const date = new Date(T);
-            return date.getFullYear() + '-' +
-                ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + date.getDate()).slice(-2);
+            return ('0' + date.getDate()).slice(-2) + '/' +
+                ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+                date.getFullYear();
         },
 
         getdata(data) {
@@ -97,7 +102,7 @@ h4 {
                 height: 70px;
                 // background: #fff;
                 // background-color: rgba(0, 0, 0, 0.5);
-                background-color: #000;
+                background-color: #2e2e2e;
                 position: absolute;
                 bottom: 0;
 
@@ -157,7 +162,7 @@ h4 {
                 width: 100%;
                 min-height: 70px;
                 // background-color: rgba(0, 0, 0, 0.5);
-                background-color: #000;
+                background-color: #2e2e2e;
                 position: absolute;
                 bottom: 0;
 

@@ -51,10 +51,10 @@
                 </div>
             </div>
             <div class="pagination_container">
-                <el-pagination background layout="prev, pager, next" v-model:current-page="data.page.current"
-                    @current-change="changeCurrent" :pager-count="5" :background="true" :page-size="data.page.pageSize"
-                    :total="data.page.total" :prev-icon="ArrowLeftBold" :next-icon="ArrowRightBold" hide-on-single-page
-                    class="pagination" />
+                <el-pagination @current-change="changeCurrent" :style="{ float: 'right', right: '3.125rem' }"
+                v-model:current-page="data.page.current" 
+                    :page-size="data.page.pageSize" :current-page="data.page.current" layout="prev, pager, next"
+                    :total="data.page.total" />
             </div>
         </div>
         <!-- <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" /> -->
@@ -90,7 +90,7 @@ const data = reactive({
     search: "",
     Hvideolist: [],
     res_url_prefix: computed(() => store.state.res_url_prefix),
-  
+
 })
 // 监听路由参数的变化
 
@@ -118,7 +118,7 @@ const getList = (current, page?: number, name?: string) => {
         }
 
         // 如果搜索记录超过10条，则移除最旧的一条记录
-        let num = isMobile()?10:20
+        let num = isMobile() ? 10 : 20
         if (data.searchHistory1.length > num) {
             data.searchHistory1.pop();
         }
@@ -147,11 +147,11 @@ const getMVdata = (data) => {
 
 }
 const fmtrelease = (time) => {
-    let T = (time + '').length > 11 ? time : time * 1000
+    let T = (time + '').length > 11 ? time : time * 1000;
     const date = new Date(T);
-    return date.getFullYear() + '-' +
-        ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-        ('0' + date.getDate()).slice(-2);
+    return ('0' + date.getDate()).slice(-2) + '/' +
+        ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+        date.getFullYear();
 
 }
 const truncatedText = (text) => {
@@ -173,11 +173,15 @@ const deletehistory = () => {
 
 
 onMounted(() => {
-   
+    let query = route.query
+    data.search = (query.search as string)
+    getList(1, 1, data.search)
+
 })
 // 分页器
 const changeCurrent = (currentVal: number) => {
     getList(currentVal)
+    data.page.current = currentVal
 }
 
 </script>
@@ -186,6 +190,7 @@ const changeCurrent = (currentVal: number) => {
 <style scoped lang="less">
 @import "/src/assets/css/pagination.css";
 @media (max-width: 768px) {
+    
     .title h2 {
         margin: 8px auto;
     }
@@ -202,6 +207,7 @@ const changeCurrent = (currentVal: number) => {
     }
 
     .film_item span {
+       
         flex: 2;
         border-radius: 8px;
         background-size: cover;
@@ -336,7 +342,7 @@ const changeCurrent = (currentVal: number) => {
         display: inline-block;
         padding: 6px 12px;
         margin: 4px;
-        background-color: #f0f0f0;
+        background-color: #2e2e2e;
         border-radius: 4px;
         font-size: 12px;
         text-align: left;
@@ -387,7 +393,7 @@ const changeCurrent = (currentVal: number) => {
     .film_intro {
         max-width: 75%;
         margin-left: 10px;
-        flex: 3;
+        flex: 2;
         /*flex-grow: 4;*/
         text-align: left;
         padding: 0 10px;
@@ -486,7 +492,7 @@ const changeCurrent = (currentVal: number) => {
         display: inline-block;
         padding: 6px 12px;
         margin: 4px;
-        background-color: #f0f0f0;
+        background-color: #2e2e2e;
         border-radius: 4px;
         font-size: 12px;
         text-align: left;

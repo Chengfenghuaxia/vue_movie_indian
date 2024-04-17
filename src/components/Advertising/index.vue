@@ -36,7 +36,9 @@ export default {
 }
 </script>
 <style scoped>
-.advertise {
+/* 移动端 */
+@media (max-width: 48rem) {
+    .advertise {
     width: 100%;
     height: 70px;
     background-color: fff;
@@ -46,6 +48,21 @@ export default {
     width: 100%;
     height: 70px;
 }
+}
+/* PC端 */
+@media (min-width: 48rem) {
+    .advertise {
+    width: 100%;
+    height: 130px;
+    background-color: fff;
+}
+
+.img {
+    width: 100%;
+    height: 140px;
+}
+}
+
 
 
 

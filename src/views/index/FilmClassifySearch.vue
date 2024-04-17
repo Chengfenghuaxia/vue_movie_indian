@@ -44,8 +44,8 @@
           <div :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">{{ truncatedText(item.name) }}
           </div>
           <span :style="{ textAlign: 'left', fontSize: '.6875rem', color: '#000' }">Release date：{{
-        fmtDate(item.release_time)
-      }}</span>
+            fmtDate(item.release_time)
+            }}</span>
         </div>
       </div>
     </div>
@@ -155,11 +155,11 @@ const truncatedText = (text) => {
 
 
 const fmtDate = (time) => {
-  let T = (time + '').length > 11 ? time : time * 1000
+  let T = (time + '').length > 11 ? time : time * 1000;
   const date = new Date(T);
-  return date.getFullYear() + '-' +
-    ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-    ('0' + date.getDate()).slice(-2);
+  return ('0' + date.getDate()).slice(-2) + '/' +
+    ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+    date.getFullYear();
 }
 
 

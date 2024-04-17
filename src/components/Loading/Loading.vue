@@ -1,12 +1,14 @@
 <template>
     <div class="loader"  v-show="msg.show">
         <div class="loader-container">
+            <!-- <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+            <div class="dot"></div> -->
+            <div class="loadingss">Loading...</div>
         </div>
+   
     </div>
 </template>
 
@@ -21,6 +23,12 @@ defineProps({
 /*body {*/
 /*    margin: 0;*/
 /*}*/
+.loadingss{
+    color: goldenrod;
+    font-size: 30px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
 .loader {
     position: fixed;
     width: 100%;

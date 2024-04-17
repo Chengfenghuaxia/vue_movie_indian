@@ -26,6 +26,7 @@ const triggerAction = () => {
 
 onMounted(() => {
   triggerAction()
+ 
 })
 
 </script>
@@ -42,7 +43,8 @@ html, body, #app {
     max-width: 100%;
     min-height: 100vh;
     color: rgb(221, 221, 221);
-    background: white;
+    /* background: white; */
+    background: #000;
 
     
 }
@@ -60,4 +62,7 @@ a {
 a:hover {
     color: #888888;
 }
+</style>
+<style>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 </style>
