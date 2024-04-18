@@ -24,6 +24,7 @@ export default {
     },
     mounted() {
         setTimeout(() => {
+            // this.$el.offsetHeight 属性来获取当前组件实例根元素的高度
             const height = this.$el.offsetHeight;
             this.$emit("getadheight", height)
         }, 1000);
