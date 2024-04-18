@@ -1,7 +1,8 @@
 <template>
   <el-container>
     <el-header style="background-color: #262626;">
-      <Nanigation ref="Nanigations" @opendetail="opendetail" />
+      <Nanigation ref="Nanigations" :countryimg="data.countryimg" @opendetail="opendetail"
+        @opencountryT="opencountryT" />
     </el-header>
     <el-main :style="isMobile() ? { marginTop: '-15px' } : { marginTop: '-10px' }">
       <router-view></router-view>
@@ -10,6 +11,8 @@
       <Footer />
     </el-footer>
     <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show" />
+    <CountryList v-if="isMobile()" ref="SearchTree" @getcountry="getcountry" @openlist="openlist"
+      :show="data.countryShow" />
   </el-container>
 </template>
 
@@ -18,6 +21,7 @@ import { isMobile } from "../utils/isMobil";
 import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
 import TreeList from "../components/TreeList/index.vue";
+import CountryList from "../components/country/index.vue";
 import { globalEvent } from '../utils/globalEvent';
 import { reactive, computed, onMounted, ref, } from "vue";
 import { useStore, mapMutations } from 'vuex';
@@ -27,9 +31,12 @@ const data = reactive({
   indexNmae: "",
   value: '',
   show: false,
+  countryShow: false,
   limit: 10,
   page: 1,
-  menulist: ["Asia", "India", "Japanese", "Occident", "Cartoon", "Taiwan", "Sri Lankan"]
+  menulist: ["Asia", "India", "Japanese", "Occident", "Cartoon", "Taiwan", "Sri Lankan"],
+  countryimg: "",
+  info: {}
 })
 
 const Searcha = ref(null);
@@ -44,6 +51,7 @@ onMounted(() => {
   document.addEventListener('click', handleClickOutside);
 })
 const filterList = (info, index) => {
+  data.info = info
   if ((data.currentIndex === 0 || data.currentIndex) && data.indexNmae && info.name == data.indexNmae) {
     data.currentIndex = null
     data.indexNmae = ""
@@ -55,10 +63,19 @@ const filterList = (info, index) => {
   }
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
 }
+const opencountryT = (e) => {
+  console.log(e);
+  data.countryShow = !data.countryShow
+}
+//向国家图标切换国旗
+const getcountry = (e) => {
+  data.countryShow = !data.countryShow
+  data.countryimg = e
+  localStorage.setItem('MVlang', e.value)
+  store.dispatch('gelMoveiList', { category_id: data.info.id || "", limit: data.limit, page: data.page, type: data.info.type || 0 });
+}
 const opendetail = (e) => {
-  // setTimeout(() => {
-    data.show = !data.show
-  // }, 300);
+  data.show = !data.show
   if (data.show) {
     // 添加点击外部关闭的事件监听器
     document.addEventListener('click', closeDivOutside);
@@ -80,22 +97,21 @@ const closedetail = (type) => {
   }, 100);
   //通知home组件发生了点击事件
   globalEvent.emit('button-clicked');
-  
+
 }
 const openlist = (index) => {
 
 }
 
 const closeDivOutside = (event) => {
-  console.log('event: ', event);
   // 检查点击的位置是否在指定的 div 外部
   console.log('SearchTree.value: ', SearchTree);
   if (event.target.nodeName && event.target.nodeName === "IMG") {
     return
-  } 
+  }
   if (!SearchTree.value.$el.contains(event.target)) {
     console.log("在菜单区域外")
-    data.show = false;
+    // data.show = false;
     // 移除事件监听器
     document.removeEventListener('click', closeDivOutside);
   }

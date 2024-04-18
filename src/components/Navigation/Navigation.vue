@@ -5,14 +5,13 @@
                 <span style="color:goldenrod">MISS</span>
                 <span style="color:palevioletred">AV</span>
             </div>
-            <!-- <div class="Nav_search">
-                <img @click="searchMovie" :style="{ width: '20px', height: '20px', marginTop: '20px' }"
-                    src="../../assets/image/search1.png" alt="">
+            <div :style="{ borderRadius: '50%', width: '30px', height: '30px', overflow: 'hidden', marginLeft: '240px' }"
+                @click="opencountryT">
+                <img :style="{ width: '50px' }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
+            </div>
 
-            </div> -->
             <div class="Nav_icon">
-                <img @click.stop="opendetail" class="icon_menu" src="../../../public/menu.png" alt="">
-                <!-- <i class="fa-solid fa-bars"></i> -->
+                <img @click.stop="opendetail" class="icon_menu" src="../../assets/image/menu.png" alt="">
             </div>
         </div>
         <div class="Nav" v-else>
@@ -32,6 +31,18 @@
                             @click="toclassMovie(subItem)" :key="subIndex">{{ subItem.name
                             }}</el-menu-item>
 
+                    </el-sub-menu>
+                    <el-sub-menu>
+                        <template #title>
+                            <img :style="{ width: '30px', marginRight: '10px' }" :src="rowimg.countryImg" alt="">
+                            Language</template>
+                        <el-menu-item v-for="(item, index) in langList" :key="index" :index="item.value"
+                            @click="changelan(item)" style="font-size:16px">
+                            <img :style="{ width: '30px', marginRight: '10px' }" :src="item.countryImg" alt="">
+                            <span>
+                                {{ item.value }}
+                            </span>
+                        </el-menu-item>
                     </el-sub-menu>
 
                 </el-menu>
@@ -55,9 +66,11 @@ import { mapMutations, mapActions, mapState } from 'vuex'
 import { useRouter } from 'vue-router';
 import { en } from '../../config/config';
 export default {
+    props: ["countryimg"],
     data() {
         return {
             show: true,
+            countryShow: true,
             router: {},
             currentIndex: "",
             params: {
@@ -68,7 +81,22 @@ export default {
             lang: en.tab,
             isMobile: isMobile(),
             activeIndex: '1',
-            activeIndex2: '1'
+            activeIndex2: '1',
+            langList: [
+                {
+
+                    countryImg: "https://cdn.pixabay.com/photo/2012/04/10/16/14/union-jack-26119_1280.png",
+                    value: 'en'
+                },
+                {
+
+                    countryImg: "https://media.istockphoto.com/id/1310357496/photo/china-flag.jpg?s=2048x2048&w=is&k=20&c=ep9KJ7dR-phAxeKkVl6e0E_WIuvl3yRaJiHTFaqnI1s=",
+                    value: 'zh-CN'
+                },
+
+
+            ],
+            rowimg: {}
         }
     },
     computed: {
@@ -85,18 +113,31 @@ export default {
         window.addEventListener('resize', function () {
 
             this.isMobile = isMobile();
-
+          
         });
+        this.langList.forEach(item => {
+            if (item.value === localStorage.getItem('MVlang')) {
+                this.rowimg = item
+            }
+        })
     },
     mounted() {
         this.router = useRouter();
     },
     methods: {
+        changelan(item) {
+            this.activeIndex2 = ""
+            this.rowimg = item
+            localStorage.setItem('MVlang', item.value)
+            this.gelMoveiList({ page: 1, limit: 12, type: 0 })
+        },
         opendetail() {
             this.$emit("opendetail", this.show)
 
         },
-
+        opencountryT() {
+            this.$emit("opencountryT", this.countryShow)
+        },
         ...mapMutations([
             'setNavigation', // 直接映射
             'setSearch',

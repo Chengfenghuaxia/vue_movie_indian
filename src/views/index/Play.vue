@@ -150,16 +150,39 @@ const initHLS = (MVinfo) => {
       if (Hls.isSupported()) {
         data.hls.loadSource(url);
         data.hls.attachMedia(video);
+        linsterHLS(video)
       }
     } else if (MVinfo.info.play_type == 2) {  //无加密
       if (Hls.isSupported()) {
         data.hls.loadSource(MVinfo.play_link);
         data.hls.attachMedia(video);
+        linsterHLS(video)
       }
     } else { //走外链
       if (Hls.isSupported()) {
         data.hls.loadSource(MVinfo.info.ext_link);
         data.hls.attachMedia(video);
+        linsterHLS(video)
+      }
+    }
+  });
+}
+const linsterHLS = (video) => {
+  data.hls.on(Hls.Events.ERROR, function (event, data1) {
+    if (data1.fatal) {
+      switch (data1.type) {
+        case Hls.ErrorTypes.NETWORK_ERROR:
+          // 如果是网络错误，尝试重新加载播放器
+          data.hls.attachMedia(video);
+          break;
+        case Hls.ErrorTypes.MEDIA_ERROR:
+          // 处理媒体错误
+          data.hls.attachMedia(video);
+          break;
+        default:
+          // 其他类型的错误
+          data.hls.attachMedia(video);
+          break;
       }
     }
   });
@@ -432,7 +455,7 @@ onUnmounted(() => {
     border-radius: .3125rem;
     height: 7.375rem;
     padding-top: 20px;
-   
+
     display: flex;
   }
 

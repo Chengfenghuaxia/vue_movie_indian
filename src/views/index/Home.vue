@@ -170,9 +170,6 @@ onMounted(() => {
   globalEvent.on('button-clicked', () => {
     data.currentPage = 1
   });
-
-
-
 })
 </script>
 <!--移动端修改-->

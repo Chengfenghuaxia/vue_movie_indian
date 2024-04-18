@@ -31,7 +31,11 @@ const http = (options: any) => {
                     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
                     config.headers[token.key] = token.value;
                     // config.headers.Authorization = +token;
+                  
                 }
+             
+                let lang = localStorage.getItem('MVlang')
+                config.url = config.url+`?lang=${lang||'cn'}`
                 return config;
             }, (error) => {
                 // Do something with request error

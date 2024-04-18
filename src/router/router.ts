@@ -111,15 +111,20 @@ const router = createRouter({
 
 })
 
-let newchildren = getrouter()
-
-newchildren.then(res => {
-    console.log(res, '新路由');
-    res.forEach(item => {
-        router.addRoute
+let newchildren: any = ""
+setTimeout(() => {
+    newchildren = getrouter()
+    newchildren.then(res => {
+        console.log(res, '新路由');
+        res.forEach(item => {
+            router.addRoute
+        })
+        // router.addRoute( { path: 'film/detail', component: Temp }); // 添加动态路由
     })
-    // router.addRoute( { path: 'film/detail', component: Temp }); // 添加动态路由
-})
+}, 1000);
+
+
+
 
 
 

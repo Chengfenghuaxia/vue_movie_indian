@@ -2,13 +2,14 @@
     <div>
         <div class="hot_movies">
             <div class="hot_movies_item" @click="gotoHot(item)" v-for="(item, index) in hotmovieList">
+                <div class="play_duration">{{ formatTime(item.play_duration) }}</div>
                 <div v-if="item.picture" class="left_movie"
                     :style="{ backgroundImage: 'url(' + res_url_prefix + item.picture + ')' }">
                 </div>
                 <div v-else class="left_movie" :style="{ backgroundImage: 'url(' + imageUrl + ')' }"></div>
                 <div :style="{ textAlign: 'left', fontSize: '16px', color: '#fff' }">{{ truncatedText(item.name) }}
                 </div>
-                <span :style="{ textAlign: 'left',  fontSize: '14px', color: '#fff' }">{{
+                <span :style="{ textAlign: 'left', fontSize: '14px', color: '#fff' }">{{
                     fmtDate(item.release_time)
                     }}</span>
             </div>
@@ -76,7 +77,21 @@ export default {
         //处理加载更多逻辑
         loadMore(limit, page) {
             this.$emit('getMoviedata', { limit, page })
-        }
+        },
+        formatTime(seconds) {
+            // 计算小时、分钟和秒数
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const remainingSeconds = seconds % 60;
+
+            // 格式化为字符串
+            const formattedHours = String(hours).padStart(2, '0');
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+            // 返回格式化后的时间字符串
+            return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        },
     }
 }
 </script>
@@ -90,7 +105,7 @@ export default {
         justify-content: flex-start;
         margin-bottom: 10px;
         margin-top: 10px;
-        color:#fff
+        color: #fff
     }
 
     .hot_movies_item {
@@ -99,7 +114,18 @@ export default {
         width: 45%;
         margin-left: 5%;
         height: 70px;
+        position: relative;
 
+        .play_duration {
+            width: 70px;
+            height: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            bottom: -20px;
+            right: 30px;
+            border-radius: 9px;
+
+        }
     }
 
     .left_movie {
@@ -139,6 +165,17 @@ export default {
         margin-bottom: 90px;
         width: 25%;
         height: 120px;
+        position: relative;
+        .play_duration {
+            width: 70px;
+            height: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            bottom: -20px;
+            right: 40px;
+            border-radius: 9px;
+
+        }
     }
 
     .left_movie {
