@@ -5,7 +5,13 @@
                 <span style="color:goldenrod">MISS</span>
                 <span style="color:palevioletred">AV</span>
             </div>
-            <div :style="{ borderRadius: '50%', width: '30px', height: '30px', overflow: 'hidden', marginLeft: '240px' }"
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    分站域名: 1、https://www.douyin.com  2、https://www.douyin.com
+
+                </div>
+            </div>
+            <div :style="{ borderRadius: '50%', width: '30px', height: '30px', overflow: 'hidden', marginLeft: '0px' }"
                 @click="opencountryT">
                 <img :style="{ width: '50px' }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
             </div>
@@ -47,11 +53,13 @@
 
                 </el-menu>
             </div>
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    分站域名: 1、https://www.douyin.com  2、https://www.douyin.com  3、 https://www.douyin.com
 
-            <!-- <div class="search" @click.stop="searchMovie">
-                <img src="../../assets/image/search1.png" alt="">
-                <div>search</div>
-            </div> -->
+                </div>
+            </div>
+
 
         </div>
 
@@ -113,7 +121,7 @@ export default {
         window.addEventListener('resize', function () {
 
             this.isMobile = isMobile();
-          
+
         });
         this.langList.forEach(item => {
             if (item.value === localStorage.getItem('MVlang')) {
@@ -130,6 +138,9 @@ export default {
             this.rowimg = item
             localStorage.setItem('MVlang', item.value)
             this.gelMoveiList({ page: 1, limit: 12, type: 0 })
+            item.value = item.value === "zh-CN" ? "zh" : item.value
+            this.$emit("changelan", item.value)
+
         },
         opendetail() {
             this.$emit("opendetail", this.show)
@@ -240,16 +251,49 @@ export default {
 
         .Nav_home {
             padding-left: 10px;
-
         }
 
-        .Nav_search {
-            img {
-                margin-left: 240px;
+        .marquee-container {
+            width: 50%;
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            overflow: hidden;
+            white-space: nowrap;
+           
+        }
+
+        .marquee-content {
+            animation:  marquee 6s linear infinite;
+            /* 播放动画 */
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+              
+                /* 从右边开始 */
+            }
+
+            100% {
+                transform: translateX(-100%);
+               
+                /* 滚动到左边 */
             }
         }
 
+        @keyframes changeColor {
+            0% {
+                color: red;
+            }
 
+          
+
+            100% {
+                color: green;
+            }
+        }
     }
 
     .icon_menu {
@@ -297,11 +341,46 @@ export default {
         }
 
         .menulist {
-            width: 60%;
+            width: 24%;
             cursor: pointer;
             line-height: 60px;
 
             justify-content: space-around;
+        }
+
+        .marquee-container {
+            max-width: 45%;
+            height: 60px;
+            line-height: 60px;
+            font-size: 24px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-content {
+            animation: marquee 15s linear infinite;
+            /* 播放动画 */
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+                /* 从右边开始 */
+            }
+
+            100% {
+                transform: translateX(-100%);
+                /* 滚动到左边 */
+            }
+        }
+
+
+
+        .abnner {
+            width: 50%;
+            background-color: red;
+            height: 60px;
         }
 
         .search {

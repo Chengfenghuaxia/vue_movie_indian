@@ -281,7 +281,9 @@ onBeforeMount(async () => {
   let movieinfo = data.data_MovieInfo.movieinfo
   if (movieinfo) {
     localStorage.setItem('PLAY_category_id', movieinfo.info.cid)
-    store.dispatch('gelMoveiList', { category_id: movieinfo ? movieinfo.info.cid : "", limit: data.limit, page: data.page, type: 2 });
+    setTimeout(() => {
+      store.dispatch('gelMoveiList', { category_id: movieinfo ? movieinfo.info.cid : "", limit: data.limit, page: data.page, type: 2 });
+    }, 500);
     await initHLS(movieinfo)
   }
 })
@@ -308,7 +310,9 @@ onUnmounted(() => {
     height: 50rem;
     /* height: auto; */
   }
-
+.player_p{
+  margin-top: 50px;
+}
   .player_area {
     padding: .625rem 6%;
   }

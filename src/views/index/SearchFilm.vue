@@ -2,13 +2,12 @@
     <div class="container">
         <div class="search_group">
             <input v-model="data.search" @keydown="e => { e.keyCode == 13 && searchMovie() }"
-                :placeholder="en.videoName" class="search" />
+                :placeholder="$t('placeSearch')" class="search" />
             <el-button @click="searchMovie" :icon="Search" style="" />
 
         </div>
         <div class="searchHistorys" v-if="data.searchHistory1.length > 0">
             <div :style="{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }">
-                <!-- <p :style="{ textAlign: 'left', marginLeft: '20PX' }">Search history:</p> -->
                 <img src="../../assets/image/delete.png" @click="deletehistory"
                     :style="{ width: '20px', height: '20px', marginLeft: '20PX' }" alt="">
             </div>
@@ -44,9 +43,9 @@
                         </div>
 
 
-                        <p><em>{{ en.Protagonist }}:</em>{{ m.actor }}</p>
+                        <p><em>{{ $t("Protagonist") }}:</em>{{ m.actor }}</p>
                         <p class="blurb"><em>plot:</em>{{ m.blurb.replaceAll('　　', '') }}</p>
-                        <el-button :icon="CaretRight" @click="play(m)">{{ en.Play }}</el-button>
+                        <el-button :icon="CaretRight" @click="play(m)">{{ $t("playNow") }}</el-button>
                     </div>
                 </div>
             </div>

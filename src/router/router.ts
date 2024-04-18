@@ -7,7 +7,8 @@ import {
 // 1.定义路由组件
 import IndexHome from "../views/IndexHome.vue";
 import Home from "../views/index/Home.vue";
-import Ceshi from "../views/index/Ceshi1.vue";
+import Copyright from "../views/index/Copyright.vue";
+import Privacy from "../views/index/privacy.vue";
 import FilmDetails from "../views/index/FilmDetails.vue";
 import Play from "../views/index/Play.vue";
 import SearchFilm from "../views/index/SearchFilm.vue";
@@ -76,7 +77,8 @@ const routes = [
             { path: 'search', component: SearchFilm },
             { path: 'filmClassify', component: FilmClassify },
             { path: 'filmClassifySearch', component: FilmClassifySearch },
-            { path: 'Ceshi', component: Ceshi },
+            { path: 'copyright', component: Copyright },
+            { path: 'privacy', component: Privacy },
         ]
     },
     { path: '/login', component: Login },

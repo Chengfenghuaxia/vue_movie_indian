@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header style="background-color: #262626;">
-      <Nanigation ref="Nanigations" :countryimg="data.countryimg" @opendetail="opendetail"
+      <Nanigation ref="Nanigations" :countryimg="data.countryimg" @changelan="changelan" @opendetail="opendetail"
         @opencountryT="opencountryT" />
     </el-header>
     <el-main :style="isMobile() ? { marginTop: '-15px' } : { marginTop: '-10px' }">
@@ -25,6 +25,8 @@ import CountryList from "../components/country/index.vue";
 import { globalEvent } from '../utils/globalEvent';
 import { reactive, computed, onMounted, ref, } from "vue";
 import { useStore, mapMutations } from 'vuex';
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n() // 先调用此方法，然后再使用
 const store = useStore();
 const data = reactive({
   currentIndex: null,
@@ -63,6 +65,9 @@ const filterList = (info, index) => {
   }
   store.dispatch('gelMoveiList', { category_id: info.id, limit: data.limit, page: data.page, type: info.type });
 }
+const changelan = (e) => {
+  locale.value = e
+}
 const opencountryT = (e) => {
   console.log(e);
   data.countryShow = !data.countryShow
@@ -73,6 +78,7 @@ const getcountry = (e) => {
   data.countryimg = e
   localStorage.setItem('MVlang', e.value)
   store.dispatch('gelMoveiList', { category_id: data.info.id || "", limit: data.limit, page: data.page, type: data.info.type || 0 });
+  locale.value = e.value
 }
 const opendetail = (e) => {
   data.show = !data.show

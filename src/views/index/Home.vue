@@ -5,13 +5,10 @@
     <Advertising :advertiseList="data.advertiseList" @getadheight="getadheight" />
 
     <div class="search_dom" :style="data.advertiseList.length > 0 ? {} : { height: '14rem' }">
-      <h2> <span>Place Search all</span>
-        <span style="color: #fff;">AVs</span>
-      </h2>
-
+      <h2> <span>{{$t('placeSearch')}}</span></h2>
       <div class="search_group">
         <input v-model="data.value" @keydown="e => { e.keyCode == 13 && searchMovie(data.value) }"
-          :placeholder="en.videoName" class="search" />
+          :placeholder="$t('placeholder')" class="search" />
         <el-button @click="searchMovie(data.value)" :icon="Search" style="" />
 
       </div>
@@ -20,8 +17,6 @@
     <div class="HotMovie" v-if="data.Homepage.length != 0">Premium video</div>
     <Playlist :MovieList="data.Homepage" @getMVdata="getMVdata" ref="gerHeight" @updateHeight="getHeight" />
     <!-- <div class="HotMovie">{{ data.lang.class }}</div> -->
-    <!-- <div class="HotMovie">Recommended movies</div> -->
-    <h2 class="HotMovie">Recommended movies</h2>
     <!-- <ClassNav :movietypeList="data.movietypeList" @getMVdetail="getMVdetail" /> -->
     <!-- <div class="HotMovie">{{ data.lang.hot_movie }}</div> -->
     <!-- 热门视频 -->
@@ -170,6 +165,7 @@ onMounted(() => {
   globalEvent.on('button-clicked', () => {
     data.currentPage = 1
   });
+
 })
 </script>
 <!--移动端修改-->
