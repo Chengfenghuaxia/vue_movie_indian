@@ -1,37 +1,65 @@
 <template>
     <div>
         <div class="Nav" v-if="isMobile">
-            <div class="Nav_home" @click="gotuhome">Home</div>
-            <div class="Nav_search">
-                <img @click="searchMovie" :style="{ width: '20px', height: '20px', marginTop: '20px' }"
-                    src="../../assets/image/search1.png" alt="">
-
+            <div class="Nav_home" @click="gotuhome" style="font-size:20px">
+                <span style="color:goldenrod">MISS</span>
+                <span style="color:palevioletred">AV</span>
             </div>
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    分站域名: 1、https://www.douyin.com  2、https://www.douyin.com
+
+                </div>
+            </div>
+            <div :style="{ borderRadius: '50%', width: '30px', height: '30px', overflow: 'hidden', marginLeft: '0px' }"
+                @click="opencountryT">
+                <img :style="{ width: '50px' }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
+            </div>
+
             <div class="Nav_icon">
-                <img @click.stop="opendetail" class="icon_menu" src="../../../public/menu.png" alt="">
+                <img @click.stop="opendetail" class="icon_menu" src="../../assets/image/menu.png" alt="">
             </div>
         </div>
         <div class="Nav" v-else>
             <div :style="{ width: '10%' }"></div>
-            <div class="Nav_home" @click="gotuhome">Home</div>
-            <!-- <i class="fas fa-heart"></i> -->
+            <!-- <div class="Nav_home" @click="gotuhome">Home</div> -->
             <div class="menulist">
-                <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" :collapse="true"
-                    background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" @select="handleSelect">
+                <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+                    background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+                    <el-menu-item index="home" @click="gotuhome" style="font-size:20px">
+                        <span style="color:goldenrod">MISS</span>
+                        <span style="color:palevioletred">AV</span>
+                    </el-menu-item>
                     <el-sub-menu :index="index" v-for="(item, index) in movietypeList" :key="index"
                         v-show="item.children">
                         <template #title>{{ item.name }}</template>
                         <el-menu-item :index="subItem.id" v-for="(subItem, subIndex) in item.children"
                             @click="toclassMovie(subItem)" :key="subIndex">{{ subItem.name
                             }}</el-menu-item>
+
                     </el-sub-menu>
+                    <el-sub-menu>
+                        <template #title>
+                            <img :style="{ width: '30px', marginRight: '10px' }" :src="rowimg.countryImg" alt="">
+                            Language</template>
+                        <el-menu-item v-for="(item, index) in langList" :key="index" :index="item.value"
+                            @click="changelan(item)" style="font-size:16px">
+                            <img :style="{ width: '30px', marginRight: '10px' }" :src="item.countryImg" alt="">
+                            <span>
+                                {{ item.value }}
+                            </span>
+                        </el-menu-item>
+                    </el-sub-menu>
+
                 </el-menu>
             </div>
+            <div class="marquee-container">
+                <div class="marquee-content">
+                    分站域名: 1、https://www.douyin.com  2、https://www.douyin.com  3、 https://www.douyin.com
 
-            <div class="search" @click.stop="searchMovie">
-                <img src="../../assets/image/search1.png" alt="">
-                <div>search</div>
+                </div>
             </div>
+
 
         </div>
 
@@ -46,9 +74,11 @@ import { mapMutations, mapActions, mapState } from 'vuex'
 import { useRouter } from 'vue-router';
 import { en } from '../../config/config';
 export default {
+    props: ["countryimg"],
     data() {
         return {
             show: true,
+            countryShow: true,
             router: {},
             currentIndex: "",
             params: {
@@ -59,7 +89,22 @@ export default {
             lang: en.tab,
             isMobile: isMobile(),
             activeIndex: '1',
-            activeIndex2: '1'
+            activeIndex2: '1',
+            langList: [
+                {
+
+                    countryImg: "https://cdn.pixabay.com/photo/2012/04/10/16/14/union-jack-26119_1280.png",
+                    value: 'en'
+                },
+                {
+
+                    countryImg: "https://media.istockphoto.com/id/1310357496/photo/china-flag.jpg?s=2048x2048&w=is&k=20&c=ep9KJ7dR-phAxeKkVl6e0E_WIuvl3yRaJiHTFaqnI1s=",
+                    value: 'zh-CN'
+                },
+
+
+            ],
+            rowimg: {}
         }
     },
     computed: {
@@ -72,16 +117,38 @@ export default {
             }),
         }),
     },
+    created() {
+        window.addEventListener('resize', function () {
+
+            this.isMobile = isMobile();
+
+        });
+        this.langList.forEach(item => {
+            if (item.value === localStorage.getItem('MVlang')) {
+                this.rowimg = item
+            }
+        })
+    },
     mounted() {
         this.router = useRouter();
-
     },
     methods: {
+        changelan(item) {
+            this.activeIndex2 = ""
+            this.rowimg = item
+            localStorage.setItem('MVlang', item.value)
+            this.gelMoveiList({ page: 1, limit: 12, type: 0 })
+            item.value = item.value === "zh-CN" ? "zh" : item.value
+            this.$emit("changelan", item.value)
+
+        },
         opendetail() {
             this.$emit("opendetail", this.show)
 
         },
-
+        opencountryT() {
+            this.$emit("opencountryT", this.countryShow)
+        },
         ...mapMutations([
             'setNavigation', // 直接映射
             'setSearch',
@@ -128,13 +195,14 @@ export default {
         async gotuhome() {
             localStorage.removeItem('category_id')
             globalEvent.emit('button-clicked');
+            // this.activeIndex2 = ""
             //如果routerInfo有筛选信息，则吧type充值为0 点击home查找所有
             let routerInfo = JSON.parse(localStorage.getItem('routerInfo'))
             if (routerInfo) {
                 routerInfo.type = 0
-               
+
             }
-            
+
             localStorage.setItem('routerInfo', JSON.stringify(routerInfo))
             await this.gelMoveiList({ page: 1, limit: 12, type: 0 }) //回主页获取所有数据 
             if (this.$route.fullPath != '/index') {
@@ -151,6 +219,7 @@ export default {
         },
         searchMovie() {
             this.router.push({ path: '/search', });
+
         },
         onClickButton(e) {
             console.log(this.value);
@@ -182,16 +251,49 @@ export default {
 
         .Nav_home {
             padding-left: 10px;
-
         }
 
-        .Nav_search {
-            img {
-                margin-left: 240px;
+        .marquee-container {
+            width: 50%;
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            overflow: hidden;
+            white-space: nowrap;
+           
+        }
+
+        .marquee-content {
+            animation:  marquee 6s linear infinite;
+            /* 播放动画 */
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+              
+                /* 从右边开始 */
+            }
+
+            100% {
+                transform: translateX(-100%);
+               
+                /* 滚动到左边 */
             }
         }
 
+        @keyframes changeColor {
+            0% {
+                color: red;
+            }
 
+          
+
+            100% {
+                color: green;
+            }
+        }
     }
 
     .icon_menu {
@@ -222,6 +324,10 @@ export default {
 
 /* PC */
 @media (min-width: 768px) {
+    .el-menu--horizontal.el-menu {
+        border-bottom: 1px solid #262626;
+    }
+
     .Nav {
         width: 100%;
         height: 65px;
@@ -235,11 +341,46 @@ export default {
         }
 
         .menulist {
-            width: 50%;
+            width: 24%;
             cursor: pointer;
             line-height: 60px;
-            display: flex;
+
             justify-content: space-around;
+        }
+
+        .marquee-container {
+            max-width: 45%;
+            height: 60px;
+            line-height: 60px;
+            font-size: 24px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-content {
+            animation: marquee 15s linear infinite;
+            /* 播放动画 */
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+                /* 从右边开始 */
+            }
+
+            100% {
+                transform: translateX(-100%);
+                /* 滚动到左边 */
+            }
+        }
+
+
+
+        .abnner {
+            width: 50%;
+            background-color: red;
+            height: 60px;
         }
 
         .search {
@@ -280,7 +421,4 @@ export default {
 
 
 }
-</style>
-<style>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 </style>

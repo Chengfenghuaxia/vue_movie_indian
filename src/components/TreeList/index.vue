@@ -1,6 +1,6 @@
 <template>
 
-    <div class="menu_list" v-if="show && menulist.length> 0" >
+    <div class="menu_list" v-if="show && menulist.length > 0">
         <div v-for="(menu, index) in menulist" :key="index">
             <div class="menu" @click="toggleSubMenu(index)"
                 :style="{ display: 'flex', justifyContent: 'space-between' }">
@@ -50,7 +50,7 @@ export default {
             }),
         }),
     },
-    created(){
+    created() {
         setTimeout(() => {
             this.menulist = this.movietypeList.map(item => {
                 return {
@@ -61,13 +61,13 @@ export default {
                 }
             })
         }, 1500);
-        
+
     },
     mounted() {
-   
+
     },
     methods: {
-       
+
         ...mapActions(['gelMoveiList']),
         filterList(info, index) {
 
@@ -82,12 +82,12 @@ export default {
             }
             info.limit = this.limit
             info.page = this.page
-            console.log(info,'查看具体详情');
+            console.log(info, '查看具体详情');
             localStorage.setItem("routerInfo", JSON.stringify(info));
             localStorage.setItem('category_id', info.id)
             this.$router.push({ path: `/index/${info.name}` });
             // 点击筛选后关闭弹窗
-            this.$emit("closedetail",false)
+            this.$emit("closedetail", false)
         },
         toggleSubMenu(index) {
             this.menulist.forEach((menu, i) => {
@@ -114,12 +114,12 @@ export default {
         min-height: 180px;
         max-height: 450px;
         overflow-y: scroll;
-
-        background-color: rgb(68, 89, 126);
+        background: linear-gradient(to bottom right, #000, #ffd700);
         position: fixed;
         right: 10px;
         top: 50px;
         border-radius: 7px;
+        border: 1px solid #fff;
         color: #fff;
         text-align: left;
 
@@ -132,6 +132,9 @@ export default {
 
         .active {
             background-color: #ba7405;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
         }
     }
 
@@ -145,7 +148,11 @@ export default {
 
     .sub-menu {
         padding: 10px 30px 10px 30px;
-        background-color: rgb(163, 156, 156);
+        border-bottom: 1px solid goldenrod;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ba7405;
+        background-color: #000;
         cursor: pointer;
     }
 

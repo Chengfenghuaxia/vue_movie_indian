@@ -1,15 +1,41 @@
 <template>
     <div class="custom-footer">
-        <span :style="{borderRight:'.0625rem solid #ccc',padding:'0 .625rem .5rem'}">copyright notice</span>
-        <span :style="{borderRight:'.0625rem solid #ccc',padding:'0 .625rem 0 .625rem'}">disclaimer</span>
-        <span :style="{borderRight:'.0625rem solid #ccc',padding:'0 .625rem 0 .625rem'}">contact us
-</span>
-        <span :style="{paddingLeft:'.625rem'}">privacy policy</span>
+        <span @click="gotutext('copyright')"
+            :style="{ borderRight: '.0625rem solid #ccc', padding: '0 .625rem 0 .625rem' }">{{ $t('copyright') }}</span>
+        <span @click="gotutext('contact')"
+            :style="{ borderRight: '.0625rem solid #ccc', padding: '0 .625rem 0 .625rem' }">{{ $t('contact') }}</span>
+        <span @click="gotutext('privacy')" :style="{ paddingLeft: '.625rem' }">{{ $t('privacy') }}</span>
     </div>
 </template>
 
-<script lang="ts" setup>
-
+<script lang="ts">
+import { query } from 'vue-gtag';
+import { useRouter } from 'vue-router';
+export default {
+    data() {
+        return {
+            router: ""
+        }
+    },
+    mounted() {
+        this.router = useRouter();
+    },
+    methods: {
+        gotutext(type) {
+            let cent = { type }
+            switch (type) {
+                case "copyright":
+                    this.router.push({ path: '/copyright', query: cent })
+                    break;
+                case "privacy":
+                    this.router.push({ path: '/privacy', query: cent })
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
 
 </script>
 

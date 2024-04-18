@@ -87,11 +87,11 @@ const truncatedText = (text) => {
 
 
 const fmtDate = (time) => {
-  let T = (time+'').length>11?time:time*1000
-  const date = new Date(T);
-  return date.getFullYear() + '-' +
-    ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-    ('0' + date.getDate()).slice(-2);
+  let T = (time + '').length > 11 ? time : time * 1000;
+    const date = new Date(T);
+    return ('0' + date.getDate()).slice(-2) + '/' +
+        ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+        date.getFullYear();
 }
 
 </script>

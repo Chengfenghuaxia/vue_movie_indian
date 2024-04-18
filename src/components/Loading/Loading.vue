@@ -6,7 +6,9 @@
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
+            <!-- <div class="loadingss">Loading...</div> -->
         </div>
+   
     </div>
 </template>
 
@@ -21,6 +23,12 @@ defineProps({
 /*body {*/
 /*    margin: 0;*/
 /*}*/
+.loadingss{
+    color: goldenrod;
+    font-size: 30px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
 .loader {
     position: fixed;
     width: 100%;
@@ -50,23 +58,27 @@ defineProps({
 }
 .dot:nth-child(1) {
     animation-delay: 0.1s;
-    background: #32aacc;
+ 
+    background: linear-gradient(to right, #edeeee, #aec4cf);
 }
 .dot:nth-child(2) {
     animation-delay: 0.2s;
-    background: #64aacc;
+    background: linear-gradient(to right, #aec4cf, rgb(228, 223, 209));
 }
 .dot:nth-child(3) {
     animation-delay: 0.3s;
-    background: #96aacc;
+
+    background: linear-gradient(to right,  rgb(228, 223, 209),rgb(233, 205, 135));
 }
 .dot:nth-child(4) {
     animation-delay: 0.4s;
-    background: #c8aacc;
+    background: linear-gradient(to right, rgb(233, 205, 135),goldenrod);
+
 }
 .dot:nth-child(5) {
     animation-delay: 0.5s;
-    background: #faaacc;
+    background: linear-gradient(to right, goldenrod,rgb(250, 180, 1));
+ 
 }
 @-moz-keyframes slide {
     0% {

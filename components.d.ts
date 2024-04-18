@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Advertising: typeof import('./src/components/Advertising/index.vue')['default']
     ClassNav: typeof import('./src/components/ClassNav/index.vue')['default']
+    Country: typeof import('./src/components/country/index.vue')['default']
     CustomDialog: typeof import('./src/components/Popup/CustomDialog.vue')['default']
     Dialog: typeof import('./src/components/Dialog/Dialog.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']

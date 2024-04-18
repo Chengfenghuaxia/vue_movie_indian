@@ -2,11 +2,13 @@
     <div class="play_list">
         <div class="play_list_item" v-for="(item, index) in HomeList" :key="index" @click="getdata(item)">
             <div class="video" :style="{ backgroundImage: 'url(' + res_url_prefix + item.picture + ')' }">
-
+                <div class="video_duration">{{ formatTime(item.play_duration) }}</div>
             </div>
-            <div class="video_detail">
-                <h4 class="video_name" :title="item.name">{{ item.name }}</h4>
-                <span :style="{ paddingLeft: '10px' }">Hot:{{ item.hits }} </span>
+            <div class="video_detail" @click.stop="xigua">
+                <!-- <h4 class="video_name" :title="item.name">{{ item.name }}</h4> -->
+                <p class="video_name">{{ item.name }}</p>
+                <span :style="{ paddingLeft: '10px' }"> <i class="fa-solid fa-eye"></i> <span
+                        :style="{ paddingLeft: '5PX' }">{{ item.hits }}</span> </span>
                 <span :style="{ float: 'right', paddingRight: '20px' }">{{ fmtDate(item.release_time) }}
                 </span>
             </div>
@@ -42,14 +44,30 @@ export default {
         });
     },
     methods: {
-        fmtDate(time) {
-            let T = (time + '').length > 11 ? time : time * 1000
-            const date = new Date(T);
-            return date.getFullYear() + '-' +
-                ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + date.getDate()).slice(-2);
+        xigua() {
+            console.log('嘻嘻哈哈');
         },
+        fmtDate(time) {
+            let T = (time + '').length > 11 ? time : time * 1000;
+            const date = new Date(T);
+            return ('0' + date.getDate()).slice(-2) + '/' +
+                ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+                date.getFullYear();
+        },
+        formatTime(seconds) {
+            // 计算小时、分钟和秒数
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const remainingSeconds = seconds % 60;
 
+            // 格式化为字符串
+            const formattedHours = String(hours).padStart(2, '0');
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+            // 返回格式化后的时间字符串
+            return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        },
         getdata(data) {
             this.$emit('getMVdata', data)
         },
@@ -89,6 +107,19 @@ h4 {
                 height: 280px;
                 background-size: cover;
                 background-position: center;
+                position: relative;
+
+                .video_duration {
+                    width: 80px;
+                    height: 30px;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    position: absolute;
+                    text-align: center;
+                    line-height: 30px;
+                    bottom: 80px;
+                    right: 10px;
+                    border-radius: 9px;
+                }
             }
 
             .video_detail {
@@ -97,7 +128,7 @@ h4 {
                 height: 70px;
                 // background: #fff;
                 // background-color: rgba(0, 0, 0, 0.5);
-                background-color: #000;
+                background-color: #2e2e2e;
                 position: absolute;
                 bottom: 0;
 
@@ -151,13 +182,25 @@ h4 {
                 height: 300px;
                 background-size: cover;
                 background-position: center;
+
+                .video_duration {
+                    width: 80px;
+                    height: 30px;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    position: absolute;
+                    text-align: center;
+                    line-height: 30px;
+                    bottom: 80px;
+                    right: 10px;
+                    border-radius: 9px;
+                }
             }
 
             .video_detail {
                 width: 100%;
                 min-height: 70px;
                 // background-color: rgba(0, 0, 0, 0.5);
-                background-color: #000;
+                background-color: #2e2e2e;
                 position: absolute;
                 bottom: 0;
 
