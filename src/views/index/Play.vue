@@ -22,10 +22,10 @@
             <!-- <el-form-item label="Starring:">
             <span style="font-size:1rem;">{{ data.data_MovieInfo.query.actor }}</span>
           </el-form-item> -->
-            <el-form-item label="Area:">
+            <el-form-item :label="$t('Area')">
               <span style="font-size:1rem;">{{ data.data_MovieInfo.query.area }}</span>
             </el-form-item>
-            <el-form-item label="RE:">
+            <el-form-item :label="$t('releaseTime')">
               <span style="font-size:.875rem;">{{ fmtDate(Number(data.data_MovieInfo.query.release_time)) }}</span>
             </el-form-item>
           </el-form>
@@ -33,11 +33,11 @@
         <div class="Movie_detail_right">
           <el-form style="max-width: 37.5rem;">
 
-            <el-form-item label="Language:">
-              <span style="font-size:1rem;">{{ data.data_MovieInfo.query.language }}</span>
+            <el-form-item :label="$t('Language')">
+              <span style="font-size:1rem;">:{{ data.data_MovieInfo.query.language }}</span>
             </el-form-item>
-            <el-form-item label="Time of play:">
-              <span style="font-size:1rem;">{{ data.data_MovieInfo.query.hits }}</span>
+            <el-form-item :label="$t('Views')">
+              <span style="font-size:1rem;">:{{ data.data_MovieInfo.query.hits }}</span>
             </el-form-item>
             <!-- <el-form-item label="Type:">
             <span style="font-size:.875rem;">{{ fmtTags(data.data_MovieInfo.query.tags) }}</span>
@@ -61,14 +61,14 @@
     </div>
     <!--相关推荐-->
     <div class="correlation">
-      <div class="HotMovie" :style="{ color: '#ba7405' }">{{ en.related_suggestion }}</div>
+      <div class="HotMovie" :style="{ color: '#ba7405' }">{{ $t('related_suggestion') }}</div>
       <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.relate" />
     </div>
     <!-- 广告弹窗 -->
     <Dialog :dvData="data.dvData" />
 
 
-    <el-pagination @current-change="handeChange" :style="{ float: 'right', right: '3.125rem' }"
+    <el-pagination class="my-pagination" @current-change="handeChange" :style="{ float: 'right', right: '3.125rem' }"
       layout="prev, pager, next" :page-size="data.limit" :current-page="data.currentPage" :total="data.total" />
   </div>
 </template>
@@ -95,7 +95,7 @@ import 'video.js/dist/video-js.css'
 import { ApiPost } from "../../utils/request";
 import axios from 'axios';
 import { useStore } from 'vuex';
-
+import { globalEvent } from '../../utils/globalEvent';
 const store = useStore();
 const router = useRouter()
 const videoa = ref(null);
@@ -188,8 +188,8 @@ const linsterHLS = (video) => {
   });
 }
 const handTohotMovie = async (e) => {
-
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
+  console.log(res, '单部电影详情');
   data.data_MovieInfo.query = e
   await initHLS((res as any).data)
   window.scrollTo(0, 500);
@@ -275,10 +275,21 @@ onMounted(() => {
   })
   intervalId = setInterval(updateVideoTime, 5000); //每5秒同步一次播放进度
   videoa.value.addEventListener('loadedmetadata', duration);
+  globalEvent.on('button-clicked', () => {
+    ApiPost('/movie/getmovieinfo', { id: data.data_MovieInfo.movieinfo.info.id }).then(res => {
+      let data = {
+        query: ((res as any).data).info,
+        movieinfo: ((res as any).data)
+      }
+      store.commit('setMovieInfo', data)
+    })
+  });
 })
 // 初始化页面数据
 onBeforeMount(async () => {
   let movieinfo = data.data_MovieInfo.movieinfo
+  console.log(movieinfo, 'aaaaaaaaaaaaaaaaaaaaaa');
+
   if (movieinfo) {
     localStorage.setItem('PLAY_category_id', movieinfo.info.cid)
     setTimeout(() => {
@@ -303,6 +314,18 @@ onUnmounted(() => {
 <style scoped lang="less">
 @import "/src/assets/css/film.css";
 @import "/src/assets/css/pagination.css";
+
+
+
+.my-pagination::v-deep {
+  .el-pager li.is-active {
+    background-color: #8d14d3 !important;
+    border-color: #8d14d3 !important;
+    color: #fff !important;
+  }
+}
+
+
 /* PC端 */
 @media (min-width: 48rem) {
   :deep(.plyr--video) {
@@ -310,9 +333,11 @@ onUnmounted(() => {
     height: 50rem;
     /* height: auto; */
   }
-.player_p{
-  margin-top: 50px;
-}
+
+  .player_p {
+    margin-top: 50px;
+  }
+
   .player_area {
     padding: .625rem 6%;
   }
@@ -334,7 +359,6 @@ onUnmounted(() => {
     width: 100%;
     height: 37.5rem;
     object-fit: cover;
-
   }
 
   .Movie_detail {

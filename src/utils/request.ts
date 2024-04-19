@@ -35,6 +35,7 @@ const http = (options: any) => {
                 }
              
                 let lang = localStorage.getItem('MVlang')
+                lang = lang==="tw"?"ch-TW":lang
                 config.url = config.url+`?lang=${lang||'cn'}`
                 return config;
             }, (error) => {

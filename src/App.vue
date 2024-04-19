@@ -30,7 +30,7 @@ onMounted(() => {
   }, 1000);
   let lang = localStorage.getItem('MVlang')
   if (!lang) {
-    localStorage.setItem('MVlang', navigator.language)
+    localStorage.setItem('MVlang', 'hi')
   }
 })
 

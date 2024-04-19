@@ -1,11 +1,16 @@
 {
-    "placeSearch":"Place Search allAVs",
-    "placeholder":"Please enter the movie name",
-    "playNow":"Play now",
-    "Protagonist":"Protagonist",
-    "copyright":"copyright notice",
-    "disclaimer":"disclaimer",
-    "contact":"contact us",
-    "privacy":"privacy policy"
-   
+    "placeSearch": "Place Search allAVs",
+    "placeholder": "Please enter the movie name",
+    "playNow": "Play now",
+    "Protagonist": "Protagonist",
+    "copyright": "copyright notice",
+    "disclaimer": "disclaimer",
+    "contact": "contact us",
+    "privacy": "privacy policy",
+    "BranchDomainName": "Branch domain name",
+    "Views": "Views",
+    "Language": "Language",
+    "Area": "Area",
+    "releaseTime":"releaseTime",
+    "related_suggestion":"Related Recommendation"
 }

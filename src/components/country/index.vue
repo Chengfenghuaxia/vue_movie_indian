@@ -4,7 +4,7 @@
         <div v-for="(item, index) in langList" :key="index" @click="xigua">
             <div class="menu_list_item" @click="getcountry(item)">
                 <img style="width:40px;height: 30px;margin-top: 5px;" :src="item.countryImg" alt="">
-                <div style="margin-left: 10px;">{{ item.value }}</div>
+                <div style="margin-left: 10px;">{{ item.label }}</div>
             </div>
         </div>
     </div>
@@ -26,11 +26,23 @@ export default {
             langList: [
                 {
                     countryImg: "https://cdn.pixabay.com/photo/2012/04/10/16/14/union-jack-26119_1280.png",
-                    value: 'en'
+                    value: 'en',
+                    label: "English"
                 },
                 {
                     countryImg: "https://media.istockphoto.com/id/1310357496/photo/china-flag.jpg?s=2048x2048&w=is&k=20&c=ep9KJ7dR-phAxeKkVl6e0E_WIuvl3yRaJiHTFaqnI1s=",
-                    value: 'zh-CN'
+                    value: 'zh-CN',
+                    label: "简体中文"
+                },
+                {
+                    countryImg: "https://images.sj33.cn/uploads/allimg/201405/7-140515095310213.png",
+                    value: 'tw',
+                    label: "繁体中文"
+                },
+                {
+                    countryImg: "https://cdn.pixabay.com/photo/2022/05/24/04/47/indian-flag-7217606_640.png",
+                    value: 'hi',
+                    label: "भारत"
                 },
             ],
         };
@@ -68,7 +80,7 @@ export default {
 
         },
         getcountry(row) {
-         this.$emit('getcountry', row)
+            this.$emit('getcountry', row)
         }
 
     }

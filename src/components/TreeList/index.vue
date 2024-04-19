@@ -45,7 +45,7 @@ export default {
             movietypeList: state => state.movietypeList.map(item => {
                 return {
                     ...item,
-                    open: false
+                    open: true
                 }
             }),
         }),

@@ -22,7 +22,7 @@
     <!-- 热门视频 -->
     <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" />
     <!-- <HotVideos @ChangeHotvideo="handTohotMovie" :HotVideoList="data.Hvideolist" @getMoviedata="getMoviedata" /> -->
-    <el-pagination @current-change="handleCurrentChange" :style="{ float: 'right', right: '3.125rem' }"
+    <el-pagination class="my-pagination" @current-change="handleCurrentChange" :style="{ float: 'right', right: '3.125rem' }"
       :page-size="data.limit" layout="prev, pager, next" :total="data.total" v-model:current-page="data.currentPage" />
      
   </div>
@@ -322,6 +322,14 @@ onMounted(() => {
 
   .nav_ul {
     justify-content: end;
+  }
+}
+//修改分页样式
+.my-pagination::v-deep {
+  .el-pager li.is-active {
+    background-color: #8d14d3 !important;
+    border-color: #8d14d3 !important;
+    color: #fff !important;
   }
 }
 </style>

@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="pagination_container">
-                <el-pagination @current-change="changeCurrent" :style="{ float: 'right', right: '3.125rem' }"
+                <el-pagination class="my-pagination" @current-change="changeCurrent" :style="{ float: 'right', right: '3.125rem' }"
                 v-model:current-page="data.page.current" 
                     :page-size="data.page.pageSize" :current-page="data.page.current" layout="prev, pager, next"
                     :total="data.page.total" />
@@ -188,6 +188,17 @@ const changeCurrent = (currentVal: number) => {
 <!--移动端-->
 <style scoped lang="less">
 @import "/src/assets/css/pagination.css";
+
+//修改分页样式
+.my-pagination::v-deep {
+  .el-pager li.is-active {
+    background-color: #8d14d3 !important;
+    border-color: #8d14d3 !important;
+    color: #fff !important;
+  }
+}
+
+
 @media (max-width: 768px) {
     
     .title h2 {

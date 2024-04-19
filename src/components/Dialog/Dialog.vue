@@ -10,7 +10,7 @@
             <div v-show="rightshow" class="right_advertise"
                 :style="{ backgroundImage: 'url(' + dialogVg[1].image + ')' }">
                 <van-icon @click.prevent="close('r')" name="cross" :style="{ marginLeft: '80px', color: '#000' }" />
-                
+
             </div>
         </a>
 
@@ -43,8 +43,10 @@ export default {
 
     },
     mounted() {
+        setTimeout(() => {
+            this.getAdver()
+        }, 500);
 
-        this.getAdver()
     },
     methods: {
         close(e) {
@@ -56,7 +58,7 @@ export default {
         },
         getAdver() {
             ApiPost("/advertise/getdata", { type: 2 }).then(res => {
-                this.dialogVg = res.data.list?res.data.list:[{image:""},{image:""}]
+                this.dialogVg = res.data.list ? res.data.list : [{ image: "" }, { image: "" }]
             })
         }
     }
@@ -85,7 +87,8 @@ export default {
 
     display: inline-block;
 }
-.chacha{
+
+.chacha {
     width: 50px;
     height: 50px;
     background: red;

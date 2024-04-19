@@ -15,15 +15,29 @@ import { createI18n } from 'vue-i18n'
 
 import en from './config/en.json'
 import zh from './config/zh.json'
+import hi from './config/hi.json'
+import tw from './config/tw.json'
 let mylan = localStorage.getItem('MVlang')
-mylan = mylan == "zh-CN" ? "zh" : mylan
+if(mylan){
+  // mylan = mylan == "zh-CN" ? "zh" : mylan
+  if(mylan==="zh-CN"){
+    mylan = "zh"
+  }else if(mylan==="zh-TW"){
+    mylan = "tw"
+  }
+}else{
+ 
+  mylan = navigator.language==="zh-CN"?"zh":navigator.language
+}
 const i18n = createI18n({
   legacy: false,
   locale: mylan, // 默认语言
   fallbackLocale: 'en', // 回退语言
   messages: {
     en,
-    zh
+    zh,
+    hi,
+    tw
   }
 })
 

@@ -7,13 +7,11 @@
             </div>
             <div class="marquee-container">
                 <div class="marquee-content">
-                    分站域名: 1、https://www.douyin.com  2、https://www.douyin.com
-
-                </div>
+                    {{ $t("BranchDomainName") }} : {{ domainName }}</div>
             </div>
             <div :style="{ borderRadius: '50%', width: '30px', height: '30px', overflow: 'hidden', marginLeft: '0px' }"
                 @click="opencountryT">
-                <img :style="{ width: '50px' }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
+                <img :style="{ width: '50px',marginLeft:'-10px', }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
             </div>
 
             <div class="Nav_icon">
@@ -24,14 +22,14 @@
             <div :style="{ width: '10%' }"></div>
             <!-- <div class="Nav_home" @click="gotuhome">Home</div> -->
             <div class="menulist">
-                <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-                    background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+                <el-menu :ellipsis="false" :default-active="activeIndex2" class="el-menu-demo" mode="horizontal"
+                    @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
                     <el-menu-item index="home" @click="gotuhome" style="font-size:20px">
                         <span style="color:goldenrod">MISS</span>
                         <span style="color:palevioletred">AV</span>
                     </el-menu-item>
-                    <el-sub-menu :index="index" v-for="(item, index) in movietypeList" :key="index"
-                        v-show="item.children">
+                    <el-sub-menu style="margin-right: 1150px;" :index="index" v-for="(item, index) in movietypeList"
+                        :key="index" v-show="item.children">
                         <template #title>{{ item.name }}</template>
                         <el-menu-item :index="subItem.id" v-for="(subItem, subIndex) in item.children"
                             @click="toclassMovie(subItem)" :key="subIndex">{{ subItem.name
@@ -41,12 +39,12 @@
                     <el-sub-menu>
                         <template #title>
                             <img :style="{ width: '30px', marginRight: '10px' }" :src="rowimg.countryImg" alt="">
-                            Language</template>
+                        </template>
                         <el-menu-item v-for="(item, index) in langList" :key="index" :index="item.value"
                             @click="changelan(item)" style="font-size:16px">
                             <img :style="{ width: '30px', marginRight: '10px' }" :src="item.countryImg" alt="">
                             <span>
-                                {{ item.value }}
+                                {{ item.label }}
                             </span>
                         </el-menu-item>
                     </el-sub-menu>
@@ -54,10 +52,7 @@
                 </el-menu>
             </div>
             <div class="marquee-container">
-                <div class="marquee-content">
-                    分站域名: 1、https://www.douyin.com  2、https://www.douyin.com  3、 https://www.douyin.com
-
-                </div>
+                <div class="marquee-content">{{ $t("BranchDomainName") }}:{{ domainName }}</div>
             </div>
 
 
@@ -73,6 +68,7 @@ import { globalEvent } from '../../utils/globalEvent';
 import { mapMutations, mapActions, mapState } from 'vuex'
 import { useRouter } from 'vue-router';
 import { en } from '../../config/config';
+import { ApiPost } from "../../utils/request";
 export default {
     props: ["countryimg"],
     data() {
@@ -92,19 +88,30 @@ export default {
             activeIndex2: '1',
             langList: [
                 {
-
                     countryImg: "https://cdn.pixabay.com/photo/2012/04/10/16/14/union-jack-26119_1280.png",
-                    value: 'en'
+                    value: 'en',
+                    label: "English"
                 },
                 {
-
                     countryImg: "https://media.istockphoto.com/id/1310357496/photo/china-flag.jpg?s=2048x2048&w=is&k=20&c=ep9KJ7dR-phAxeKkVl6e0E_WIuvl3yRaJiHTFaqnI1s=",
-                    value: 'zh-CN'
+                    value: 'zh-CN',
+                    label: "简体中文"
+                },
+                {
+                    countryImg: "https://images.sj33.cn/uploads/allimg/201405/7-140515095310213.png",
+                    // value: 'zh-TW',
+                    value: 'tw',
+                    label: "繁体中文"
+                },
+                {
+                    countryImg: "https://cdn.pixabay.com/photo/2022/05/24/04/47/indian-flag-7217606_640.png",
+                    value: 'hi',
+                    label: "भारत"
                 },
 
-
             ],
-            rowimg: {}
+            rowimg: {},
+            domainName: []
         }
     },
     computed: {
@@ -131,14 +138,22 @@ export default {
     },
     mounted() {
         this.router = useRouter();
+        this.getdomainName()
     },
     methods: {
+        async getdomainName() {
+            let res = await ApiPost('domain/all')
+            res.data.forEach((item, index) => {
+                console.log(item);
+                this.domainName += `  ${item.name}`
+            })
+        },
         changelan(item) {
             this.activeIndex2 = ""
             this.rowimg = item
             localStorage.setItem('MVlang', item.value)
             this.gelMoveiList({ page: 1, limit: 12, type: 0 })
-            item.value = item.value === "zh-CN" ? "zh" : item.value
+            // item.value = item.value === "zh-CN" ? "zh" : item.value
             this.$emit("changelan", item.value)
 
         },
@@ -158,40 +173,6 @@ export default {
             'setHD'
         ]),
         ...mapActions(['gelMoveiList']),
-        async handTopSearch(e, index) {
-            this.currentIndex = index;
-            switch (e.nav) {
-                case 'Home':
-                case '首页':
-                    if (this.$route.fullPath != '/index') {
-                        this.gelMoveiList({ page: 1, limit: 12, type: 0 }) //回主页获取所有数据
-                        await this.router.push({ path: '/index' });
-                        this.setNavigation(true)
-                        window.scrollTo(0, 400);
-                    } else {
-                        this.gelMoveiList({ page: 1, limit: 12, type: 0 }) //回主页获取所有数据 
-                    }
-                    break;
-                case 'search':
-                case '搜索':
-                    this.router.push({ path: '/search', });
-
-                    break;
-                case 'Ranking':
-                case '排行':
-                    this.setVideo(true)
-                    this.router.push({ path: '/filmClassify' })
-                    break;
-                case 'menu':
-                    console.log(e);
-                    break;
-
-                case 'HD_movie':
-                case '高清电影':
-                    this.setHD(true)
-                    this.router.push({ path: '/Ceshi' })
-            }
-        },
         async gotuhome() {
             localStorage.removeItem('category_id')
             globalEvent.emit('button-clicked');
@@ -261,24 +242,24 @@ export default {
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             overflow: hidden;
             white-space: nowrap;
-           
+
         }
 
         .marquee-content {
-            animation:  marquee 6s linear infinite;
+            animation: marquee 6s linear infinite;
             /* 播放动画 */
         }
 
         @keyframes marquee {
             0% {
                 transform: translateX(100%);
-              
+
                 /* 从右边开始 */
             }
 
             100% {
                 transform: translateX(-100%);
-               
+
                 /* 滚动到左边 */
             }
         }
@@ -288,7 +269,7 @@ export default {
                 color: red;
             }
 
-          
+
 
             100% {
                 color: green;
@@ -341,7 +322,7 @@ export default {
         }
 
         .menulist {
-            width: 24%;
+            width: 16%;
             cursor: pointer;
             line-height: 60px;
 
@@ -349,7 +330,7 @@ export default {
         }
 
         .marquee-container {
-            max-width: 45%;
+            width: 50%;
             height: 60px;
             line-height: 60px;
             font-size: 24px;

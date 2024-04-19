@@ -67,9 +67,10 @@ const filterList = (info, index) => {
 }
 const changelan = (e) => {
   locale.value = e
+  globalEvent.emit('button-clicked');
+  
 }
 const opencountryT = (e) => {
-  console.log(e);
   data.countryShow = !data.countryShow
 }
 //向国家图标切换国旗
@@ -79,6 +80,7 @@ const getcountry = (e) => {
   localStorage.setItem('MVlang', e.value)
   store.dispatch('gelMoveiList', { category_id: data.info.id || "", limit: data.limit, page: data.page, type: data.info.type || 0 });
   locale.value = e.value
+  globalEvent.emit('button-clicked');
 }
 const opendetail = (e) => {
   data.show = !data.show
@@ -98,6 +100,8 @@ const handleClickOutside = () => {
 }
 
 const closedetail = (type) => {
+
+  
   setTimeout(() => {
     data.show = type
   }, 100);

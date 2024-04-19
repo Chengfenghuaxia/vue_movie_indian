@@ -47,7 +47,6 @@ async function getrouter() {
         }
 
     })
-    console.log(routerList, '获取到的路由');
     return routerList
 }
 
@@ -117,7 +116,6 @@ let newchildren: any = ""
 setTimeout(() => {
     newchildren = getrouter()
     newchildren.then(res => {
-        console.log(res, '新路由');
         res.forEach(item => {
             router.addRoute
         })
