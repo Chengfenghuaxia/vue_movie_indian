@@ -34,10 +34,10 @@
           <el-form style="max-width: 37.5rem;">
 
             <el-form-item :label="$t('Language')">
-              <span style="font-size:1rem;">:{{ data.data_MovieInfo.query.language }}</span>
+              <span style="font-size:1rem;">{{ data.data_MovieInfo.query.language }}</span>
             </el-form-item>
             <el-form-item :label="$t('Views')">
-              <span style="font-size:1rem;">:{{ data.data_MovieInfo.query.hits }}</span>
+              <span style="font-size:1rem;">{{ data.data_MovieInfo.query.hits }}</span>
             </el-form-item>
             <!-- <el-form-item label="Type:">
             <span style="font-size:.875rem;">{{ fmtTags(data.data_MovieInfo.query.tags) }}</span>

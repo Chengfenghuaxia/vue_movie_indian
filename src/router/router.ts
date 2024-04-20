@@ -64,11 +64,13 @@ const routes = [
                 path: 'index', component: Home,
 
                 children: [
+                    
                     { path: 'cartoon', component: Home },
                     { path: 'occident', component: Home },
                     { path: 'Taiwan', component: Home },
                     { path: 'Japanese', component: Home },
                     { path: 'india', component: Home },
+                    { path: 'Occident Best', component: Home },
                 ]
             },
             { path: 'filmDetail', component: FilmDetails },

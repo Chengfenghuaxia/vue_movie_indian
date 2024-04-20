@@ -67,10 +67,25 @@ export default {
 
     },
     methods: {
+        ...mapActions(['gelMoveiList', 'getmovietypeList']),
+        //国家选择组件选择语言后通知菜单组件更新语言显示 涉及组件通信
+        listrend() {
+            this.getmovietypeList({})
+            setTimeout(() => {
+                this.menulist = this.movietypeList.map(item => {
+                    return {
+                        name: item.name,
+                        open: item.open,
+                        subMenus: item.children,
+                        show: item.show,
+                    }
+                })
 
-        ...mapActions(['gelMoveiList']),
+            }, 800);
+
+
+        },
         filterList(info, index) {
-
             if ((this.currentIndex === 0 || this.currentIndex) && this.indexId && info.name == this.indexId) {
                 this.currentIndex = null
                 this.indexId = ""

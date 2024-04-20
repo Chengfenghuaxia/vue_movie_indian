@@ -11,7 +11,7 @@
             </div>
             <div :style="{ borderRadius: '50%', width: '30px', height: '30px', overflow: 'hidden', marginLeft: '0px' }"
                 @click="opencountryT">
-                <img :style="{ width: '50px',marginLeft:'-10px', }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
+                <img :style="{ width: '50px',marginLeft:'-10px',marginTop:'-2px' }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
             </div>
 
             <div class="Nav_icon">
@@ -108,7 +108,41 @@ export default {
                     value: 'hi',
                     label: "भारत"
                 },
-
+                {
+                    countryImg: "https://st.depositphotos.com/1022597/3292/i/950/depositphotos_32924593-stock-photo-flag-of-japan-vignetted.jpg",
+                    value: 'ja',
+                    label: "日本語"
+                },
+                {
+                    countryImg: "https://cdn.pixabay.com/photo/2013/07/13/14/17/south-korea-162427_1280.png",
+                    value: 'ko',
+                    label: "대한민국"
+                },
+                {
+                    countryImg: "https://st2.depositphotos.com/1000641/6630/v/950/depositphotos_66300757-stock-illustration-flag-of-brazil.jpg",
+                    value: 'es',
+                    label: "español"
+                },
+                {
+                    countryImg: "https://www.shutterstock.com/shutterstock/photos/540126295/display_1500/stock-vector-germany-flag-vector-eps-german-flag-germany-flag-icon-540126295.jpg",
+                    value: 'de',
+                    label: "Deutsch"
+                },
+                {
+                    countryImg: "https://cdn.pixabay.com/photo/2013/07/13/14/16/portugal-162394_1280.png",
+                    value: 'pt',
+                    label: "Português"
+                },
+                {
+                    countryImg: "https://st4.depositphotos.com/12883492/28907/v/450/depositphotos_289075276-stock-illustration-france-flag-brush-painted-france.jpg",
+                    value: 'fr',
+                    label: "Français"
+                },
+                {
+                    countryImg: "https://www.shutterstock.com/image-vector/russia-flag-260nw-91811033.jpg",
+                    value: 'ru',
+                    label: "Русский"
+                },
             ],
             rowimg: {},
             domainName: []
@@ -155,10 +189,11 @@ export default {
             this.gelMoveiList({ page: 1, limit: 12, type: 0 })
             // item.value = item.value === "zh-CN" ? "zh" : item.value
             this.$emit("changelan", item.value)
-
+            this.getmovietypeList({})
         },
         opendetail() {
             this.$emit("opendetail", this.show)
+        
 
         },
         opencountryT() {
@@ -172,7 +207,7 @@ export default {
             'setNovel',
             'setHD'
         ]),
-        ...mapActions(['gelMoveiList']),
+        ...mapActions(['gelMoveiList','getmovietypeList']),
         async gotuhome() {
             localStorage.removeItem('category_id')
             globalEvent.emit('button-clicked');
@@ -214,6 +249,8 @@ export default {
             localStorage.setItem("routerInfo", JSON.stringify(item));
             localStorage.setItem('category_id', item.id)
             this.gelMoveiList({ category_id: item.id, page: 1, limit: 12, type: 2 })
+            
+
         }
     }
 }

@@ -11,7 +11,7 @@
                 </div>
                 <span :style="{ textAlign: 'left', fontSize: '14px', color: '#fff' }">{{
                     fmtDate(item.release_time)
-                    }}</span>
+                }}</span>
             </div>
 
         </div>
@@ -21,6 +21,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { isMobile } from "../../utils/isMobil";
 export default {
 
     props: ['HotVideoList'],
@@ -33,6 +34,13 @@ export default {
             page: 0
         }
 
+    },
+    created() {
+        if (isMobile()) {
+            this.maxLength = 9
+        } else {
+            this.maxLength = 40
+        }
     },
     mounted() {
         // this.loadMore(); // 初始加载数据
@@ -166,6 +174,7 @@ export default {
         width: 25%;
         height: 120px;
         position: relative;
+
         .play_duration {
             width: 70px;
             height: 24px;

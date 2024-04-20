@@ -11,7 +11,7 @@
       <Footer />
     </el-footer>
     <TreeList v-if="isMobile()" ref="SearchTree" @closedetail="closedetail" @openlist="openlist" :show="data.show" />
-    <CountryList v-if="isMobile()" ref="SearchTree" @getcountry="getcountry" @openlist="openlist"
+    <CountryList v-if="isMobile()" ref="CountryListref" @getcountry="getcountry" @openlist="openlist"
       :show="data.countryShow" />
   </el-container>
 </template>
@@ -44,6 +44,7 @@ const data = reactive({
 const Searcha = ref(null);
 const Nanigations = ref(null);
 const SearchTree = ref(null);
+const CountryListref = ref(null);
 
 const handSearch = () => {
   //执行搜索逻辑
@@ -81,6 +82,8 @@ const getcountry = (e) => {
   store.dispatch('gelMoveiList', { category_id: data.info.id || "", limit: data.limit, page: data.page, type: data.info.type || 0 });
   locale.value = e.value
   globalEvent.emit('button-clicked');
+ 
+  SearchTree.value.listrend()
 }
 const opendetail = (e) => {
   data.show = !data.show

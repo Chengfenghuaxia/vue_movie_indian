@@ -17,6 +17,14 @@ import en from './config/en.json'
 import zh from './config/zh.json'
 import hi from './config/hi.json'
 import tw from './config/tw.json'
+import ja from './config/ja.json'
+import ko from './config/ko.json'
+import es from './config/es.json'
+import de from './config/de.json'
+import fr from './config/fr.json'
+import pt from './config/pt.json'
+import ru from './config/ru.json'
+
 let mylan = localStorage.getItem('MVlang')
 if(mylan){
   // mylan = mylan == "zh-CN" ? "zh" : mylan
@@ -37,7 +45,14 @@ const i18n = createI18n({
     en,
     zh,
     hi,
-    tw
+    tw,
+    ja,
+    ko,
+    es,
+    de,
+    fr,
+    pt,
+    ru
   }
 })
 
