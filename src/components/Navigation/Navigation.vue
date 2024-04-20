@@ -11,7 +11,8 @@
             </div>
             <div :style="{ borderRadius: '50%', width: '30px', height: '30px', overflow: 'hidden', marginLeft: '0px' }"
                 @click="opencountryT">
-                <img :style="{ width: '50px',marginLeft:'-10px',marginTop:'-2px' }" :src="countryimg.countryImg || rowimg.countryImg" alt="">
+                <img :style="{ width: '50px', marginLeft: '-10px', marginTop: '-2px' }"
+                    :src="countryimg.countryImg || rowimg.countryImg" alt="">
             </div>
 
             <div class="Nav_icon">
@@ -28,7 +29,7 @@
                         <span style="color:goldenrod">MISS</span>
                         <span style="color:palevioletred">AV</span>
                     </el-menu-item>
-                    <el-sub-menu style="margin-right: 1150px;" :index="index" v-for="(item, index) in movietypeList"
+                    <el-sub-menu style="margin-right: 380%" :index="index" v-for="(item, index) in movietypeList"
                         :key="index" v-show="item.children">
                         <template #title>{{ item.name }}</template>
                         <el-menu-item :index="subItem.id" v-for="(subItem, subIndex) in item.children"
@@ -190,10 +191,11 @@ export default {
             // item.value = item.value === "zh-CN" ? "zh" : item.value
             this.$emit("changelan", item.value)
             this.getmovietypeList({})
+
         },
         opendetail() {
             this.$emit("opendetail", this.show)
-        
+
 
         },
         opencountryT() {
@@ -207,7 +209,7 @@ export default {
             'setNovel',
             'setHD'
         ]),
-        ...mapActions(['gelMoveiList','getmovietypeList']),
+        ...mapActions(['gelMoveiList', 'getmovietypeList']),
         async gotuhome() {
             localStorage.removeItem('category_id')
             globalEvent.emit('button-clicked');
@@ -248,9 +250,8 @@ export default {
             globalEvent.emit('button-clicked');
             localStorage.setItem("routerInfo", JSON.stringify(item));
             localStorage.setItem('category_id', item.id)
-            this.gelMoveiList({ category_id: item.id, page: 1, limit: 12, type: 2 })
-            
-
+            // this.gelMoveiList({ category_id: item.id, page: 1, limit: 12, type: 2 })
+            this.$router.push({ path: `/index/${item.router}` });  //跳转路由会更新列表所以省去上面主动刷新列表  存在分类路由的时候会多请求一次
         }
     }
 }

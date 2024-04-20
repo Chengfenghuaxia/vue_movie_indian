@@ -100,7 +100,7 @@ export default {
             console.log(info, '查看具体详情');
             localStorage.setItem("routerInfo", JSON.stringify(info));
             localStorage.setItem('category_id', info.id)
-            this.$router.push({ path: `/index/${info.name}` });
+            this.$router.push({ path: `/index/${info.router}` });
             // 点击筛选后关闭弹窗
             this.$emit("closedetail", false)
         },

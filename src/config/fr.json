@@ -12,5 +12,7 @@
     "Language": "langue",
     "Area": "zone",
     "releaseTime":"temps de libération",
-    "related_suggestion":"suggestion connexe"
+    "related_suggestion":"suggestion connexe",
+    "historylist":"enregistrement de l'histoire",
+    "hotsearch":"Recherches populaires"
 }

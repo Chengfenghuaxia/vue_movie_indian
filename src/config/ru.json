@@ -12,5 +12,7 @@
     "Language": "язык",
     "Area": "область",
     "releaseTime":"время выпуска",
-    "related_suggestion":"связанное предложение"
+    "related_suggestion":"связанное предложение",
+    "historylist":"запись истории",
+    "hotsearch":"популярные запросы"
 }

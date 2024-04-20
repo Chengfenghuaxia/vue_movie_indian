@@ -12,5 +12,8 @@
     "Language": "语言",
     "Area": "地区",
     "releaseTime":"上映时间",
-    "related_suggestion":"相关推荐"
+    "related_suggestion":"相关推荐",
+    "historylist":"历史记录",
+    "hotsearch":"热门搜索"
+
 }

@@ -33,7 +33,7 @@ let list = []
 
 
 async function getrouter() {
-    let res = (await ApiPost("/category/all", {}))
+    let res = (await ApiPost("/category/all", {name:"测试111"}))
     let routerList = []
     res.data.map(item => {
         if (item.children) {
@@ -42,6 +42,8 @@ async function getrouter() {
                     path: item1.name,
                     component: Home
                 }
+                console.log('跳路由',data);
+                
                 routerList.push(data)
             })
         }
@@ -66,7 +68,7 @@ const routes = [
                 children: [
                     
                     { path: 'cartoon', component: Home },
-                    { path: 'occident', component: Home },
+                    { path: 'Occident', component: Home },
                     { path: 'Taiwan', component: Home },
                     { path: 'Japanese', component: Home },
                     { path: 'india', component: Home },
@@ -115,15 +117,15 @@ const router = createRouter({
 })
 
 let newchildren: any = ""
-setTimeout(() => {
-    newchildren = getrouter()
-    newchildren.then(res => {
-        res.forEach(item => {
-            router.addRoute
-        })
-        // router.addRoute( { path: 'film/detail', component: Temp }); // 添加动态路由
-    })
-}, 1000);
+// setTimeout(() => {
+//     newchildren = getrouter()
+//     newchildren.then(res => {
+//         res.forEach(item => {
+//             router.addRoute
+//         })
+//         // router.addRoute( { path: 'film/detail', component: Temp }); // 添加动态路由
+//     })
+// }, 1000);
 
 
 
@@ -156,7 +158,10 @@ router.beforeEach((to, from, next) => {
         console.log(info, '路由变化的参数');
         if (to.fullPath !== '/index') {
             let data = { category_id: info.id, limit: info.limit || 10, page: info.page || 1, type: info.type || 2 }
-            store.dispatch('gelMoveiList', data);
+            setTimeout(() => {
+                store.dispatch('gelMoveiList', data);
+            }, 600);
+          
         }
 
     }

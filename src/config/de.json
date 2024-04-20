@@ -12,5 +12,7 @@
     "Language": "Sprache",
     "Area": "Bereich",
     "releaseTime":"Veröffentlichkeitsdatum",
-    "related_suggestion":"diesbezüglicher Vorschlag"
+    "related_suggestion":"diesbezüglicher Vorschlag",
+    "historylist":"Geschichtsaufzeichnung",
+    "hotsearch":"beliebte Suchanfragen"
 }

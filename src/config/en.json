@@ -12,5 +12,7 @@
     "Language": "Language",
     "Area": "Area",
     "releaseTime":"releaseTime",
-    "related_suggestion":"Related Recommendation"
+    "related_suggestion":"Related Recommendation",
+    "historylist":"history record",
+    "hotsearch":"popular searches"
 }

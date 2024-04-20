@@ -39,7 +39,7 @@ export default {
         if (isMobile()) {
             this.maxLength = 9
         } else {
-            this.maxLength = 40
+            this.maxLength = 30
         }
     },
     mounted() {

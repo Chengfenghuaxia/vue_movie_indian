@@ -12,5 +12,7 @@
     "Language": "idioma",
     "Area": "área",
     "releaseTime":"tiempo de liberación",
-    "related_suggestion":"sugerencia relacionada"
+    "related_suggestion":"sugerencia relacionada",
+    "historylist":"registro de historia",
+    "hotsearch":"Búsquedas populares"
 }

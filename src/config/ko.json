@@ -12,5 +12,7 @@
     "Language": "언어",
     "Area": "영역",
     "releaseTime":"출시 시간",
-    "related_suggestion":"관련 제안"
+    "related_suggestion":"관련 제안",
+    "historylist":"역사 기록",
+    "hotsearch":"인기 검색어"
 }

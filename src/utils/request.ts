@@ -65,7 +65,11 @@ const http = (options: any) => {
                 } else if (error.response.status == 403) {
                     // ElMessage.error(`无访问权限!!!`)
                     ElMessage.error(`No access!!!`)
-                } else {
+                } else if (error.response.status == 429) {
+                   console.log('qqpf');
+                   
+                }
+                 else {
                     // ElMessage.error("服务器繁忙，请稍后再试");
                     ElMessage.error("Service is busy");
                 }

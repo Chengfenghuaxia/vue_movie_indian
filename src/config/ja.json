@@ -12,5 +12,7 @@
     "Language": "言語",
     "Area": "エリア",
     "releaseTime":"リリースタイム",
-    "related_suggestion":"関連する提案"
+    "related_suggestion":"関連する提案",
+    "historylist":"歴史の記録",
+    "hotsearch":"人気の検索"
 }

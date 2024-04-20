@@ -12,5 +12,7 @@
     "Language": "語言",
     "Area": "地區",
     "releaseTime":"上映時間",
-    "related_suggestion":"相關推薦"
+    "related_suggestion":"相關推薦",
+    "historylist":"歷史記錄",
+    "hotsearch":"熱門搜尋"
 }

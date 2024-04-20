@@ -6,19 +6,34 @@
             <el-button @click="searchMovie" :icon="Search" style="" />
 
         </div>
-        <div class="searchHistorys" v-if="data.searchHistory1.length > 0">
-            <div :style="{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }">
-                <img src="../../assets/image/delete.png" @click="deletehistory"
-                    :style="{ width: '20px', height: '20px', marginLeft: '20PX' }" alt="">
+        <div v-if="data.searchHistory1.length > 0"
+            :style="{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }">
+            <img src="../../assets/image/delete.png" @click="deletehistory"
+                :style="{ width: '20px', height: '20px', marginLeft: '20PX' }" alt="">
+        </div>
+        <div class="quick_search">
+            <div class="searchHistorys" v-if="data.searchHistory1.length > 0">
+                <div class="History_list">{{ $t('historylist') }}</div>
+
+                <div>
+                    <div @click="HistorySearch(item, 0)" v-for="(item, index) in data.searchHistory1" :key="index"
+                        class="tag">
+                        {{ item }}</div>
+
+                </div>
             </div>
+            <div class="fenge"></div>
+            <div class="hotsearch">
+                <div class="Hot_list">{{ $t('hotsearch') }}</div>
+                <div>
+                    <div @click="HistorySearch(item.id, 1)" v-for="(item, index) in data.tagList" :key="index"
+                        class="tag">
+                        {{ item.value }}</div>
 
-            <div v-if="data.searchHistory1.length === 0">暂无搜索记录</div>
-            <div v-else :style="{ textAlign: 'left' }">
-                <div @click="HistorySearch(item)" v-for="(item, index) in data.searchHistory1" :key="index" class="tag">
-                    {{ item }}</div>
-
+                </div>
             </div>
         </div>
+
         <div v-if="data.list && data.list.length > 0" class="search_res">
             <div class="title">
                 <h2>{{ data.oldSearch }}</h2>
@@ -50,8 +65,8 @@
                 </div>
             </div>
             <div class="pagination_container">
-                <el-pagination class="my-pagination" @current-change="changeCurrent" :style="{ float: 'right', right: '3.125rem' }"
-                v-model:current-page="data.page.current" 
+                <el-pagination class="my-pagination" @current-change="changeCurrent"
+                    :style="{ float: 'right', right: '3.125rem' }" v-model:current-page="data.page.current"
                     :page-size="data.page.pageSize" :current-page="data.page.current" layout="prev, pager, next"
                     :total="data.page.total" />
             </div>
@@ -70,6 +85,7 @@ import { ApiPost } from "../../utils/request";
 import { ArrowLeftBold, ArrowRightBold, CaretRight, Search } from '@element-plus/icons-vue'
 import { ElMessage } from "element-plus";
 import { useStore } from 'vuex';
+
 const store = useStore();
 const router = useRouter()
 const route = useRoute()
@@ -89,7 +105,10 @@ const data = reactive({
     search: "",
     Hvideolist: [],
     res_url_prefix: computed(() => store.state.res_url_prefix),
-
+    tagList: [],
+    type: 0,
+    data1: {},
+    tag_id: ""
 })
 // 监听路由参数的变化
 
@@ -105,29 +124,48 @@ const play = async (e: string | number) => {
     store.commit('setMovieInfo', data)
     // window.scrollTo(0, 500);
 }
-const getList = (current, page?: number, name?: string) => {
-    ApiPost('/movie/pagebyname', { name: name || data.search, page: current, limit: 10 }).then((resp: any) => {
+const getList = (current: number, page: number, name: string, tag_id: string, type: number) => {
+    // data.type = type
+    data.page.current = current
+    let query = {
+        name,
+        tag_id,
+        page,
+        limit: 10,
+        type
+    }
+    ApiPost('/movie/pagebyname', query).then((resp: any) => {
+        if (data.type == 0) {
+            const index = data.searchHistory1.indexOf(data.search);
+            if (index !== -1) {
+                data.searchHistory1.splice(index, 1);
+            }
+            if (data.search) {
+                data.searchHistory1.unshift(data.search);
+            }
 
-        const index = data.searchHistory1.indexOf(data.search);
-        if (index !== -1) {
-            data.searchHistory1.splice(index, 1);
-        }
-        if (data.search) {
-            data.searchHistory1.unshift(data.search);
+            // 如果搜索记录超过10条，则移除最旧的一条记录
+            let num = isMobile() ? 10 : 20
+            if (data.searchHistory1.length > num) {
+                data.searchHistory1.pop();
+            }
+            localStorage.setItem('searchHistory', JSON.stringify(data.searchHistory1));
         }
 
-        // 如果搜索记录超过10条，则移除最旧的一条记录
-        let num = isMobile() ? 10 : 20
-        if (data.searchHistory1.length > num) {
-            data.searchHistory1.pop();
-        }
-        localStorage.setItem('searchHistory', JSON.stringify(data.searchHistory1));
         if (resp.code == 0) {
             data.list = resp.data.list
             data.page.total = resp.data.total
         } else {
             ElMessage.warning({ message: resp.msg, duration: 1000 })
         }
+
+    })
+}
+
+const getTags = () => {
+    ApiPost('/tag/all', {}).then(res => {
+        data.tagList = (res as any).data
+        console.log(res, '获取到的标签');
 
     })
 }
@@ -138,7 +176,8 @@ const searchMovie = () => {
         return
     }
     data.page.current = 1
-    getList(data.page.current, 1)
+    data.tag_id = ""
+    getList(data.page.current, 1, data.search, "", data.type)
 
 }
 const getMVdata = (data) => {
@@ -160,9 +199,24 @@ const truncatedText = (text) => {
         return text;
     }
 }
-const HistorySearch = (name) => {
-    data.search = name
-    getList(1, 1, name)
+const HistorySearch = (IN, type) => {
+    let IN1 = ""
+    let IN2 = ""
+    if (type == 0) {
+        data.search = IN
+        data.tag_id = ""
+        data.type = 0
+        IN1 = IN
+        IN2 = ""
+    } else {
+        data.tag_id = IN
+        data.search = ""
+        data.type = 1
+        IN1 = ""
+        IN2 = IN
+    }
+
+    getList(1, 1, IN1, IN2, type)
     data.showSuggestions = false;
 }
 const deletehistory = () => {
@@ -174,12 +228,12 @@ const deletehistory = () => {
 onMounted(() => {
     let query = route.query
     data.search = (query.search as string)
-    getList(1, 1, data.search)
-
+    getList(1, 1, data.search, data.tag_id, data.type)
+    getTags()
 })
 // 分页器
 const changeCurrent = (currentVal: number) => {
-    getList(currentVal)
+    getList(currentVal, currentVal, data.search, data.tag_id, data.type)
     data.page.current = currentVal
 }
 
@@ -191,16 +245,54 @@ const changeCurrent = (currentVal: number) => {
 
 //修改分页样式
 .my-pagination::v-deep {
-  .el-pager li.is-active {
-    background-color: #8d14d3 !important;
-    border-color: #8d14d3 !important;
-    color: #fff !important;
-  }
+    .el-pager li.is-active {
+        background-color: #8d14d3 !important;
+        border-color: #8d14d3 !important;
+        color: #fff !important;
+    }
 }
 
 
 @media (max-width: 768px) {
-    
+
+    .container {
+        width: 100%;
+
+        .quick_search {
+
+
+            .searchHistorys {
+                width: 96%;
+                margin-left: 2%;
+                min-height: 40px;
+                margin-top: 5px;
+                text-align: left;
+
+                .History_list {
+                    text-align: left;
+                    border-bottom: 1px solid goldenrod;
+                }
+            }
+
+
+
+            .hotsearch {
+                width: 96%;
+                margin-left: 2%;
+                min-height: 40px;
+                margin-top: 20px;
+
+                text-align: left;
+
+                .Hot_list {
+                    text-align: left;
+                    border-bottom: 1px solid goldenrod;
+                }
+            }
+        }
+    }
+
+
     .title h2 {
         margin: 8px auto;
     }
@@ -217,7 +309,7 @@ const changeCurrent = (currentVal: number) => {
     }
 
     .film_item span {
-       
+
         flex: 2;
         border-radius: 8px;
         background-size: cover;
@@ -360,14 +452,12 @@ const changeCurrent = (currentVal: number) => {
 }
 </style>
 <!--pc端-->
-<style scoped>
+<style scoped lang="less">
 .title {
     margin-bottom: 20px;
 }
 
-.container {
-    width: 100%;
-}
+
 
 .content {
     width: 100%;
@@ -382,6 +472,46 @@ const changeCurrent = (currentVal: number) => {
 
 
 @media (min-width: 768px) {
+    .container {
+        width: 100%;
+
+        .quick_search {
+            display: flex;
+
+            .searchHistorys {
+                width: 46%;
+                min-height: 40px;
+                margin-top: 20px;
+                text-align: left;
+
+                .History_list {
+                    text-align: left;
+                    border-bottom: 1px solid goldenrod;
+                }
+            }
+
+            .fenge {
+                width: 4%;
+                height: 100px;
+                margin-top: 20px;
+                border-right: 1px solid #2e2e2e;
+            }
+
+            .hotsearch {
+                width: 46%;
+                min-height: 40px;
+                margin-top: 20px;
+                margin-left: 4%;
+                text-align: left;
+
+                .Hot_list {
+                    text-align: left;
+                    border-bottom: 1px solid goldenrod;
+                }
+            }
+        }
+    }
+
     .film_item {
         flex-basis: calc(50% - 18px);
         max-width: 50%;

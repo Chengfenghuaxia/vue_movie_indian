@@ -283,6 +283,7 @@ onMounted(() => {
       }
       store.commit('setMovieInfo', data)
     })
+
   });
 })
 // 初始化页面数据
