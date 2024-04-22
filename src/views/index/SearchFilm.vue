@@ -71,21 +71,20 @@
                     :total="data.page.total" />
             </div>
         </div>
-        <!-- <Playlist :MovieList="data.Hvideolist" @getMVdata="getMVdata" /> -->
+
     </div>
     <el-empty v-if="data.oldSearch != '' && (!data.list || data.list.length == 0)" description="未查询到对应影片" />
 </template>
 
 <script lang="ts" setup>
 import { isMobile } from "../../utils/isMobil";
-import { zh, en } from '../../config/config';
-import { onMounted, reactive, computed, watch } from "vue";
+import { onMounted, reactive, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiPost } from "../../utils/request";
-import { ArrowLeftBold, ArrowRightBold, CaretRight, Search } from '@element-plus/icons-vue'
+import { CaretRight, Search } from '@element-plus/icons-vue'
 import { ElMessage } from "element-plus";
 import { useStore } from 'vuex';
-
+import { globalEvent_count,globalEvent_count_PC } from '../../utils/globalEvent';
 const store = useStore();
 const router = useRouter()
 const route = useRoute()
@@ -125,7 +124,6 @@ const play = async (e: string | number) => {
     // window.scrollTo(0, 500);
 }
 const getList = (current: number, page: number, name: string, tag_id: string, type: number) => {
-    // data.type = type
     data.page.current = current
     let query = {
         name,
@@ -165,8 +163,6 @@ const getList = (current: number, page: number, name: string, tag_id: string, ty
 const getTags = () => {
     ApiPost('/tag/all', {}).then(res => {
         data.tagList = (res as any).data
-        console.log(res, '获取到的标签');
-
     })
 }
 // 搜索按钮事件
@@ -180,10 +176,7 @@ const searchMovie = () => {
     getList(data.page.current, 1, data.search, "", data.type)
 
 }
-const getMVdata = (data) => {
-    console.log(data);
 
-}
 const fmtrelease = (time) => {
     let T = (time + '').length > 11 ? time : time * 1000;
     const date = new Date(T);
@@ -226,6 +219,15 @@ const deletehistory = () => {
 
 
 onMounted(() => {
+    //来自移动端的监听
+    globalEvent_count.on('button-clicked_changecountry', () => {
+        getList(data.page.current, data.page.current, data.search, data.tag_id, data.type)
+    });
+      //来自移PC的监听
+    globalEvent_count_PC.on('button-clicked_changecountry1', () => {
+        getList(data.page.current, data.page.current, data.search, data.tag_id, data.type)
+
+    });
     let query = route.query
     data.search = (query.search as string)
     getList(1, 1, data.search, data.tag_id, data.type)

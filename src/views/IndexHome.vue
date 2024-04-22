@@ -22,7 +22,7 @@ import Footer from "../components/index/Footer.vue";
 import Nanigation from "../components/Navigation/Navigation.vue";
 import TreeList from "../components/TreeList/index.vue";
 import CountryList from "../components/country/index.vue";
-import { globalEvent } from '../utils/globalEvent';
+import { globalEvent, globalEvent_count_PC,globalEvent_moveInfo } from '../utils/globalEvent';
 import { reactive, computed, onMounted, ref, } from "vue";
 import { useStore, mapMutations } from 'vuex';
 import { useI18n } from 'vue-i18n'
@@ -68,8 +68,7 @@ const filterList = (info, index) => {
 }
 const changelan = (e) => {
   locale.value = e
-  globalEvent.emit('button-clicked');
-  
+  globalEvent_count_PC.emit('button-clicked_changecountry1');
 }
 const opencountryT = (e) => {
   data.countryShow = !data.countryShow
@@ -81,8 +80,9 @@ const getcountry = (e) => {
   localStorage.setItem('MVlang', e.value)
   store.dispatch('gelMoveiList', { category_id: data.info.id || "", limit: data.limit, page: data.page, type: data.info.type || 0 });
   locale.value = e.value
-  globalEvent.emit('button-clicked');
- 
+  globalEvent_moveInfo.emit('button-clicked_moveInfo'); //监听电影详情触发
+
+
   SearchTree.value.listrend()
 }
 const opendetail = (e) => {
@@ -98,13 +98,12 @@ const opendetail = (e) => {
 const handleClickOutside = () => {
   if (Searcha.value && !Searcha.value.$el.contains(event.target) && !Nanigations.value.$el.children[1].contains(event.target)) {
     store.commit('setSearch', false)
-    console.log(Nanigations.value.$el.children[1].contains(event.target));
   }
 }
 
 const closedetail = (type) => {
 
-  
+
   setTimeout(() => {
     data.show = type
   }, 100);
@@ -118,7 +117,6 @@ const openlist = (index) => {
 
 const closeDivOutside = (event) => {
   // 检查点击的位置是否在指定的 div 外部
-  console.log('SearchTree.value: ', SearchTree);
   if (event.target.nodeName && event.target.nodeName === "IMG") {
     return
   }

@@ -13,6 +13,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import { globalEvent_count } from '../../utils/globalEvent';
 export default {
     props: ["show"],
     data() {
@@ -106,7 +107,7 @@ export default {
 
     },
     mounted() {
-
+      
     },
     methods: {
 
@@ -116,8 +117,7 @@ export default {
         },
         getcountry(row) {
             this.$emit('getcountry', row)
-        
-     
+            globalEvent_count.emit('button-clicked_changecountry');
         }
 
     }

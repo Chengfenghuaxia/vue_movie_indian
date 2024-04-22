@@ -65,10 +65,9 @@
 <script>
 
 import { isMobile } from "../../utils/isMobil";
-import { globalEvent } from '../../utils/globalEvent';
+import { globalEvent, globalEvent_moveInfo } from '../../utils/globalEvent';
 import { mapMutations, mapActions, mapState } from 'vuex'
 import { useRouter } from 'vue-router';
-import { en } from '../../config/config';
 import { ApiPost } from "../../utils/request";
 export default {
     props: ["countryimg"],
@@ -83,7 +82,6 @@ export default {
                 page: 1,
                 type: 0
             },
-            lang: en.tab,
             isMobile: isMobile(),
             activeIndex: '1',
             activeIndex2: '1',
@@ -179,7 +177,6 @@ export default {
         async getdomainName() {
             let res = await ApiPost('domain/all')
             res.data.forEach((item, index) => {
-                console.log(item);
                 this.domainName += `  ${item.name}`
             })
         },
@@ -191,7 +188,7 @@ export default {
             // item.value = item.value === "zh-CN" ? "zh" : item.value
             this.$emit("changelan", item.value)
             this.getmovietypeList({})
-
+            globalEvent_moveInfo.emit('button-clicked_moveInfo');
         },
         opendetail() {
             this.$emit("opendetail", this.show)
@@ -199,6 +196,7 @@ export default {
 
         },
         opencountryT() {
+            console.log(123);
             this.$emit("opencountryT", this.countryShow)
         },
         ...mapMutations([
@@ -239,11 +237,9 @@ export default {
             this.router.push({ path: '/search', });
 
         },
-        onClickButton(e) {
-            console.log(this.value);
-        },
+
         handleSelect(key, keyPath) {
-            // console.log(key, keyPath);
+
         },
         // PC端点击菜单
         toclassMovie(item) {

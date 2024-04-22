@@ -72,7 +72,9 @@ const routes = [
                     { path: 'Taiwan', component: Home },
                     { path: 'Japanese', component: Home },
                     { path: 'india', component: Home },
+                    { path: 'chinese_best', component: Home },
                     { path: 'Occident Best', component: Home },
+                    
                 ]
             },
             { path: 'filmDetail', component: FilmDetails },

@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <p class="blurb" v-if="data.data_MovieInfo.query.blurb">{{ en.brief }}</p>
+    <p class="blurb" v-if="data.data_MovieInfo.query.blurb">Brief introduction</p>
     <div class="Movie_details" v-if="data.data_MovieInfo.query.blurb">
       <span>
         {{ data.data_MovieInfo.query.blurb }}
@@ -74,7 +74,6 @@
 </template>
 
 <script lang="ts" setup>
-import { en } from '../../config/config';
 import {
   onBeforeMount,
   onMounted,
@@ -95,7 +94,7 @@ import 'video.js/dist/video-js.css'
 import { ApiPost } from "../../utils/request";
 import axios from 'axios';
 import { useStore } from 'vuex';
-import { globalEvent } from '../../utils/globalEvent';
+import { globalEvent_moveInfo } from '../../utils/globalEvent';
 const store = useStore();
 const router = useRouter()
 const videoa = ref(null);
@@ -189,7 +188,6 @@ const linsterHLS = (video) => {
 }
 const handTohotMovie = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
-  console.log(res, '单部电影详情');
   data.data_MovieInfo.query = e
   await initHLS((res as any).data)
   window.scrollTo(0, 500);
@@ -275,7 +273,7 @@ onMounted(() => {
   })
   intervalId = setInterval(updateVideoTime, 5000); //每5秒同步一次播放进度
   videoa.value.addEventListener('loadedmetadata', duration);
-  globalEvent.on('button-clicked', () => {
+  globalEvent_moveInfo.on('button-clicked_moveInfo', () => {
     ApiPost('/movie/getmovieinfo', { id: data.data_MovieInfo.movieinfo.info.id }).then(res => {
       let data = {
         query: ((res as any).data).info,
@@ -289,8 +287,6 @@ onMounted(() => {
 // 初始化页面数据
 onBeforeMount(async () => {
   let movieinfo = data.data_MovieInfo.movieinfo
-  console.log(movieinfo, 'aaaaaaaaaaaaaaaaaaaaaa');
-
   if (movieinfo) {
     localStorage.setItem('PLAY_category_id', movieinfo.info.cid)
     setTimeout(() => {

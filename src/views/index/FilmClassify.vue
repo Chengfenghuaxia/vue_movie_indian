@@ -9,7 +9,7 @@
     <div class="content" :style="{marginTop:'20px'}">
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text">{{ en.Ranking }}</span>
+          <span class="c_nav_text">Ranking display</span>
           <!-- <a :href="`/filmClassifySearch?type=4`" class="c_nav_more ">{{ en.more }}<b
               class="iconfont icon-more" /></a> -->
         </div>
@@ -17,7 +17,7 @@
       </div>
       <div class="news">
         <div class="c_nav">
-          <span class="c_nav_text">{{ en.Ranking1 }}</span>
+          <span class="c_nav_text">Ranking list</span>
           <!-- <a :href="`/filmClassifySearch?type=5`" class="c_nav_more ">{{ en.more }}<b
               class="iconfont icon-more" /></a> -->
         </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import {  en } from '../../config/config';
+
 import { onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
 import FilmList from "../../components/index/FilmList.vue";

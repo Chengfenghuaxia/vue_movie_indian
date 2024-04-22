@@ -40,24 +40,13 @@ import Advertising from "../../components/Advertising/index.vue";
 import ClassNav from "../../components/ClassNav/index.vue";
 import HotVideos from "../../components/HotVideos/HotVideos.vue";
 import Playlist from "../../components/Playlist/index.vue";
-import { en } from '../../config/config';
 import { useStore } from 'vuex';
 import { Search } from '@element-plus/icons-vue'
 const store = useStore();
 const router = useRouter();
 
-watch(
-  () => router.currentRoute,
-  (to, from) => {
-    console.log('路由从', from, '变为', to);
-    // 在这里执行相应的操作，例如更新组件数据等
-  }
-);
-
-
 const data = reactive({
   value: "",
-  lang: en,
   limit: 12,
   page: 1,
   currentPage: 1,
@@ -87,7 +76,7 @@ const data = reactive({
 })
 const gerHeight = ref(null);
 const searchMovie = (val?) => {
-  console.log(val, '有多年广西吗');
+
   router.push({ path: '/search', query: { search: val } });
 }
 const getTabsValue = async (value) => {
@@ -97,13 +86,7 @@ const changePage = (page: number) => {
   console.log(page);
 }
 const onSearch = (val) => {
-  console.log(val, '有多年广西吗');
-
   router.push({ path: '/search', query: { search: val } });
-};
-const onCancel = () => {
-  console.log('取消');
-
 };
 const handTohotMovie = async (e) => {
   let res = await ApiPost('/movie/getmovieinfo', { id: e.id })
